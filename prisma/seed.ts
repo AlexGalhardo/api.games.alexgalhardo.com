@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import DateTime from "src/utils/date-time.util.js";
-import * as gamesJSONDatabase from "src/repositories/jsons/games.json" with { type: "json" };
-import { Bcrypt } from "src/utils/bcrypt.util.js";
-import GenerateRandomToken from "src/utils/generate-random-token.util.js";
-import PhoneValidator from "../src/validators/phone.validator.js";
+import DateTime from "../src/utils/date-time.util";
+import * as gamesJSONDatabase from "../src/repositories/jsons/games.json";
+import { Bcrypt } from "../src/utils/bcrypt.util";
+import GenerateRandomToken from "../src/utils/generate-random-token.util";
+import PhoneValidator from "../src/validators/phone.validator";
 
 const prisma = new PrismaClient({
 	errorFormat: "pretty",
@@ -11,7 +11,7 @@ const prisma = new PrismaClient({
 
 const gamesToSeedDatabase: any[] = [];
 
-gamesJSONDatabase.default.forEach((game) => {
+gamesJSONDatabase.forEach((game) => {
 	gamesToSeedDatabase.push({
 		title: game.title,
 		cover_image: game.cover_image,

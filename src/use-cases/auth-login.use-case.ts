@@ -4,48 +4,51 @@ import { ErrorsMessages } from "../utils/errors-messages.util.js";
 import { ClientException } from "../utils/exceptions.util.js";
 import * as jwt from "jsonwebtoken";
 import EmailValidator from "../validators/email.validator.js";
+import PasswordValidator from "src/validators/password.validator.js";
 
 export interface AuthLoginUseCasePort {
-    execute(authLoginDTO: AuthLoginDTO): Promise<UserLoginUseCaseResponse>;
+	execute(authLoginDTO: AuthLoginDTO): Promise<UserLoginUseCaseResponse>;
 }
 
 export interface AuthLoginDTO {
-    email: string;
-    password: string;
+	email: string;
+	password: string;
 }
 
 interface UserLoginUseCaseResponse {
-    success: boolean;
-    jwt_token?: string;
-    message?: string;
+	success: boolean;
+	jwt_token?: string;
+	message?: string;
 }
 
 export default class AuthLoginUseCase implements AuthLoginUseCasePort {
-    constructor(private readonly usersRepository: UsersRepositoryPort) {}
+	constructor(private readonly usersRepository: UsersRepositoryPort) { }
 
-    async execute(authLoginPayload: AuthLoginDTO): Promise<UserLoginUseCaseResponse> {
-        const { email, password } = authLoginPayload;
+	async execute(authLoginPayload: AuthLoginDTO): Promise<UserLoginUseCaseResponse> {
+		const { email, password } = authLoginPayload;
 
-        if (!EmailValidator.validate(email)) throw new ClientException(ErrorsMessages.EMAIL_IS_INVALID);
+		if (email && !EmailValidator.validate(email)) throw new ClientException(ErrorsMessages.EMAIL_IS_INVALID);
 
-        if (email && password) {
-            const { user, index } = await this.usersRepository.getByEmail(email);
+		if (password && !PasswordValidator.validate(password)) throw new ClientException(ErrorsMessages.PASSWORD_IS_INVALID);
 
-            if (user) {
-                if (!(await Bcrypt.compare(password, user.password))) {
-                    return { success: false, message: ErrorsMessages.EMAIL_OR_PASSWORD_INVALID };
-                }
+		if (email && password) {
+			const { user, index } = await this.usersRepository.getByEmail(email);
 
-                const jwt_token = jwt.sign({ userID: user.id }, process.env.JWT_SECRET);
-                user.jwt_token = jwt_token;
-                await this.usersRepository.save(user, index);
+			if (user) {
+				if (!(await Bcrypt.compare(password, user.password))) {
+					return { success: false, message: ErrorsMessages.EMAIL_OR_PASSWORD_INVALID };
+				}
 
-                return { success: true, jwt_token };
-            }
+				const jwt_token = jwt.sign({ userID: user.id }, process.env.JWT_SECRET);
+				user.jwt_token = jwt_token;
+				await this.usersRepository.save(user, index);
 
-            throw new ClientException(ErrorsMessages.USER_NOT_FOUND);
-        }
+				return { success: true, jwt_token };
+			}
 
-        throw new ClientException(ErrorsMessages.EMAIL_OR_PASSWORD_INVALID);
-    }
+			throw new ClientException(ErrorsMessages.USER_NOT_FOUND);
+		}
+
+		throw new ClientException(ErrorsMessages.EMAIL_OR_PASSWORD_INVALID);
+	}
 }
