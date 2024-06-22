@@ -2,11 +2,9 @@ import * as https from "https";
 import "dotenv/config";
 
 class TelegramLogger {
-	private token: string;
-	private channelId: number;
 	private baseUrl: string;
 
-	constructor(token: string, channelId: number) {
+	constructor(private token: string = '123', private channelId: number = 123) {
 		this.isThereToken(token);
 		this.isThereChannelId(channelId);
 		this.token = token;
@@ -18,8 +16,10 @@ class TelegramLogger {
 		if (!token) throw new Error("There is no Telegram Token in TelegramLogger Class Constructor");
 	}
 
-	private isThereChannelId(channel: number) {
-		if (!channel) throw new Error("There is no Telegram Channel Id in TelegramLogger Class Constructor");
+	private isThereChannelId(channelId: number) {
+		if (typeof channelId !== 'number' || channelId <= 0) {
+			throw new Error("There is no valid Telegram Channel Id in TelegramLogger Class Constructor");
+		}
 	}
 
 	private log(logType: string, message: string) {
@@ -61,7 +61,7 @@ class TelegramLogger {
 }
 
 const TelegramLog = new TelegramLogger(
-	process.env.TELEGRAM_BOT_HTTP_TOKEN ?? '123',
-	Number(process.env.TELEGRAM_BOT_CHANNEL_ID) ?? 123,
+	process.env.TELEGRAM_BOT_HTTP_TOKEN,
+	Number(process.env.TELEGRAM_BOT_CHANNEL_ID),
 );
 export default TelegramLog;
