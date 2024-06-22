@@ -11,81 +11,81 @@ import PhoneValidator from "../validators/phone.validator.js";
 import PasswordValidator from "../validators/password.validator.js";
 
 interface AuthRegisterUseCaseResponse {
-	success: boolean;
-	jwt_token?: string;
+    success: boolean;
+    jwt_token?: string;
 }
 
 export interface AuthRegisterDTO {
-	username: string;
-	email: string;
-	telegramNumber: string | null;
-	password: string;
+    username: string;
+    email: string;
+    telegramNumber: string | null;
+    password: string;
 }
 
 export enum SubscriptionName {
-	NOOB = "NOOB",
-	CASUAL = "CASUAL",
-	PRO = "PRO",
+    NOOB = "NOOB",
+    CASUAL = "CASUAL",
+    PRO = "PRO",
 }
 
 export interface AuthRegisterUseCasePort {
-	execute(authRegisterDTO: AuthRegisterDTO): Promise<AuthRegisterUseCaseResponse>;
+    execute(authRegisterDTO: AuthRegisterDTO): Promise<AuthRegisterUseCaseResponse>;
 }
 
 export default class AuthRegisterUseCase implements AuthRegisterUseCasePort {
-	constructor(private readonly usersRepository: UsersRepositoryPort) { }
+    constructor(private readonly usersRepository: UsersRepositoryPort) {}
 
-	async execute(authRegisterDTO: AuthRegisterDTO): Promise<AuthRegisterUseCaseResponse> {
-		const { username, email, telegramNumber, password } = authRegisterDTO;
+    async execute(authRegisterDTO: AuthRegisterDTO): Promise<AuthRegisterUseCaseResponse> {
+        const { username, email, telegramNumber, password } = authRegisterDTO;
 
-		if (email && !EmailValidator.validate(email)) throw new ClientException(ErrorsMessages.EMAIL_IS_INVALID);
+        if (email && !EmailValidator.validate(email)) throw new ClientException(ErrorsMessages.EMAIL_IS_INVALID);
 
-		if (telegramNumber && !PhoneValidator.validate(telegramNumber))
-			throw new ClientException(ErrorsMessages.INVALID_PHONE_NUMBER);
+        if (telegramNumber && !PhoneValidator.validate(telegramNumber))
+            throw new ClientException(ErrorsMessages.INVALID_PHONE_NUMBER);
 
-		if (password && !PasswordValidator.validate(password))
-			throw new ClientException(ErrorsMessages.PASSWORD_INSECURE);
+        if (password && !PasswordValidator.validate(password))
+            throw new ClientException(ErrorsMessages.PASSWORD_INSECURE);
 
-		const hashedPassword = await Bcrypt.hash(password);
+        const hashedPassword = await Bcrypt.hash(password);
 
-		if (!(await this.usersRepository.findByEmail(email))) {
-			const userId = randomUUID();
+        if (!(await this.usersRepository.findByEmail(email))) {
+            const userId = randomUUID();
 
-			const jwt_token = jwt.sign({ userID: userId }, process.env.JWT_SECRET);
+            const jwt_token = jwt.sign({ userID: userId }, process.env.JWT_SECRET);
 
-			await this.usersRepository.create({
-				id: userId,
-				username,
-				email,
-				telegram_number: telegramNumber,
-				password: hashedPassword,
-				jwt_token,
-				api_key: GenerateRandomToken(),
-				reset_password_token: null,
-				reset_password_token_expires_at: null,
-				stripe: {
-					customer_id: null,
-					subscription: {
-						active: false,
-						name: SubscriptionName.NOOB,
-						starts_at: null,
-						ends_at: null,
-						charge_id: null,
-						receipt_url: null,
-						hosted_invoice_url: null,
-					},
-					updated_at: null,
-					updated_at_pt_br: null,
-				},
-				created_at: String(new Date()),
-				updated_at: null,
-				created_at_pt_br: DateTime.getNow(),
-				updated_at_pt_br: null,
-			});
+            await this.usersRepository.create({
+                id: userId,
+                username,
+                email,
+                telegram_number: telegramNumber,
+                password: hashedPassword,
+                jwt_token,
+                api_key: GenerateRandomToken(),
+                reset_password_token: null,
+                reset_password_token_expires_at: null,
+                stripe: {
+                    customer_id: null,
+                    subscription: {
+                        active: false,
+                        name: SubscriptionName.NOOB,
+                        starts_at: null,
+                        ends_at: null,
+                        charge_id: null,
+                        receipt_url: null,
+                        hosted_invoice_url: null,
+                    },
+                    updated_at: null,
+                    updated_at_pt_br: null,
+                },
+                created_at: String(new Date()),
+                updated_at: null,
+                created_at_pt_br: DateTime.getNow(),
+                updated_at_pt_br: null,
+            });
 
-			return { success: true, jwt_token };
-		}
+            return { success: true, jwt_token };
+        }
 
-		throw new ClientException(ErrorsMessages.EMAIL_ALREADY_REGISTRED);
-	}
+        throw new ClientException(ErrorsMessages.EMAIL_ALREADY_REGISTRED);
+    }
 }
