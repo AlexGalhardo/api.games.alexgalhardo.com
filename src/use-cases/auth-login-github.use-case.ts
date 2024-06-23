@@ -1,16 +1,16 @@
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
-import { Bcrypt } from "../utils/bcrypt.util.js";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import { ClientException } from "../utils/exceptions.util.js";
+import { UsersRepositoryPort } from "../repositories/users.repository";
+import { Bcrypt } from "../utils/bcrypt.util";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import { ClientException } from "../utils/exceptions.util";
 import * as jwt from "jsonwebtoken";
 import { Request } from "express";
 import { randomUUID } from "node:crypto";
-import { APP_URL } from "../utils/constants.util.js";
+import { APP_URL } from "../utils/constants.util";
 
-import GenerateRandomToken from "../utils/generate-random-token.util.js";
-import { SubscriptionName } from "./auth-register.use-case.js";
-import emailValidator from "../validators/email.validator.js";
-import DateTime from "../utils/date-time.util.js";
+import GenerateRandomToken from "../utils/generate-random-token.util";
+import { SubscriptionName } from "./auth-register.use-case";
+import emailValidator from "../validators/email.validator";
+import DateTime from "../utils/date-time.util";
 
 export interface AuthLoginGitHubUseCasePort {
     execute(request: Request): Promise<AuthLoginGitHubUseCaseResponse>;
@@ -84,6 +84,8 @@ export default class AuthLoginGitHubUseCase implements AuthLoginGitHubUseCasePor
                     password: await Bcrypt.hash(responseGithubProfileJSON.email),
                     jwt_token,
                     api_key: GenerateRandomToken(),
+                    api_requests_today: 0,
+                    date_last_api_request: null,
                     reset_password_token: null,
                     reset_password_token_expires_at: null,
                     stripe: {

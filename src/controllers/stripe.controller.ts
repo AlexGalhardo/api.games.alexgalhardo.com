@@ -1,15 +1,15 @@
 import { Controller, Post, Res, Body, Inject, HttpStatus } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import { StripeRepositoryPort } from "../repositories/stripe.repository.js";
+import { StripeRepositoryPort } from "../repositories/stripe.repository";
 import {
     StripeCreateCheckoutSessionDTO,
     StripeCreateCheckoutSessionUseCasePort,
-} from "../use-cases/stripe-create-checkout-session.use-case.js";
-import { StripeCreatePortalSessionUseCasePort } from "../use-cases/stripe-create-portal-session.use-case.js";
-import { StripeWebhookChargeSucceededUseCasePort } from "../use-cases/stripe-webhook-charge-succeeded.use-case.js";
-import { StripeWebhookInvoiceFinalizedUseCasePort } from "../use-cases/stripe-webhook-invoice-finalized.use-case.js";
-import TelegramLog from "../config/telegram-logger.config.js";
+} from "../use-cases/stripe-create-checkout-session.use-case";
+import { StripeCreatePortalSessionUseCasePort } from "../use-cases/stripe-create-portal-session.use-case";
+import { StripeWebhookChargeSucceededUseCasePort } from "../use-cases/stripe-webhook-charge-succeeded.use-case";
+import { StripeWebhookInvoiceFinalizedUseCasePort } from "../use-cases/stripe-webhook-invoice-finalized.use-case";
+import TelegramLog from "../config/telegram-logger.config";
 
 interface StripeUseCaseResponse {
     success: boolean;

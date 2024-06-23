@@ -1,14 +1,14 @@
 import { Test } from "@nestjs/testing";
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
-import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case.js";
+import { UsersRepositoryPort } from "../repositories/users.repository";
+import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
 import { mock } from "jest-mock-extended";
 import { randomUUID } from "node:crypto";
 import * as jwt from "jsonwebtoken";
-import { AuthLoginDTO, AuthLoginUseCasePort } from "../use-cases/auth-login.use-case.js";
-import { AuthLogoutUseCasePort } from "../use-cases/auth-logout.use-case.js";
-// import EmailValidator from "../validators/email.validator.js";
-// import PasswordValidator from "../validators/password.validator.js";
-// import PhoneValidator from "../validators/phone.validator.js";
+import { AuthLoginDTO, AuthLoginUseCasePort } from "../use-cases/auth-login.use-case";
+import { AuthLogoutUseCasePort } from "../use-cases/auth-logout.use-case";
+// import EmailValidator from "../validators/email.validator";
+// import PasswordValidator from "../validators/password.validator";
+// import PhoneValidator from "../validators/phone.validator";
 
 describe("Test AuthLogoutUseCase", () => {
     beforeAll(async () => {

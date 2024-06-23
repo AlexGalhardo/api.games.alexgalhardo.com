@@ -1,5 +1,5 @@
 import { Injectable, Inject } from "@nestjs/common";
-import { SMTP } from "../config/smtp.config.js";
+import { SMTP } from "../config/smtp.config";
 import DateTime from "../utils/date-time.util";
 import TelegramLog from "../config/telegram-logger.config";
 

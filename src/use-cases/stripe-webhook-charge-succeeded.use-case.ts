@@ -1,9 +1,9 @@
-import DateTime from "../utils/date-time.util.js";
-import { StripeRepositoryPort } from "../repositories/stripe.repository.js";
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import { ClientException } from "../utils/exceptions.util.js";
-import GenerateRandomToken from "../utils/generate-random-token.util.js";
+import DateTime from "../utils/date-time.util";
+import { StripeRepositoryPort } from "../repositories/stripe.repository";
+import { UsersRepositoryPort } from "../repositories/users.repository";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import { ClientException } from "../utils/exceptions.util";
+import GenerateRandomToken from "../utils/generate-random-token.util";
 
 export interface StripeWebhookChargeSucceededUseCasePort {
     execute(event: any): void;

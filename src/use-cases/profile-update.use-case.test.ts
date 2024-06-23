@@ -1,10 +1,10 @@
 import { Test } from "@nestjs/testing";
 import { mock } from "jest-mock-extended";
-import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case.js";
-import { ProfileUpdateUseCasePort } from "../use-cases/profile-update.use-case.js";
-import { UserDeleteUseCasePort } from "../use-cases/user-delete.use-case.js";
-import { ProfileUpdateDTO } from "../dtos/profile-update.dto.js";
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
+import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
+import { ProfileUpdateUseCasePort } from "../use-cases/profile-update.use-case";
+import { UserDeleteUseCasePort } from "../use-cases/user-delete.use-case";
+import { ProfileUpdateDTO } from "../dtos/profile-update.dto";
+import { UsersRepositoryPort } from "../repositories/users.repository";
 
 describe("Test ProfileUpdateUseCase", () => {
     beforeAll(async () => {

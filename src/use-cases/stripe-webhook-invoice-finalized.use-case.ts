@@ -1,9 +1,9 @@
-import DateTime from "../utils/date-time.util.js";
-import { StripeRepositoryPort } from "../repositories/stripe.repository.js";
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
-import { ClientException } from "../utils/exceptions.util.js";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import TelegramLog from "../config/telegram-logger.config.js";
+import DateTime from "../utils/date-time.util";
+import { StripeRepositoryPort } from "../repositories/stripe.repository";
+import { UsersRepositoryPort } from "../repositories/users.repository";
+import { ClientException } from "../utils/exceptions.util";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import TelegramLog from "../config/telegram-logger.config";
 
 export interface StripeWebhookInvoiceFinalizedUseCasePort {
     execute(event: any): void;

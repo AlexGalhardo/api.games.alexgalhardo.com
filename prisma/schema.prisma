@@ -15,7 +15,7 @@ model Users {
   jwt_token                              String?   @unique
   api_key                                String?   @unique
   api_requests_today                     Int       @default(0)
-  date_last_api_request                  DateTime?
+  date_last_api_request                  String?
   password                               String
   reset_password_token                   String?   @unique
   reset_password_token_expires_at        String?
@@ -40,27 +40,22 @@ model Users {
 
 model Games {
   id                  String  @id @default(uuid())
-  title               String
+  title               String  @unique
+  slug                String  @unique
   cover_image         String  @unique
   summary             String
-  release_year        Int
-  release_date        String
-  igdb_url            String? @unique
-  igdb_rating         Int?
-  metacritic_url      String? @unique
-  metacritic_rating   Int?
-  where_to_buy        Json
-  developer_id        String
+  release_year        Int @default(2030)
+  igdb_id             Int @unique
+  igdb_url            String @unique
+  igdb_rating         Int
+  developer_id        Int
   developer_name      String
-  publisher_id        String
+  developer_slug      String
+  publisher_id        Int
   publisher_name      String
+  publisher_slug      String
   platforms_available Json
   genres              Json
-  how_long_to_beat    Json
-  created_at          String
-  updated_at          String?
-  created_at_pt_br    String
-  updated_at_pt_br    String?
 
   @@map("games")
 }

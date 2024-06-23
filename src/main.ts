@@ -1,9 +1,10 @@
 import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module.js";
+import { AppModule } from "./app.module";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+
     app.enableCors();
 
     const config = new DocumentBuilder()
@@ -14,10 +15,14 @@ async function bootstrap() {
         .addBearerAuth()
         .build();
     const document = SwaggerModule.createDocument(app, config);
+
     SwaggerModule.setup("api", app, document);
 
-    await app.listen(process.env.PORT || 3000, () => {
-        console.log(`\n\nAPI.NERDAPI.COM running on http://localhost:${process.env.PORT || 3000}`);
+    await app.listen(Number(process.env.PORT) || 3000, () => {
+        console.log(`\n\nAPI.NERDAPI.COM running on http://localhost:${Number(process.env.PORT) || 3000}`);
+        console.log(
+            `\n\n...Using ${process.env.USE_JSON_DATABASE === "true" ? "JSON" : "DOCKER POSTGRES"} Database!\n\n`,
+        );
     });
 }
 

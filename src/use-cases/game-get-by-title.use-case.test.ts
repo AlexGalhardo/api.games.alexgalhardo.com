@@ -1,7 +1,7 @@
 import { Test } from "@nestjs/testing";
 import { mock } from "jest-mock-extended";
-import { Game, GamesRepositoryPort } from "../repositories/games.repository.js";
-import { GameGetByTitleUseCasePort } from "../use-cases/game-get-by-title.use-case.js";
+import { Game, GamesRepositoryPort } from "../repositories/games.repository";
+import { GameGetByTitleUseCasePort } from "../use-cases/game-get-by-title.use-case";
 
 describe("Test GameGetByTitleUseCase", () => {
     beforeAll(async () => {

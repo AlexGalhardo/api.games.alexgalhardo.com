@@ -3,17 +3,17 @@ import { Request, Response } from "express";
 import {
     AuthCheckResetPasswordTokenUseCasePort,
     CheckResetPasswordTokenDTO,
-} from "../use-cases/auth-check-reset-password-token.use-case.js";
-import { AuthForgetPasswordDTO, AuthForgetPasswordUseCasePort } from "../use-cases/auth-forget-password.use-case.js";
-import { AuthLoginDTO, AuthLoginUseCasePort } from "../use-cases/auth-login.use-case.js";
-import { AuthLoginGitHubUseCasePort } from "../use-cases/auth-login-github.use-case.js";
-import { AuthLoginGoogleUseCasePort } from "../use-cases/auth-login-google.use-case.js";
-import { AuthLogoutUseCasePort } from "../use-cases/auth-logout.use-case.js";
-import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case.js";
-import { AuthResetPasswordDTO, AuthResetPasswordUseCasePort } from "../use-cases/auth-reset-password.use-case.js";
-import { AuthCheckUserJWTTokenUseCasePort } from "../use-cases/auth-check-user-jwt-token.use-case.js";
+} from "../use-cases/auth-check-reset-password-token.use-case";
+import { AuthForgetPasswordDTO, AuthForgetPasswordUseCasePort } from "../use-cases/auth-forget-password.use-case";
+import { AuthLoginDTO, AuthLoginUseCasePort } from "../use-cases/auth-login.use-case";
+import { AuthLoginGitHubUseCasePort } from "../use-cases/auth-login-github.use-case";
+import { AuthLoginGoogleUseCasePort } from "../use-cases/auth-login-google.use-case";
+import { AuthLogoutUseCasePort } from "../use-cases/auth-logout.use-case";
+import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
+import { AuthResetPasswordDTO, AuthResetPasswordUseCasePort } from "../use-cases/auth-reset-password.use-case";
+import { AuthCheckUserJWTTokenUseCasePort } from "../use-cases/auth-check-user-jwt-token.use-case";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { Auth } from "../entities/auth.entity.js";
+import { Auth } from "../entities/auth.entity";
 
 interface AuthUseCaseResponse {
     success: boolean;

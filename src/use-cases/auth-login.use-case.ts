@@ -1,10 +1,10 @@
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
-import { Bcrypt } from "../utils/bcrypt.util.js";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import { ClientException } from "../utils/exceptions.util.js";
+import { UsersRepositoryPort } from "../repositories/users.repository";
+import { Bcrypt } from "../utils/bcrypt.util";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import { ClientException } from "../utils/exceptions.util";
 import * as jwt from "jsonwebtoken";
-import EmailValidator from "../validators/email.validator.js";
-import PasswordValidator from "src/validators/password.validator.js";
+import EmailValidator from "../validators/email.validator";
+import PasswordValidator from "src/validators/password.validator";
 
 export interface AuthLoginUseCasePort {
     execute(authLoginDTO: AuthLoginDTO): Promise<UserLoginUseCaseResponse>;

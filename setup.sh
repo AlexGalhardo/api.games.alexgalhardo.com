@@ -5,5 +5,3 @@ docker-compose up -d
 npx husky
 npm run prisma:generate
 npm run prisma:migrate
-npm run prisma:push
-npm run prisma:seed

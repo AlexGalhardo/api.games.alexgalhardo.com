@@ -1,8 +1,8 @@
 import { Test } from "@nestjs/testing";
-import { User, UsersRepositoryPort } from "../repositories/users.repository.js";
-import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case.js";
+import { User, UsersRepositoryPort } from "../repositories/users.repository";
+import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
 import { mock } from "jest-mock-extended";
-import { AuthCheckUserJWTTokenUseCasePort } from "../use-cases/auth-check-user-jwt-token.use-case.js";
+import { AuthCheckUserJWTTokenUseCasePort } from "../use-cases/auth-check-user-jwt-token.use-case";
 
 describe("Test AuthRegisterUseCase", () => {
     beforeAll(async () => {

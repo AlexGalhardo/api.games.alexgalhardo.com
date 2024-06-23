@@ -1,7 +1,7 @@
 import { Controller, Res, HttpStatus, Get } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import { HealthCheck } from "../entities/health-check.js";
+import { HealthCheck } from "../entities/health-check";
 
 @Controller()
 @ApiTags("health-check")

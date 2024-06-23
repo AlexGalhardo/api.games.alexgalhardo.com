@@ -1,12 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
-import { AuthModule } from "./modules/auth.module.js";
-import { ProfileModule } from "./modules/profile.module.js";
-import { ContactModule } from "./modules/contact.module.js";
-import { StripeModule } from "./modules/stripe.module.js";
-import { HealthCheckModule } from "./modules/health-check.module.js";
+import { AuthModule } from "./modules/auth.module";
+import { ProfileModule } from "./modules/profile.module";
+import { ContactModule } from "./modules/contact.module";
+import { StripeModule } from "./modules/stripe.module";
+import { HealthCheckModule } from "./modules/health-check.module";
 import { ConfigModule } from "@nestjs/config";
-import { ValidateToken } from "./middlewares/validate-token.middleware.js";
-import { GamesModule } from "./modules/games.module.js";
+import { ValidateToken } from "./middlewares/validate-token.middleware";
+import { GamesModule } from "./modules/games.module";
 
 @Module({
     imports: [

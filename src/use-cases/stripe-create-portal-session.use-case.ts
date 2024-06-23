@@ -1,9 +1,9 @@
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
-import { APP_URL } from "../utils/constants.util.js";
-import { stripe } from "../config/stripe.config.js";
+import { UsersRepositoryPort } from "../repositories/users.repository";
+import { APP_URL } from "../utils/constants.util";
+import { stripe } from "../config/stripe.config";
 import * as jwt from "jsonwebtoken";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import { ClientException } from "../utils/exceptions.util.js";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import { ClientException } from "../utils/exceptions.util";
 
 interface StripeCreatePortalSessionUseCaseResponse {
     success: boolean;

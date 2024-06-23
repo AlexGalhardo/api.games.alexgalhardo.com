@@ -1,8 +1,8 @@
 import { Controller, Post, Res, Body, Inject, HttpStatus } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import { Contact } from "../entities/contact.entity.js";
-import { ContactSendMessageDTO, ContactSendMessageUseCasePort } from "../use-cases/contact-send-message.use-case.js";
+import { Contact } from "../entities/contact.entity";
+import { ContactSendMessageDTO, ContactSendMessageUseCasePort } from "../use-cases/contact-send-message.use-case";
 
 interface ContactUseCaseResponse {
     success: boolean;

@@ -5,7 +5,7 @@ import * as StripeInvoices from "./jsons/stripe/invoices.json";
 import * as StripeCheckouts from "./jsons/stripe/checkouts.json";
 import * as StripeBillingPortals from "./jsons/stripe/billing-portals.json";
 import * as StripePayments from "./jsons/stripe/payments.json";
-import { Database } from "../config/database.config.js";
+import { Database } from "../config/database.config";
 import { Injectable } from "@nestjs/common";
 
 export interface StripeRepositoryPort {
@@ -34,7 +34,7 @@ export default class StripeRepository implements StripeRepositoryPort {
             try {
                 this.charges.push(event);
                 fs.writeFileSync(
-                    "./../repositories/Jsons/stripe/charges.json",
+                    "./../repositories/jsons/stripe/charges.json",
                     JSON.stringify(this.charges, null, 4),
                     "utf-8",
                 );
@@ -59,7 +59,7 @@ export default class StripeRepository implements StripeRepositoryPort {
             try {
                 this.customers.push(event);
                 fs.writeFileSync(
-                    "./../repositories/Jsons/stripe/customers.json",
+                    "./../repositories/jsons/stripe/customers.json",
                     JSON.stringify(this.customers, null, 4),
                     "utf-8",
                 );
@@ -84,7 +84,7 @@ export default class StripeRepository implements StripeRepositoryPort {
             try {
                 this.invoices.push(event);
                 fs.writeFileSync(
-                    "./../repositories/Jsons/stripe/invoices.json",
+                    "./../repositories/jsons/stripe/invoices.json",
                     JSON.stringify(this.invoices, null, 4),
                     "utf-8",
                 );
@@ -109,7 +109,7 @@ export default class StripeRepository implements StripeRepositoryPort {
             try {
                 this.payments.push(event);
                 fs.writeFileSync(
-                    "./../repositories/Jsons/stripe/payments.json",
+                    "./../repositories/jsons/stripe/payments.json",
                     JSON.stringify(this.payments, null, 4),
                     "utf-8",
                 );
@@ -134,7 +134,7 @@ export default class StripeRepository implements StripeRepositoryPort {
             try {
                 this.checkouts.push(event);
                 fs.writeFileSync(
-                    "./../repositories/Jsons/stripe/checkouts.json",
+                    "./../repositories/jsons/stripe/checkouts.json",
                     JSON.stringify(this.checkouts, null, 4),
                     "utf-8",
                 );
@@ -159,7 +159,7 @@ export default class StripeRepository implements StripeRepositoryPort {
             try {
                 this.billingPortals.push(event);
                 fs.writeFileSync(
-                    "./../repositories/Jsons/stripe/billingPortals.json",
+                    "./../repositories/jsons/stripe/billingPortals.json",
                     JSON.stringify(this.billingPortals, null, 4),
                     "utf-8",
                 );

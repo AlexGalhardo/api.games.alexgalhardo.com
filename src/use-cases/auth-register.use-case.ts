@@ -1,14 +1,14 @@
 import { randomUUID } from "crypto";
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
-import { Bcrypt } from "../utils/bcrypt.util.js";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import { ClientException } from "../utils/exceptions.util.js";
+import { UsersRepositoryPort } from "../repositories/users.repository";
+import { Bcrypt } from "../utils/bcrypt.util";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import { ClientException } from "../utils/exceptions.util";
 import * as jwt from "jsonwebtoken";
-import DateTime from "../utils/date-time.util.js";
-import GenerateRandomToken from "../utils/generate-random-token.util.js";
-import EmailValidator from "../validators/email.validator.js";
-import PhoneValidator from "../validators/phone.validator.js";
-import PasswordValidator from "../validators/password.validator.js";
+import DateTime from "../utils/date-time.util";
+import GenerateRandomToken from "../utils/generate-random-token.util";
+import EmailValidator from "../validators/email.validator";
+import PhoneValidator from "../validators/phone.validator";
+import PasswordValidator from "../validators/password.validator";
 
 interface AuthRegisterUseCaseResponse {
     success: boolean;
@@ -61,6 +61,8 @@ export default class AuthRegisterUseCase implements AuthRegisterUseCasePort {
                 password: hashedPassword,
                 jwt_token,
                 api_key: GenerateRandomToken(),
+                api_requests_today: 0,
+                date_last_api_request: null,
                 reset_password_token: null,
                 reset_password_token_expires_at: null,
                 stripe: {

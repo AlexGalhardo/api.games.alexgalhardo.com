@@ -1,10 +1,10 @@
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
-import { APP_URL } from "../utils/constants.util.js";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import { ClientException } from "../utils/exceptions.util.js";
-import GenerateRandomToken from "../utils/generate-random-token.util.js";
-import { SMTP } from "../config/smtp.config.js";
-import emailValidator from "../validators/email.validator.js";
+import { UsersRepositoryPort } from "../repositories/users.repository";
+import { APP_URL } from "../utils/constants.util";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import { ClientException } from "../utils/exceptions.util";
+import GenerateRandomToken from "../utils/generate-random-token.util";
+import { SMTP } from "../config/smtp.config";
+import emailValidator from "../validators/email.validator";
 
 export interface AuthForgetPasswordUseCasePort {
     execute(authForgetPasswordDTO: AuthForgetPasswordDTO): Promise<AuthForgetPasswordUseCaseResponse>;

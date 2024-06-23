@@ -1,12 +1,12 @@
 import * as fs from "fs";
 import * as usersDatabase from "./jsons/users.json";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import DateTime from "../utils/date-time.util.js";
-import { Bcrypt } from "../utils/bcrypt.util.js";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import DateTime from "../utils/date-time.util";
+import { Bcrypt } from "../utils/bcrypt.util";
 import { Injectable } from "@nestjs/common";
-import { Database } from "../config/database.config.js";
-import { SubscriptionName } from "../use-cases/auth-register.use-case.js";
-import { ProfileUpdateDTO } from "../dtos/profile-update.dto.js";
+import { Database } from "../config/database.config";
+import { SubscriptionName } from "../use-cases/auth-register.use-case";
+import { ProfileUpdateDTO } from "../dtos/profile-update.dto";
 
 export interface User {
     id: string;
@@ -16,6 +16,8 @@ export interface User {
     password: string;
     jwt_token: string;
     api_key: string | null;
+    api_requests_today: number;
+    date_last_api_request: null | string;
     reset_password_token: string | null;
     reset_password_token_expires_at: string | null;
     stripe: {
@@ -88,7 +90,7 @@ export interface UsersRepositoryPort {
     findResetPasswordToken(resetPasswordToken: string): Promise<boolean>;
     updateStripeSubscriptionInfo(user: User, stripeSubscriptionInfo: StripeSubscriptionInfo): Promise<User>;
     phoneAlreadyRegistred(userId: string, phoneNumber: string): Promise<boolean>;
-    incrementAPIRequest(userAPIKey: string): Promise<IncrementAPIRequestResponse>;
+    incrementAPIRequest(apiKey: string): Promise<IncrementAPIRequestResponse>;
 }
 
 @Injectable()
@@ -105,43 +107,43 @@ export default class UsersRepository implements UsersRepositoryPort {
                     this.users.splice(index, 1, user);
                 }
 
-                fs.writeFileSync("./../repositories/Jsons/users.json", JSON.stringify(this.users, null, 4), "utf-8");
-                this.users = JSON.parse(fs.readFileSync("./../repositories/Jsons/users.json", "utf-8"));
+                fs.writeFileSync("./src/repositories/jsons/users.json", JSON.stringify(this.users, null, 4), "utf-8");
+                this.users = JSON.parse(fs.readFileSync("./src/repositories/jsons/users.json", "utf-8"));
             } catch (error: any) {
                 throw new Error(error);
             }
+        } else {
+            await this.database.users.update({
+                where: {
+                    id: user.id,
+                },
+                data: {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    telegram_number: user.telegram_number,
+                    password: user.password,
+                    jwt_token: user.jwt_token,
+                    api_key: user.api_key,
+                    reset_password_token: user.reset_password_token,
+                    reset_password_token_expires_at: user.reset_password_token_expires_at,
+                    stripe_customer_id: user.stripe.customer_id,
+                    stripe_subscription_active: user.stripe.subscription.active,
+                    stripe_subscription_name: user.stripe.subscription.name,
+                    stripe_subscription_starts_at: user.stripe.subscription.starts_at,
+                    stripe_subscription_ends_at: user.stripe.subscription.ends_at,
+                    stripe_subscription_charge_id: user.stripe.subscription.charge_id,
+                    stripe_subscription_receipt_url: user.stripe.subscription.receipt_url,
+                    stripe_subscription_hosted_invoice_url: user.stripe.subscription.hosted_invoice_url,
+                    stripe_updated_at: user.stripe.updated_at,
+                    stripe_updated_at_pt_br: user.stripe.updated_at_pt_br,
+                    created_at: user.created_at,
+                    updated_at: user.updated_at,
+                    created_at_pt_br: user.created_at_pt_br,
+                    updated_at_pt_br: user.updated_at_pt_br,
+                },
+            });
         }
-
-        await this.database.users.update({
-            where: {
-                id: user.id,
-            },
-            data: {
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                telegram_number: user.telegram_number,
-                password: user.password,
-                jwt_token: user.jwt_token,
-                api_key: user.api_key,
-                reset_password_token: user.reset_password_token,
-                reset_password_token_expires_at: user.reset_password_token_expires_at,
-                stripe_customer_id: user.stripe.customer_id,
-                stripe_subscription_active: user.stripe.subscription.active,
-                stripe_subscription_name: user.stripe.subscription.name,
-                stripe_subscription_starts_at: user.stripe.subscription.starts_at,
-                stripe_subscription_ends_at: user.stripe.subscription.ends_at,
-                stripe_subscription_charge_id: user.stripe.subscription.charge_id,
-                stripe_subscription_receipt_url: user.stripe.subscription.receipt_url,
-                stripe_subscription_hosted_invoice_url: user.stripe.subscription.hosted_invoice_url,
-                stripe_updated_at: user.stripe.updated_at,
-                stripe_updated_at_pt_br: user.stripe.updated_at_pt_br,
-                created_at: user.created_at,
-                updated_at: user.updated_at,
-                created_at_pt_br: user.created_at_pt_br,
-                updated_at_pt_br: user.updated_at_pt_br,
-            },
-        });
     }
 
     public transformToUserResponse(user): UserResponse {
@@ -154,6 +156,8 @@ export default class UsersRepository implements UsersRepositoryPort {
                 password: user.password,
                 jwt_token: user.jwt_token,
                 api_key: user.api_key,
+                api_requests_today: user.api_requests_today,
+                date_last_api_request: user.date_last_api_request,
                 reset_password_token: user.reset_password_token,
                 reset_password_token_expires_at: user.reset_password_token_expires_at,
                 stripe: {
@@ -188,6 +192,8 @@ export default class UsersRepository implements UsersRepositoryPort {
             password: user.password,
             jwt_token: user.jwt_token,
             api_key: user.api_key,
+            api_requests_today: user.api_requests_today,
+            date_last_api_request: user.date_last_api_request,
             reset_password_token: user.reset_password_token,
             reset_password_token_expires_at: user.reset_password_token_expires_at,
             stripe: {
@@ -652,10 +658,57 @@ export default class UsersRepository implements UsersRepositoryPort {
         }
     }
 
-    public async incrementAPIRequest(userAPIKey: string): Promise<IncrementAPIRequestResponse> {
+    public async incrementAPIRequest(apiKey: string): Promise<IncrementAPIRequestResponse> {
+        if (process.env.USE_JSON_DATABASE === "true") {
+            const index = this.users.findIndex((user: any) => user.api_key === apiKey);
+
+            if (index === -1) {
+                return {
+                    success: false,
+                    found_api_key: false,
+                    api_requests_today: 0,
+                };
+            }
+
+            const user = this.users[index];
+
+            if (user.date_last_api_request && DateTime.isToday(new Date(user.date_last_api_request))) {
+                const subscriptionTypes = ["NOOB", "CASUAL", "PRO"];
+                const userSubscription = user.stripe.subscription.name;
+
+                if (subscriptionTypes.includes(userSubscription)) {
+                    const requiredRequests = Number(process.env[`${userSubscription}_API_REQUESTS_PER_DAY`]);
+
+                    if (user.api_requests_today >= requiredRequests) {
+                        return {
+                            success: false,
+                            found_api_key: true,
+                            api_requests_today: user.api_requests_today,
+                        };
+                    }
+                }
+            } else {
+                user.api_requests_today = 0;
+                user.date_last_api_request = new Date().toISOString();
+                this.users[index] = user;
+                this.save();
+            }
+
+            user.api_requests_today++;
+            user.date_last_api_request = new Date().toISOString();
+            this.users[index] = user;
+            this.save();
+
+            return {
+                success: true,
+                found_api_key: true,
+                api_requests_today: user.api_requests_today,
+            };
+        }
+
         const user = await this.database.users.findUnique({
             where: {
-                api_key: userAPIKey,
+                api_key: apiKey,
             },
         });
 
@@ -667,7 +720,7 @@ export default class UsersRepository implements UsersRepositoryPort {
             };
         }
 
-        if (user.date_last_api_request && DateTime.isToday(user.date_last_api_request)) {
+        if (user.date_last_api_request && DateTime.isToday(new Date(user.date_last_api_request))) {
             const subscriptionTypes = ["NOOB", "CASUAL", "PRO"];
             const userSubscription = user.stripe_subscription_name;
 
@@ -685,17 +738,17 @@ export default class UsersRepository implements UsersRepositoryPort {
         } else {
             await this.database.users.update({
                 where: {
-                    api_key: userAPIKey,
+                    api_key: apiKey,
                 },
-                data: { api_requests_today: 0, date_last_api_request: new Date() },
+                data: { api_requests_today: 0, date_last_api_request: new Date().toISOString() },
             });
         }
 
         await this.database.users.update({
             where: {
-                api_key: userAPIKey,
+                api_key: apiKey,
             },
-            data: { api_requests_today: { increment: 1 }, date_last_api_request: new Date() },
+            data: { api_requests_today: { increment: 1 }, date_last_api_request: new Date().toISOString() },
         });
 
         return {

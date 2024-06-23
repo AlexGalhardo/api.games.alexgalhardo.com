@@ -1,13 +1,13 @@
 import { Test } from "@nestjs/testing";
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
-import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case.js";
-import { AuthForgetPasswordUseCasePort } from "../use-cases/auth-forget-password.use-case.js";
-import { AuthResetPasswordDTO, AuthResetPasswordUseCasePort } from "../use-cases/auth-reset-password.use-case.js";
+import { UsersRepositoryPort } from "../repositories/users.repository";
+import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
+import { AuthForgetPasswordUseCasePort } from "../use-cases/auth-forget-password.use-case";
+import { AuthResetPasswordDTO, AuthResetPasswordUseCasePort } from "../use-cases/auth-reset-password.use-case";
 import { mock } from "jest-mock-extended";
 import { randomUUID } from "node:crypto";
 import * as jwt from "jsonwebtoken";
-// import EmailValidator from "../validators/email.validator.js";
-// import PasswordValidator from "../validators/password.validator.js";
+// import EmailValidator from "../validators/email.validator";
+// import PasswordValidator from "../validators/password.validator";
 
 describe("Test AuthForgetPasswordUseCase", () => {
     beforeAll(async () => {

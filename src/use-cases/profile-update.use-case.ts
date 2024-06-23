@@ -1,11 +1,11 @@
-import { UsersRepositoryPort, UserUpdated } from "../repositories/users.repository.js";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import { ClientException } from "../utils/exceptions.util.js";
+import { UsersRepositoryPort, UserUpdated } from "../repositories/users.repository";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import { ClientException } from "../utils/exceptions.util";
 import * as jwt from "jsonwebtoken";
-import { ProfileUpdateDTO } from "../dtos/profile-update.dto.js";
-import PhoneValidator from "../validators/phone.validator.js";
-import PasswordValidator from "../validators/password.validator.js";
-import UsernameValidator from "../validators/user-name.validator.js";
+import { ProfileUpdateDTO } from "../dtos/profile-update.dto";
+import PhoneValidator from "../validators/phone.validator";
+import PasswordValidator from "../validators/password.validator";
+import UsernameValidator from "../validators/user-name.validator";
 
 interface ProfileUpdateUseCaseResponse {
     success: boolean;

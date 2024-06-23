@@ -1,6 +1,6 @@
-import { User, UsersRepositoryPort } from "../repositories/users.repository.js";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import { ClientException } from "../utils/exceptions.util.js";
+import { User, UsersRepositoryPort } from "../repositories/users.repository";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import { ClientException } from "../utils/exceptions.util";
 import * as jwt from "jsonwebtoken";
 
 export interface AuthCheckUserJWTTokenUseCasePort {

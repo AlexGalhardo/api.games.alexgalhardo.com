@@ -1,70 +1,49 @@
 import * as stringSimilarity from "string-similarity";
 import * as gamesDatabase from "./jsons/games.json";
 import { Injectable } from "@nestjs/common";
-import { Database } from "../config/database.config.js";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
+import { Database } from "../config/database.config";
+import { ErrorsMessages } from "../utils/errors-messages.util";
 
 export interface PlatformAvailable {
     id: string;
     name: string;
+    slug: string;
 }
 
 export interface Developer {
     id: string;
     name: string;
+    slug: string;
 }
 
 export interface Publisher {
     id: string;
     name: string;
+    slug: string;
 }
 
 export interface Genre {
     id: string;
     name: string;
-}
-
-export interface WhereToBuy {
-    id: string;
-    name: string;
-    url: string;
+    slug: string;
 }
 
 export interface Game {
     id: string;
     title: string;
+    slug: string;
     cover_image: string;
     summary: string;
-    release: {
-        year: number;
-        date: string;
-    };
+    release_year: number;
     igdb: {
-        url: string | null;
-        rating: number | null;
+        id: number;
+        url: string;
+        rating: number;
     };
-    metacritic: {
-        url: string | null;
-        rating: number | null;
-    };
-    where_to_buy: WhereToBuy[];
     developer: Developer;
     publisher: Publisher;
     platforms_available: PlatformAvailable[];
     genres: Genre[];
-    how_long_to_beat?: {
-        url: string | null;
-        main_story: {
-            average: string | null;
-        };
-        completionist: {
-            average: string | null;
-        };
-    };
-    created_at: string;
-    updated_at: string | null;
-    created_at_pt_br: string;
-    updated_at_pt_br: string | null;
 }
 
 export interface GamesRepositoryPort {
@@ -86,36 +65,27 @@ export default class GamesRepository implements GamesRepositoryPort {
         return {
             id: game.id,
             title: game.title,
+            slug: game.slug,
             cover_image: game.cover_image,
             summary: game.summary,
-            release: {
-                year: game.release_year,
-                date: game.release_date,
-            },
+            release_year: game.release_year,
             igdb: {
+                id: game.igdb_id,
                 url: game.igdb_url,
                 rating: game.igdb_rating,
             },
-            metacritic: {
-                url: game.metacritic_url,
-                rating: game.metacritic_rating,
-            },
-            where_to_buy: JSON.parse(game.where_to_buy),
             developer: {
                 id: game.developer_id,
                 name: game.developer_name,
+                slug: game.developer_slug,
             },
             publisher: {
                 id: game.publisher_id,
                 name: game.publisher_name,
+                slug: game.publisher_slug,
             },
             platforms_available: JSON.parse(game.platforms_available),
             genres: JSON.parse(game.genres),
-            how_long_to_beat: JSON.parse(game.how_long_to_beat),
-            created_at: game.created_at,
-            updated_at: game.updated_at,
-            created_at_pt_br: game.created_at_pt_br,
-            updated_at_pt_br: game.updated_at_pt_br,
         };
     }
 
@@ -124,36 +94,27 @@ export default class GamesRepository implements GamesRepositoryPort {
             return {
                 id: game.id,
                 title: game.title,
+                slug: game.slug,
                 cover_image: game.cover_image,
                 summary: game.summary,
-                release: {
-                    year: game.release_year,
-                    date: game.release_date,
-                },
+                release_year: game.release_year,
                 igdb: {
+                    id: game.igdb_id,
                     url: game.igdb_url,
                     rating: game.igdb_rating,
                 },
-                metacritic: {
-                    url: game.metacritic_url,
-                    rating: game.metacritic_rating,
-                },
-                where_to_buy: JSON.parse(game.where_to_buy),
                 developer: {
                     id: game.developer_id,
                     name: game.developer_name,
+                    slug: game.developer_slug,
                 },
                 publisher: {
                     id: game.publisher_id,
                     name: game.publisher_name,
+                    slug: game.publisher_slug,
                 },
                 platforms_available: JSON.parse(game.platforms_available),
                 genres: JSON.parse(game.genres),
-                how_long_to_beat: JSON.parse(game.how_long_to_beat),
-                created_at: game.created_at,
-                updated_at: game.updated_at,
-                created_at_pt_br: game.created_at_pt_br,
-                updated_at_pt_br: game.updated_at_pt_br,
             };
         });
     }

@@ -1,6 +1,6 @@
 import { Test } from "@nestjs/testing";
-import { Game, GamesRepositoryPort } from "../repositories/games.repository.js";
-import { GameGetByIdUseCasePort } from "../use-cases/game-get-by-id.use-case.js";
+import { Game, GamesRepositoryPort } from "../repositories/games.repository";
+import { GameGetByIdUseCasePort } from "../use-cases/game-get-by-id.use-case";
 import { mock } from "jest-mock-extended";
 
 describe("Test GameGetByIdUseCase", () => {

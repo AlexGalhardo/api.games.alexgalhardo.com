@@ -1,7 +1,7 @@
-import { Game, GamesRepositoryPort } from "../repositories/games.repository.js";
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import { ClientException } from "../utils/exceptions.util.js";
+import { Game, GamesRepositoryPort } from "../repositories/games.repository";
+import { UsersRepositoryPort } from "../repositories/users.repository";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import { ClientException } from "../utils/exceptions.util";
 
 export interface GameGetByIdUseCasePort {
     execute(gameId: string, userAPIKey: string): Promise<GameGetByIdUseCaseResponse>;
@@ -10,7 +10,7 @@ export interface GameGetByIdUseCasePort {
 interface GameGetByIdUseCaseResponse {
     success: boolean;
     data?: Game;
-    message?: string;
+    error?: string;
     api_requests_today?: number;
 }
 
@@ -20,9 +20,9 @@ export default class GameGetByIdUseCase implements GameGetByIdUseCasePort {
         private readonly usersRepository: UsersRepositoryPort,
     ) {}
 
-    private async returnGameById(gameId: string) {
+    private async returnGameById(gameId: string, api_requests_today?: number) {
         const gameById = await this.gamesRepository.getById(gameId);
-        if (gameById) return { success: true, data: gameById };
+        if (gameById) return { success: true, api_requests_today, data: gameById };
         throw new ClientException(ErrorsMessages.GET_GAME_BY_ID_ERROR);
     }
 
@@ -36,11 +36,11 @@ export default class GameGetByIdUseCase implements GameGetByIdUseCasePort {
                 await this.usersRepository.incrementAPIRequest(userAPIKey);
 
             if (success && found_api_key) {
-                return this.returnGameById(gameId);
+                return this.returnGameById(gameId, api_requests_today);
             } else if (!success && found_api_key) {
-                return { success, message: "Your API Requests reached limit for today", api_requests_today };
+                return { success, error: "Your API Requests reached limit for today", api_requests_today };
             } else {
-                return { success, message: ErrorsMessages.API_KEY_NOT_FOUND };
+                return { success, error: ErrorsMessages.API_KEY_NOT_FOUND };
             }
         }
     }

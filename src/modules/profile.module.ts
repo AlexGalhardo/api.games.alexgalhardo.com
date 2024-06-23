@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
-import { ProfileController } from "../controllers/profile.controller.js";
-import UsersRepository, { UsersRepositoryPort } from "../repositories/users.repository.js";
-import ProfileUpdateUseCase from "../use-cases/profile-update.use-case.js";
-import { Database } from "../config/database.config.js";
+import { ProfileController } from "../controllers/profile.controller";
+import UsersRepository, { UsersRepositoryPort } from "../repositories/users.repository";
+import ProfileUpdateUseCase from "../use-cases/profile-update.use-case";
+import { Database } from "../config/database.config";
 
 @Module({
     controllers: [ProfileController],

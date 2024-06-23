@@ -1,15 +1,15 @@
 import { Controller, Res, HttpStatus, Get, Inject, Req } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Request, Response } from "express";
-import { GameEntity } from "../entities/game.entity.js";
-import { Game } from "../repositories/games.repository.js";
-import { GameGetByIdUseCasePort } from "../use-cases/game-get-by-id.use-case.js";
-import { GameGetByTitleUseCasePort } from "../use-cases/game-get-by-title.use-case.js";
-import { GameGetRandomUseCasePort } from "../use-cases/game-get-random.use-case.js";
+import { GameEntity } from "../entities/game.entity";
+import { Game } from "../repositories/games.repository";
+import { GameGetByIdUseCasePort } from "../use-cases/game-get-by-id.use-case";
+import { GameGetByTitleUseCasePort } from "../use-cases/game-get-by-title.use-case";
+import { GameGetRandomUseCasePort } from "../use-cases/game-get-random.use-case";
 
 interface GameUseCaseResponse {
     success: boolean;
-    message?: string;
+    error?: string;
     data?: Game | Game[];
     api_requests_today?: number;
 }
@@ -35,11 +35,11 @@ export class GamesController implements GamesControllerPort {
     async getRandom(@Res() response: Response): Promise<Response<GameUseCaseResponse>> {
         try {
             const userAPIKey = response.locals.token;
-            const { success, data, message, api_requests_today } = await this.gameGetRandomUseCase.execute(userAPIKey);
-            if (success) return response.status(HttpStatus.OK).json({ success: true, data });
-            return response.status(HttpStatus.OK).json({ success: false, message, api_requests_today });
+            const { success, data, error, api_requests_today } = await this.gameGetRandomUseCase.execute(userAPIKey);
+            if (success) return response.status(HttpStatus.OK).json({ success: true, api_requests_today, data });
+            return response.status(HttpStatus.OK).json({ success: false, error, api_requests_today });
         } catch (error: any) {
-            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message: error.message });
+            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });
         }
     }
 
@@ -48,14 +48,14 @@ export class GamesController implements GamesControllerPort {
         try {
             const { game_id } = request.params;
             const userAPIKey = response.locals.token;
-            const { success, data, message, api_requests_today } = await this.gameGetByIdUseCase.execute(
+            const { success, data, error, api_requests_today } = await this.gameGetByIdUseCase.execute(
                 game_id,
                 userAPIKey,
             );
-            if (success) return response.status(HttpStatus.OK).json({ success: true, data });
-            return response.status(HttpStatus.OK).json({ success: false, message, api_requests_today });
+            if (success) return response.status(HttpStatus.OK).json({ success: true, api_requests_today, data });
+            return response.status(HttpStatus.OK).json({ success: false, api_requests_today, error });
         } catch (error: any) {
-            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message: error.message });
+            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });
         }
     }
 
@@ -64,14 +64,14 @@ export class GamesController implements GamesControllerPort {
         try {
             const { game_title } = request.params;
             const userAPIKey = response.locals.token;
-            const { success, data, message, api_requests_today } = await this.gameGetByTitleUseCase.execute(
+            const { success, data, error, api_requests_today } = await this.gameGetByTitleUseCase.execute(
                 game_title,
                 userAPIKey,
             );
-            if (success) return response.status(HttpStatus.OK).json({ success: true, data });
-            return response.status(HttpStatus.OK).json({ success: false, message, api_requests_today });
+            if (success) return response.status(HttpStatus.OK).json({ success: true, api_requests_today, data });
+            return response.status(HttpStatus.OK).json({ success: false, api_requests_today, error });
         } catch (error: any) {
-            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message: error.message });
+            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });
         }
     }
 }

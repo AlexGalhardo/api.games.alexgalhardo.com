@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable, NestMiddleware } from "@nestjs/common";
 import { Request, Response, NextFunction } from "express";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
+import { ErrorsMessages } from "../utils/errors-messages.util";
 
 @Injectable()
 export class ValidateToken implements NestMiddleware {

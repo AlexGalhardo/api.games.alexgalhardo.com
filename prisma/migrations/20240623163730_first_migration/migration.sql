@@ -7,7 +7,7 @@ CREATE TABLE "users" (
     "jwt_token" TEXT,
     "api_key" TEXT,
     "api_requests_today" INTEGER NOT NULL DEFAULT 0,
-    "date_last_api_request" TIMESTAMP(3),
+    "date_last_api_request" TEXT,
     "password" TEXT NOT NULL,
     "reset_password_token" TEXT,
     "reset_password_token_expires_at" TEXT,
@@ -33,26 +33,21 @@ CREATE TABLE "users" (
 CREATE TABLE "games" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
     "cover_image" TEXT NOT NULL,
     "summary" TEXT NOT NULL,
-    "release_year" INTEGER NOT NULL,
-    "release_date" TEXT NOT NULL,
-    "igdb_url" TEXT,
-    "igdb_rating" INTEGER,
-    "metacritic_url" TEXT,
-    "metacritic_rating" INTEGER,
-    "where_to_buy" JSONB NOT NULL,
-    "developer_id" TEXT NOT NULL,
+    "release_year" INTEGER NOT NULL DEFAULT 2030,
+    "igdb_id" INTEGER NOT NULL,
+    "igdb_url" TEXT NOT NULL,
+    "igdb_rating" INTEGER NOT NULL,
+    "developer_id" INTEGER NOT NULL,
     "developer_name" TEXT NOT NULL,
-    "publisher_id" TEXT NOT NULL,
+    "developer_slug" TEXT NOT NULL,
+    "publisher_id" INTEGER NOT NULL,
     "publisher_name" TEXT NOT NULL,
+    "publisher_slug" TEXT NOT NULL,
     "platforms_available" JSONB NOT NULL,
     "genres" JSONB NOT NULL,
-    "how_long_to_beat" JSONB NOT NULL,
-    "created_at" TEXT NOT NULL,
-    "updated_at" TEXT,
-    "created_at_pt_br" TEXT NOT NULL,
-    "updated_at_pt_br" TEXT,
 
     CONSTRAINT "games_pkey" PRIMARY KEY ("id")
 );
@@ -148,10 +143,16 @@ CREATE UNIQUE INDEX "users_stripe_subscription_hosted_invoice_url_key" ON "users
 CREATE UNIQUE INDEX "users_email_reset_password_token_key" ON "users"("email", "reset_password_token");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "games_title_key" ON "games"("title");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "games_slug_key" ON "games"("slug");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "games_cover_image_key" ON "games"("cover_image");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "games_igdb_url_key" ON "games"("igdb_url");
+CREATE UNIQUE INDEX "games_igdb_id_key" ON "games"("igdb_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "games_metacritic_url_key" ON "games"("metacritic_url");
+CREATE UNIQUE INDEX "games_igdb_url_key" ON "games"("igdb_url");

@@ -1,8 +1,8 @@
-import { UsersRepositoryPort } from "../repositories/users.repository.js";
-import { Bcrypt } from "../utils/bcrypt.util.js";
-import { ErrorsMessages } from "../utils/errors-messages.util.js";
-import { ClientException } from "../utils/exceptions.util.js";
-import PasswordValidator from "../validators/password.validator.js";
+import { UsersRepositoryPort } from "../repositories/users.repository";
+import { Bcrypt } from "../utils/bcrypt.util";
+import { ErrorsMessages } from "../utils/errors-messages.util";
+import { ClientException } from "../utils/exceptions.util";
+import PasswordValidator from "../validators/password.validator";
 
 export interface AuthResetPasswordUseCasePort {
     execute(
