@@ -12,7 +12,7 @@ export class ValidateToken implements NestMiddleware {
         ) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: ErrorsMessages.TOKEN_EXPIRED_OR_INVALID });
+                .json({ success: false, error: ErrorsMessages.MISSING_HEADER_AUTHORIZATION_BEARER_TOKEN });
         }
 
         const token = request.headers.authorization.split(" ")[1];

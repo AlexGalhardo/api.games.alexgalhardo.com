@@ -22,6 +22,6 @@ export default class AuthLogoutUseCase implements AuthLogoutUseCasePort {
             return { success: true };
         }
 
-        throw new ClientException(ErrorsMessages.TOKEN_EXPIRED_OR_INVALID);
+        throw new ClientException(ErrorsMessages.HEADER_AUTHORIZATION_BEARER_TOKEN_EXPIRED_OR_INVALID);
     }
 }

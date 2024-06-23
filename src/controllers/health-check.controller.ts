@@ -12,6 +12,15 @@ export class HealthCheckController {
         return response.status(HttpStatus.OK).json({
             success: true,
             message: "Nerd API is on, lets goo!",
+            docs: "https://docs.nerdapi.com",
+            source_code: "https://github.com/alexgalhardo/api.nerdapi.com",
+            front_end: "https://nerdapi.com",
+            author: "https://github.com/alexgalhardo",
+            games_endpoints: {
+                "GET Random Game": "https://api.nerdapi.com/games/random",
+                "GET Game by Id": "https://api.nerdapi.com/games/id/{game_id}",
+                "GET Game by title": "https://api.nerdapi.com/games/title/{game_title}",
+            },
         });
     }
 }

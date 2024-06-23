@@ -11,7 +11,9 @@ export enum ErrorsMessages {
 
     INVALID_PHONE_NUMBER = "Invalid telegram number",
 
-    TOKEN_EXPIRED_OR_INVALID = "Header Authorization Bearer Token or API Key Expired Or Invalid",
+    MISSING_HEADER_AUTHORIZATION_BEARER_TOKEN = "Missing Header Authorization Bearer Token",
+
+    HEADER_AUTHORIZATION_BEARER_TOKEN_EXPIRED_OR_INVALID = "Header Authorization Bearer Token Invalid or Expired",
 
     NAME_IS_INVALID = "Name is invalid",
 

@@ -56,6 +56,6 @@ export default class ProfileUpdateUseCase implements ProfileUpdateUseCasePort {
             return { success: true, data: userUpdated };
         }
 
-        throw new ClientException(ErrorsMessages.TOKEN_EXPIRED_OR_INVALID);
+        throw new ClientException(ErrorsMessages.HEADER_AUTHORIZATION_BEARER_TOKEN_EXPIRED_OR_INVALID);
     }
 }
