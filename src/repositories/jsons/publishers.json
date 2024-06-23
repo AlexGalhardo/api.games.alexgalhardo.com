@@ -505,7 +505,7 @@
         "slug": "square"
     },
     {
-        "id": "d2e6fd69-766e-4965-9460-b2713f36e7d6",
+        "id": 160241,
         "name": "SUNSOFT",
         "slug": "sunsoft"
     },
@@ -1715,78 +1715,368 @@
         "slug": "daedalic-entertainment"
     },
     {
-        "id": 134198,
-        "name": "Istom Games Kft.",
-        "slug": "istom-games-kft"
+        "id": 157310,
+        "name": "Robot Circus",
+        "slug": "robot-circus"
     },
     {
-        "id": 215450,
-        "name": "KID",
-        "slug": "kid"
+        "id": 66909,
+        "name": "Quiet River",
+        "slug": "quiet-river"
     },
     {
-        "id": 191198,
-        "name": "Otomate",
-        "slug": "otomate"
+        "id": 67308,
+        "name": "ProjectorGames",
+        "slug": "projectorgames"
     },
     {
-        "id": 66152,
-        "name": "Spike",
-        "slug": "spike"
+        "id": 55849,
+        "name": "Butterflyware",
+        "slug": "butterflyware"
     },
     {
-        "id": 57658,
-        "name": "SakuraGame",
-        "slug": "sakuragame"
+        "id": 151122,
+        "name": "Panasonic Interactive Media",
+        "slug": "panasonic-interactive-media"
     },
     {
-        "id": 113526,
-        "name": "Nippon Telenet",
-        "slug": "nippon-telenet"
+        "id": 257594,
+        "name": "California Dreams",
+        "slug": "california-dreams"
     },
     {
-        "id": 151551,
-        "name": "FDG Entertainment",
-        "slug": "fdg-entertainment"
+        "id": 143597,
+        "name": "Glu Games",
+        "slug": "glu-games"
     },
     {
-        "id": 100524,
-        "name": "Rayark Inc.",
-        "slug": "rayark-inc"
+        "id": 206342,
+        "name": "Omgpop",
+        "slug": "omgpop"
     },
     {
-        "id": 113535,
-        "name": "Culture Publishers",
-        "slug": "culture-publishers"
+        "id": 224011,
+        "name": "Cartoon Network",
+        "slug": "cartoon-network"
     },
     {
-        "id": 205493,
-        "name": "Raw Thrills",
-        "slug": "raw-thrills"
+        "id": 92623,
+        "name": "Kemco",
+        "slug": "kemco"
     },
     {
-        "id": 68896,
-        "name": "TYPE-MOON",
-        "slug": "type-moon"
+        "id": 98859,
+        "name": "Forever Entertainment S. A.",
+        "slug": "forever-entertainment-s-a"
     },
     {
-        "id": 147609,
-        "name": "Pandora Box",
-        "slug": "pandora-box"
+        "id": 109057,
+        "name": "Amaterasu Software",
+        "slug": "amaterasu-software"
     },
     {
-        "id": 191593,
-        "name": "Plan Peace",
-        "slug": "plan-peace"
+        "id": 99726,
+        "name": "Frima Studio",
+        "slug": "frima-studio"
     },
     {
-        "id": 195392,
+        "id": 112274,
+        "name": "Opera Soft",
+        "slug": "opera-soft"
+    },
+    {
+        "id": 112170,
+        "name": "Dinamic Software",
+        "slug": "dinamic-software"
+    },
+    {
+        "id": 102731,
+        "name": "Level 9 Computing",
+        "slug": "level-9-computing"
+    },
+    {
+        "id": 143899,
+        "name": "The Oliver Twins",
+        "slug": "the-oliver-twins"
+    },
+    {
+        "id": 208148,
+        "name": "Com2uS",
+        "slug": "com2us"
+    },
+    {
+        "id": 188911,
+        "name": "Miniclip.com",
+        "slug": "miniclipcom"
+    },
+    {
+        "id": 210405,
+        "name": "Storm8 Studios",
+        "slug": "storm8-studios"
+    },
+    {
+        "id": 174644,
+        "name": "Roofdog Games",
+        "slug": "roofdog-games"
+    },
+    {
+        "id": 91570,
+        "name": "DahJee",
+        "slug": "dahjee"
+    },
+    {
+        "id": 164727,
+        "name": "Ving Co., Ltd.",
+        "slug": "ving-co-ltd"
+    },
+    {
+        "id": 157053,
+        "name": "Sammy",
+        "slug": "sammy"
+    },
+    {
+        "id": 181135,
+        "name": "Kaneko",
+        "slug": "kaneko"
+    },
+    {
+        "id": 54583,
+        "name": "Data East",
+        "slug": "data-east"
+    },
+    {
+        "id": 271159,
+        "name": "BrezzaSoft",
+        "slug": "brezzasoft"
+    },
+    {
+        "id": 218833,
+        "name": "Data East Corporation",
+        "slug": "data-east-corporation"
+    },
+    {
+        "id": 202372,
+        "name": "SunA Co.",
+        "slug": "suna-co"
+    },
+    {
+        "id": 239927,
+        "name": "Sega Corporation",
+        "slug": "sega-corporation"
+    },
+    {
+        "id": 213959,
+        "name": "Midway Manufacturing",
+        "slug": "midway-manufacturing"
+    },
+    {
+        "id": 142544,
+        "name": "Toaplan",
+        "slug": "toaplan"
+    },
+    {
+        "id": 53827,
+        "name": "Nichibutsu",
+        "slug": "nichibutsu"
+    },
+    {
+        "id": 251471,
+        "name": "International Games System",
+        "slug": "international-games-system"
+    },
+    {
+        "id": 149583,
+        "name": "Exidy",
+        "slug": "exidy"
+    },
+    {
+        "id": 188163,
+        "name": "Atari Games",
+        "slug": "atari-games"
+    },
+    {
+        "id": 240668,
+        "name": "Meadows Games",
+        "slug": "meadows-games"
+    },
+    {
+        "id": 202264,
+        "name": "Mitchell Corporation",
+        "slug": "mitchell-corporation"
+    },
+    {
+        "id": 202229,
+        "name": "Home Data",
+        "slug": "home-data"
+    },
+    {
+        "id": 62589,
+        "name": "Gremlin Industries",
+        "slug": "gremlin-industries"
+    },
+    {
+        "id": 263840,
+        "name": "Taito Corporation",
+        "slug": "taito-corporation"
+    },
+    {
+        "id": 142297,
+        "name": "Home Vision",
+        "slug": "home-vision"
+    },
+    {
+        "id": 167037,
+        "name": "Hozer",
+        "slug": "hozer"
+    },
+    {
+        "id": 259161,
+        "name": "Bit Corporation",
+        "slug": "bit-corporation"
+    },
+    {
+        "id": 74115,
+        "name": "Starpath Corporation",
+        "slug": "starpath-corporation"
+    },
+    {
+        "id": 83235,
+        "name": "Mumin Corporation",
+        "slug": "mumin-corporation"
+    },
+    {
+        "id": 56133,
+        "name": "Paragon Software Corporation",
+        "slug": "paragon-software-corporation"
+    },
+    {
+        "id": 54237,
+        "name": "Fairchild Semiconductor",
+        "slug": "fairchild-semiconductor"
+    },
+    {
+        "id": 55713,
+        "name": "HAL Laboratory",
+        "slug": "hal-laboratory"
+    },
+    {
+        "id": 258395,
+        "name": "Internet Revolution",
+        "slug": "internet-revolution"
+    },
+    {
+        "id": 247590,
+        "name": "Philips",
+        "slug": "philips"
+    },
+    {
+        "id": 86631,
+        "name": "North American Philips Consumer Electronics Corp.",
+        "slug": "north-american-philips-consumer-electronics-corp"
+    },
+    {
+        "id": 115781,
+        "name": "Philips do Brasil",
+        "slug": "philips-do-brasil"
+    },
+    {
+        "id": 179159,
+        "name": "Paramount Digital Entertainment",
+        "slug": "paramount-digital-entertainment"
+    },
+    {
+        "id": 116416,
+        "name": "Bethesda Game Studios",
+        "slug": "bethesda-game-studios"
+    },
+    {
+        "id": 106355,
+        "name": "Compile",
+        "slug": "compile"
+    },
+    {
+        "id": 94486,
+        "name": "Telenet Japan",
+        "slug": "telenet-japan"
+    },
+    {
+        "id": 51569,
         "name": "Idea Factory",
         "slug": "idea-factory"
     },
     {
-        "id": 236133,
-        "name": "ASCII Entertainment",
-        "slug": "ascii-entertainment"
+        "id": 119100,
+        "name": "Trident Game Studio",
+        "slug": "trident-game-studio"
+    },
+    {
+        "id": 66850,
+        "name": "Antonio Renna",
+        "slug": "antonio-renna"
+    },
+    {
+        "id": 101117,
+        "name": "GCE",
+        "slug": "gce"
+    },
+    {
+        "id": 262185,
+        "name": "Pack-In-Video",
+        "slug": "pack-in-video"
+    },
+    {
+        "id": 113788,
+        "name": "D3Publisher",
+        "slug": "d3publisher"
+    },
+    {
+        "id": 181738,
+        "name": "Naxat Soft",
+        "slug": "naxat-soft"
+    },
+    {
+        "id": 132000,
+        "name": "Irem Corporation",
+        "slug": "irem-corporation"
+    },
+    {
+        "id": 205477,
+        "name": "Coconuts Japan",
+        "slug": "coconuts-japan"
+    },
+    {
+        "id": 161948,
+        "name": "BEC",
+        "slug": "bec"
+    },
+    {
+        "id": 160485,
+        "name": "Teichiku",
+        "slug": "teichiku"
+    },
+    {
+        "id": 159247,
+        "name": "Nihon Telenet",
+        "slug": "nihon-telenet"
+    },
+    {
+        "id": 161960,
+        "name": "Human Entertainment",
+        "slug": "human-entertainment"
+    },
+    {
+        "id": 102909,
+        "name": "Ocean Software",
+        "slug": "ocean-software"
+    },
+    {
+        "id": 97894,
+        "name": "The Software Toolworks",
+        "slug": "the-software-toolworks"
+    },
+    {
+        "id": 122239,
+        "name": "Media Factory",
+        "slug": "media-factory"
     }
 ]

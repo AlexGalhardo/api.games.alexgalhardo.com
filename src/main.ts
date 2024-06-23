@@ -18,7 +18,7 @@ async function bootstrap() {
 
     SwaggerModule.setup("api", app, document);
 
-    await app.listen(Number(process.env.PORT) || 3000, () => {
+    await app.listen(Number(process.env.PORT) || 3000, "0.0.0.0", () => {
         console.log(`\n\nAPI.NERDAPI.COM running on http://localhost:${Number(process.env.PORT) || 3000}`);
         console.log(
             `\n\n...Using ${process.env.USE_JSON_DATABASE === "true" ? "JSON" : "DOCKER POSTGRES"} Database!\n\n`,

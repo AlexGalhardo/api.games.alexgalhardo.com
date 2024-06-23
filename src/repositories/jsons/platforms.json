@@ -385,12 +385,12 @@
         "slug": "n-gage"
     },
     {
-        "id": 125,
+        "id": "fdac8767-3708-46ab-83bf-a4d23a51a55c",
         "name": "PC-8800 Series",
         "slug": "pc-8800-series"
     },
     {
-        "id": 152,
+        "id": "d35b6687-b163-469d-9d92-d7cdd12320d1",
         "name": "FM-7",
         "slug": "fm-7"
     },
@@ -528,5 +528,10 @@
         "id": 129,
         "name": "Texas Instruments TI-99",
         "slug": "texas-instruments-ti-99"
+    },
+    {
+        "id": 133,
+        "name": "Odyssey 2 / Videopac G7000",
+        "slug": "odyssey-2-videopac-g7000"
     }
 ]
