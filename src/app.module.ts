@@ -7,6 +7,8 @@ import { HealthCheckModule } from "./modules/health-check.module";
 import { ConfigModule } from "@nestjs/config";
 import { ValidateToken } from "./middlewares/validate-token.middleware";
 import { GamesModule } from "./modules/games.module";
+import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
+import { APP_GUARD } from "@nestjs/core";
 
 @Module({
     imports: [
@@ -17,9 +19,20 @@ import { GamesModule } from "./modules/games.module";
         StripeModule,
         GamesModule,
         ConfigModule.forRoot({ isGlobal: true }),
+        ThrottlerModule.forRoot([
+            {
+                ttl: 2000, // milliseconds
+                limit: 1, // 1 request each ttl
+            },
+        ]),
     ],
     controllers: [],
-    providers: [],
+    providers: [
+        {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard,
+        },
+    ],
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {

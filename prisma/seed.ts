@@ -20,7 +20,7 @@ gamesJSONDatabase.forEach((game) => {
 		release_year: game.release_year ?? 2030,
 		igdb_id: game.igdb.id,
 		igdb_url: game.igdb.url,
-		igdb_rating: game.igdb.rating,
+		igdb_rating: game.igdb.rating ?? 1,
 		developer_id: typeof game.developer.id === 'string' ? 999 : game.developer.id,
 		developer_name: game.developer.name,
 		developer_slug: game.developer.slug,
