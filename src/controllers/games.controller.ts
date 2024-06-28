@@ -16,7 +16,7 @@ interface GameUseCaseResponse {
 
 interface GamesControllerPort {
     getRandom(response: Response): Promise<Response<GameUseCaseResponse>>;
-    getById(request: Request, response: Response): Promise<Response<GameUseCaseResponse>>;
+    findById(request: Request, response: Response): Promise<Response<GameUseCaseResponse>>;
     getByTitle(request: Request, response: Response): Promise<Response<GameUseCaseResponse>>;
 }
 
@@ -44,7 +44,7 @@ export class GamesController implements GamesControllerPort {
     }
 
     @Get("/id/:game_id")
-    async getById(@Req() request: Request, @Res() response: Response): Promise<Response<GameUseCaseResponse>> {
+    async findById(@Req() request: Request, @Res() response: Response): Promise<Response<GameUseCaseResponse>> {
         try {
             const { game_id } = request.params;
             const userAPIKey = response.locals.token;

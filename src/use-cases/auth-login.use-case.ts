@@ -1,7 +1,6 @@
 import { UsersRepositoryPort } from "../repositories/users.repository";
 import { Bcrypt } from "../utils/bcrypt.util";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
 import * as jwt from "jsonwebtoken";
 import EmailValidator from "../validators/email.validator";
 import PasswordValidator from "src/validators/password.validator";
@@ -27,13 +26,13 @@ export default class AuthLoginUseCase implements AuthLoginUseCasePort {
     async execute(authLoginPayload: AuthLoginDTO): Promise<UserLoginUseCaseResponse> {
         const { email, password } = authLoginPayload;
 
-        if (email && !EmailValidator.validate(email)) throw new ClientException(ErrorsMessages.EMAIL_IS_INVALID);
+        if (email && !EmailValidator.validate(email)) throw new Error(ErrorsMessages.EMAIL_OR_PASSWORD_INVALID);
 
         if (password && !PasswordValidator.validate(password))
-            throw new ClientException(ErrorsMessages.PASSWORD_IS_INVALID);
+            throw new Error(ErrorsMessages.EMAIL_OR_PASSWORD_INVALID);
 
         if (email && password) {
-            const { user, index } = await this.usersRepository.getByEmail(email);
+            const { user, index } = await this.usersRepository.findByEmail(email);
 
             if (user) {
                 if (!(await Bcrypt.compare(password, user.password))) {
@@ -47,9 +46,9 @@ export default class AuthLoginUseCase implements AuthLoginUseCasePort {
                 return { success: true, jwt_token };
             }
 
-            throw new ClientException(ErrorsMessages.USER_NOT_FOUND);
+            throw new Error(ErrorsMessages.USER_NOT_FOUND);
         }
 
-        throw new ClientException(ErrorsMessages.EMAIL_OR_PASSWORD_INVALID);
+        throw new Error(ErrorsMessages.EMAIL_OR_PASSWORD_INVALID);
     }
 }

@@ -49,7 +49,7 @@ export interface Game {
 export interface GamesRepositoryPort {
     transformToGameResponse(game): Game;
     transformToGamesResponses(game): Game[];
-    getById(gameId: string): Promise<Game>;
+    findById(gameId: string): Promise<Game>;
     getByTitle(gameTitle: string): Promise<Game[]>;
     getRandom(): Promise<Game>;
 }
@@ -119,7 +119,7 @@ export default class GamesRepository implements GamesRepositoryPort {
         });
     }
 
-    public async getById(gameId: string): Promise<Game> {
+    public async findById(gameId: string): Promise<Game> {
         if (process.env.USE_JSON_DATABASE === "true") {
             return this.games.filter((game: Game) => game.id === gameId)[0];
         }

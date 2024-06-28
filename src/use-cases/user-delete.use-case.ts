@@ -1,6 +1,5 @@
 import { UsersRepositoryPort } from "../repositories/users.repository";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
 
 interface UserDeleteUseCaseResponse {
     success: boolean;
@@ -20,6 +19,6 @@ export default class UserDeleteUseCase implements UserDeleteUseCasePort {
             return { success: true };
         }
 
-        throw new ClientException(ErrorsMessages.EMAIL_NOT_REGISTRED);
+        throw new Error(ErrorsMessages.USER_NOT_FOUND);
     }
 }

@@ -1,7 +1,7 @@
 import DateTime from "../utils/date-time.util";
 import { StripeRepositoryPort } from "../repositories/stripe.repository";
 import { UsersRepositoryPort } from "../repositories/users.repository";
-import { ClientException } from "../utils/exceptions.util";
+import { Error } from "../utils/exceptions.util";
 import { ErrorsMessages } from "../utils/errors-messages.util";
 import TelegramLog from "../config/telegram-logger.config";
 
@@ -16,7 +16,7 @@ export default class StripeWebhookInvoiceFinalizedUseCase implements StripeWebho
     ) {}
 
     async execute(event: any) {
-        const { user } = await this.usersRepository.getByEmail(event.data.object.customer_email);
+        const { user } = await this.usersRepository.findByEmail(event.data.object.customer_email);
 
         if (user) {
             const userUpdated = await this.usersRepository.updateStripeSubscriptionInfo(user, {
@@ -50,7 +50,7 @@ export default class StripeWebhookInvoiceFinalizedUseCase implements StripeWebho
             	<b>CUSTOMER API TOKEN: </b> ${userUpdated.api_key}
             	`);
         } else {
-            throw new ClientException(ErrorsMessages.USER_NOT_FOUND);
+            throw new Error(ErrorsMessages.USER_NOT_FOUND);
         }
     }
 }

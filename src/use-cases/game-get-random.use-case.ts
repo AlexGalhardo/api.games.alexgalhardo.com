@@ -1,7 +1,7 @@
 import { Game, GamesRepositoryPort } from "../repositories/games.repository";
 import { UsersRepositoryPort } from "../repositories/users.repository";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
+import { Error } from "../utils/exceptions.util";
 
 export interface GameGetRandomUseCasePort {
     execute(userAPIKey: string): Promise<GameGetRandomUseCaseResponse>;
@@ -23,11 +23,11 @@ export default class GameGetRandomUseCase implements GameGetRandomUseCasePort {
     private async returnRandomGame(api_requests_today?: number) {
         const randomGame = await this.gamesRepository.getRandom();
         if (randomGame) return { success: true, data: randomGame, api_requests_today };
-        throw new ClientException(ErrorsMessages.GET_RANDOM_GAME_ERROR);
+        throw new Error(ErrorsMessages.GET_RANDOM_GAME_ERROR);
     }
 
     async execute(userAPIKey: string): Promise<GameGetRandomUseCaseResponse> {
-        if (!userAPIKey) throw new ClientException(ErrorsMessages.INVALID_API_KEY);
+        if (!userAPIKey) throw new Error(ErrorsMessages.INVALID_API_KEY);
 
         if (userAPIKey === process.env.API_KEY_ADMIN) {
             return this.returnRandomGame();

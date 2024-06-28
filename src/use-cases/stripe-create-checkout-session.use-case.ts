@@ -3,7 +3,7 @@ import { APP_URL } from "../utils/constants.util";
 import { stripe } from "../config/stripe.config";
 import * as jwt from "jsonwebtoken";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
+import { Error } from "../utils/exceptions.util";
 
 interface StripeCreateCheckoutSessionUseCaseResponse {
     success: boolean;
@@ -30,10 +30,10 @@ export default class StripeCreateCheckoutSessionUseCase implements StripeCreateC
     ): Promise<StripeCreateCheckoutSessionUseCaseResponse> {
         const { userID } = jwt.verify(jwtToken, process.env.JWT_SECRET) as jwt.JwtPayload;
 
-        const { user } = await this.usersRepository.getById(userID);
+        const { user } = await this.usersRepository.findById(userID);
 
         if (user) {
-            if (user.stripe.subscription.active) throw new ClientException(ErrorsMessages.USER_HAS_ACTIVE_PLAN);
+            if (user.stripe.subscription.active) throw new Error(ErrorsMessages.USER_HAS_ACTIVE_PLAN);
 
             const { lookup_key } = stripeCreateCheckoutSessionDTO;
 
@@ -61,6 +61,6 @@ export default class StripeCreateCheckoutSessionUseCase implements StripeCreateC
             return { success: true, redirect: session.url };
         }
 
-        throw new ClientException(ErrorsMessages.USER_NOT_FOUND);
+        throw new Error(ErrorsMessages.USER_NOT_FOUND);
     }
 }

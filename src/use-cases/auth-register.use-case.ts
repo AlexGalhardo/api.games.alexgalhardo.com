@@ -2,13 +2,13 @@ import { randomUUID } from "crypto";
 import { UsersRepositoryPort } from "../repositories/users.repository";
 import { Bcrypt } from "../utils/bcrypt.util";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
 import * as jwt from "jsonwebtoken";
 import DateTime from "../utils/date-time.util";
 import GenerateRandomToken from "../utils/generate-random-token.util";
 import EmailValidator from "../validators/email.validator";
 import PhoneValidator from "../validators/phone.validator";
 import PasswordValidator from "../validators/password.validator";
+import UsernameValidator from "src/validators/user-name.validator";
 
 interface AuthRegisterUseCaseResponse {
     success: boolean;
@@ -38,13 +38,14 @@ export default class AuthRegisterUseCase implements AuthRegisterUseCasePort {
     async execute(authRegisterDTO: AuthRegisterDTO): Promise<AuthRegisterUseCaseResponse> {
         const { username, email, telegramNumber, password } = authRegisterDTO;
 
-        if (email && !EmailValidator.validate(email)) throw new ClientException(ErrorsMessages.EMAIL_IS_INVALID);
+        if (username && !UsernameValidator.validate(username)) throw new Error(ErrorsMessages.USERNAME_INVALID);
+
+        if (email && !EmailValidator.validate(email)) throw new Error(ErrorsMessages.EMAIL_INVALID);
 
         if (telegramNumber && !PhoneValidator.validate(telegramNumber))
-            throw new ClientException(ErrorsMessages.INVALID_PHONE_NUMBER);
+            throw new Error(ErrorsMessages.INVALID_PHONE_NUMBER);
 
-        if (password && !PasswordValidator.validate(password))
-            throw new ClientException(ErrorsMessages.PASSWORD_INSECURE);
+        if (password && !PasswordValidator.validate(password)) throw new Error(ErrorsMessages.PASSWORD_INSECURE);
 
         const hashedPassword = await Bcrypt.hash(password);
 
@@ -88,6 +89,6 @@ export default class AuthRegisterUseCase implements AuthRegisterUseCasePort {
             return { success: true, jwt_token };
         }
 
-        throw new ClientException(ErrorsMessages.EMAIL_ALREADY_REGISTRED);
+        throw new Error(ErrorsMessages.EMAIL_ALREADY_REGISTRED);
     }
 }

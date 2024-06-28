@@ -1,6 +1,6 @@
 import { User, UsersRepositoryPort } from "../repositories/users.repository";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
+import { Error } from "../utils/exceptions.util";
 import * as jwt from "jsonwebtoken";
 
 export interface AuthCheckUserJWTTokenUseCasePort {
@@ -19,10 +19,10 @@ export default class AuthCheckUserJWTTokenUseCase implements AuthCheckUserJWTTok
         const { userID } = jwt.verify(token, process.env.JWT_SECRET) as jwt.JwtPayload;
 
         if (userID && (await this.usersRepository.findById(userID))) {
-            const { user } = await this.usersRepository.getById(userID);
+            const { user } = await this.usersRepository.findById(userID);
             return { success: true, data: user };
         }
 
-        throw new ClientException(ErrorsMessages.USER_NOT_FOUND);
+        throw new Error(ErrorsMessages.USER_NOT_FOUND);
     }
 }

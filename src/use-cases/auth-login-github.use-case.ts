@@ -1,7 +1,6 @@
 import { UsersRepositoryPort } from "../repositories/users.repository";
 import { Bcrypt } from "../utils/bcrypt.util";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
 import * as jwt from "jsonwebtoken";
 import { Request } from "express";
 import { randomUUID } from "node:crypto";
@@ -32,7 +31,7 @@ export default class AuthLoginGitHubUseCase implements AuthLoginGitHubUseCasePor
 
     async execute(request: Request): Promise<AuthLoginGitHubUseCaseResponse> {
         try {
-            const requestToken = request.query.code;
+            const requestToken = String(request.query.code);
 
             const githubResponse = await fetch(
                 `https://github.com/login/oauth/access_token?client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}&code=${requestToken}`,
@@ -56,12 +55,12 @@ export default class AuthLoginGitHubUseCase implements AuthLoginGitHubUseCasePor
             const responseGithubProfileJSON = await responseGithubProfile.json();
 
             if (!emailValidator.validate(responseGithubProfileJSON.email))
-                throw new ClientException(ErrorsMessages.EMAIL_IS_INVALID);
+                throw new Error(ErrorsMessages.EMAIL_INVALID);
 
             const userExists = await this.usersRepository.findByEmail(responseGithubProfileJSON.email);
 
             if (userExists) {
-                const { user, index } = await this.usersRepository.getByEmail(responseGithubProfileJSON.email);
+                const { user, index } = await this.usersRepository.findByEmail(responseGithubProfileJSON.email);
                 const jwt_token = jwt.sign({ userID: user.id }, process.env.JWT_SECRET);
                 user.jwt_token = jwt_token;
                 await this.usersRepository.save(user, index);
@@ -115,7 +114,7 @@ export default class AuthLoginGitHubUseCase implements AuthLoginGitHubUseCasePor
                 };
             }
         } catch (error: any) {
-            throw new ClientException(error);
+            throw new Error(error);
         }
     }
 }

@@ -2,7 +2,7 @@ import DateTime from "../utils/date-time.util";
 import { StripeRepositoryPort } from "../repositories/stripe.repository";
 import { UsersRepositoryPort } from "../repositories/users.repository";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
+import { Error } from "../utils/exceptions.util";
 import GenerateRandomToken from "../utils/generate-random-token.util";
 
 export interface StripeWebhookChargeSucceededUseCasePort {
@@ -16,7 +16,7 @@ export default class StripeWebhookChargeSucceededUseCase implements StripeWebhoo
     ) {}
 
     async execute(event: any) {
-        const { user } = await this.usersRepository.getByEmail(event.data.object.billing_details.email);
+        const { user } = await this.usersRepository.findByEmail(event.data.object.billing_details.email);
 
         if (user) {
             await this.usersRepository.updateStripeSubscriptionInfo(user, {
@@ -32,7 +32,7 @@ export default class StripeWebhookChargeSucceededUseCase implements StripeWebhoo
 
             this.stripeRepository.saveChargeWebhookEventLog(event);
         } else {
-            throw new ClientException(ErrorsMessages.USER_NOT_FOUND);
+            throw new Error(ErrorsMessages.USER_NOT_FOUND);
         }
     }
 }

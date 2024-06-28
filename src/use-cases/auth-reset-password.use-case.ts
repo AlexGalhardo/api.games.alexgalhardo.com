@@ -1,7 +1,7 @@
 import { UsersRepositoryPort } from "../repositories/users.repository";
 import { Bcrypt } from "../utils/bcrypt.util";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
+import { Error } from "../utils/exceptions.util";
 import PasswordValidator from "../validators/password.validator";
 
 export interface AuthResetPasswordUseCasePort {
@@ -30,9 +30,9 @@ export default class AuthResetPasswordUseCase implements AuthResetPasswordUseCas
         const { newPassword, confirmNewPassword } = authResetPasswordDTO;
 
         if (!PasswordValidator.isEqual(newPassword, confirmNewPassword))
-            throw new ClientException(ErrorsMessages.PASSWORDS_NOT_EQUAL);
+            throw new Error(ErrorsMessages.PASSWORDS_NOT_EQUAL);
 
-        const { user } = await this.usersRepository.getByResetPasswordToken(resetPasswordToken);
+        const { user } = await this.usersRepository.findByResetPasswordToken(resetPasswordToken);
 
         if (user) {
             const hashedPassword = await Bcrypt.hash(newPassword);
@@ -42,6 +42,6 @@ export default class AuthResetPasswordUseCase implements AuthResetPasswordUseCas
             return { success: true };
         }
 
-        throw new ClientException(ErrorsMessages.RESET_PASSWORD_TOKEN_INVALID);
+        throw new Error(ErrorsMessages.RESET_PASSWORD_TOKEN_INVALID);
     }
 }

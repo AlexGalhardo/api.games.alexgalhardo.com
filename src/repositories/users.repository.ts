@@ -76,11 +76,9 @@ export interface UsersRepositoryPort {
     save(user?: any, index?: number): Promise<void>;
     transformToUserResponse(user): UserResponse;
     transformToUser(user): User;
-    findById(userId: string): Promise<boolean>;
-    findByEmail(email: string): Promise<boolean>;
-    getByEmail(email: string): Promise<UserResponse>;
-    getById(userId: string): Promise<UserResponse>;
-    getByResetPasswordToken(resetPasswordToken: string): Promise<UserResponse>;
+    findByEmail(email: string): Promise<UserResponse>;
+    findById(userId: string): Promise<UserResponse>;
+    findByResetPasswordToken(resetPasswordToken: string): Promise<UserResponse>;
     create(user: User): Promise<void>;
     update(userId: string, profileUpdatePayload: ProfileUpdateDTO): Promise<UserUpdated>;
     deleteByEmail(email: string): Promise<void>;
@@ -217,35 +215,7 @@ export default class UsersRepository implements UsersRepositoryPort {
         };
     }
 
-    public async findById(userId: string): Promise<boolean> {
-        if (process.env.USE_JSON_DATABASE === "true") return this.users.some((user: any) => user.id === userId);
-
-        const userExist = await this.database.users.findUnique({
-            where: {
-                id: userId,
-            },
-        });
-
-        if (userExist) return true;
-
-        return false;
-    }
-
-    public async findByEmail(email: string): Promise<boolean> {
-        if (process.env.USE_JSON_DATABASE === "true") return this.users.some((user: any) => user.email === email);
-
-        const userExist = await this.database.users.findUnique({
-            where: {
-                email,
-            },
-        });
-
-        if (userExist) return true;
-
-        return false;
-    }
-
-    public async getByEmail(email: string): Promise<UserResponse> {
+    public async findByEmail(email: string): Promise<UserResponse> {
         try {
             if (process.env.USE_JSON_DATABASE === "true") {
                 for (let i = 0; i < this.users.length; i++) {
@@ -272,7 +242,7 @@ export default class UsersRepository implements UsersRepositoryPort {
         }
     }
 
-    public async getById(userId: string): Promise<UserResponse> {
+    public async findById(userId: string): Promise<UserResponse> {
         try {
             if (process.env.USE_JSON_DATABASE === "true") {
                 for (let i = 0; i < this.users.length; i++) {
@@ -299,7 +269,7 @@ export default class UsersRepository implements UsersRepositoryPort {
         }
     }
 
-    public async getByResetPasswordToken(resetPasswordToken: string): Promise<UserResponse> {
+    public async findByResetPasswordToken(resetPasswordToken: string): Promise<UserResponse> {
         if (process.env.USE_JSON_DATABASE === "true") {
             for (let i = 0; i < this.users.length; i++) {
                 if (this.users[i].reset_password_token === resetPasswordToken) {

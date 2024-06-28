@@ -1,7 +1,7 @@
 import { Game, GamesRepositoryPort } from "../repositories/games.repository";
 import { UsersRepositoryPort } from "../repositories/users.repository";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
+import { Error } from "../utils/exceptions.util";
 
 export interface GameGetByIdUseCasePort {
     execute(gameId: string, userAPIKey: string): Promise<GameGetByIdUseCaseResponse>;
@@ -21,13 +21,13 @@ export default class GameGetByIdUseCase implements GameGetByIdUseCasePort {
     ) {}
 
     private async returnGameById(gameId: string, api_requests_today?: number) {
-        const gameById = await this.gamesRepository.getById(gameId);
+        const gameById = await this.gamesRepository.findById(gameId);
         if (gameById) return { success: true, api_requests_today, data: gameById };
-        throw new ClientException(ErrorsMessages.GET_GAME_BY_ID_ERROR);
+        throw new Error(ErrorsMessages.GET_GAME_BY_ID_ERROR);
     }
 
     async execute(gameId: string, userAPIKey: string): Promise<GameGetByIdUseCaseResponse> {
-        if (!userAPIKey) throw new ClientException(ErrorsMessages.INVALID_API_KEY);
+        if (!userAPIKey) throw new Error(ErrorsMessages.INVALID_API_KEY);
 
         if (userAPIKey === process.env.API_KEY_ADMIN) {
             return this.returnGameById(gameId);

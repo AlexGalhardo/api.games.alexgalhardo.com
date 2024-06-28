@@ -1,7 +1,7 @@
 import { UsersRepositoryPort } from "../repositories/users.repository";
 import { Bcrypt } from "../utils/bcrypt.util";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
+import { Error } from "../utils/exceptions.util";
 import * as jwt from "jsonwebtoken";
 import { Request } from "express";
 import { OAuth2Client } from "google-auth-library";
@@ -41,12 +41,12 @@ export default class AuthLoginGoogleUseCase implements AuthLoginGoogleUseCasePor
             const payload = googleResponse.getPayload();
             const { email, name } = payload;
 
-            if (!emailValidator.validate(email)) throw new ClientException(ErrorsMessages.EMAIL_IS_INVALID);
+            if (!emailValidator.validate(email)) throw new Error(ErrorsMessages.EMAIL_INVALID);
 
             const userExists = await this.usersRepository.findByEmail(email);
 
             if (userExists) {
-                const { user, index } = await this.usersRepository.getByEmail(email);
+                const { user, index } = await this.usersRepository.findByEmail(email);
                 const jwt_token = jwt.sign({ userID: user.id }, process.env.JWT_SECRET);
                 user.jwt_token = jwt_token;
                 await this.usersRepository.save(user, index);
@@ -100,7 +100,7 @@ export default class AuthLoginGoogleUseCase implements AuthLoginGoogleUseCasePor
                 };
             }
         } catch (error: any) {
-            throw new ClientException(error);
+            throw new Error(error);
         }
     }
 }

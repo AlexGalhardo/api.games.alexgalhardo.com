@@ -1,7 +1,6 @@
 import { UsersRepositoryPort } from "../repositories/users.repository";
 import { APP_URL } from "../utils/constants.util";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
 import GenerateRandomToken from "../utils/generate-random-token.util";
 import { SMTP } from "../config/smtp.config";
 import emailValidator from "../validators/email.validator";
@@ -28,9 +27,9 @@ export default class AuthForgetPasswordUseCase implements AuthForgetPasswordUseC
     async execute(authForgetPasswordDTO: AuthForgetPasswordDTO): Promise<AuthForgetPasswordUseCaseResponse> {
         const { email } = authForgetPasswordDTO;
 
-        if (!emailValidator.validate(email)) throw new ClientException(ErrorsMessages.EMAIL_IS_INVALID);
+        if (!emailValidator.validate(email)) throw new Error(ErrorsMessages.EMAIL_INVALID);
 
-        const { user } = await this.usersRepository.getByEmail(email);
+        const { user } = await this.usersRepository.findByEmail(email);
 
         if (user) {
             const reset_password_token = GenerateRandomToken();
@@ -55,10 +54,10 @@ export default class AuthForgetPasswordUseCase implements AuthForgetPasswordUseC
             if (sendEmailForgetPasswordResponse) {
                 return { success: true, reset_password_token };
             } else {
-                throw new ClientException(ErrorsMessages.PROCESSING_ERROR);
+                throw new Error(ErrorsMessages.EMAIL_FORGET_PASSWORD_NOT_SEND);
             }
         }
 
-        throw new ClientException(ErrorsMessages.USER_NOT_FOUND);
+        throw new Error(ErrorsMessages.USER_NOT_FOUND);
     }
 }

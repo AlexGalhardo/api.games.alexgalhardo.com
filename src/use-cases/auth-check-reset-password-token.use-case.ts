@@ -1,6 +1,6 @@
 import { UsersRepositoryPort } from "../repositories/users.repository";
 import { ErrorsMessages } from "../utils/errors-messages.util";
-import { ClientException } from "../utils/exceptions.util";
+import { Error } from "../utils/exceptions.util";
 
 export interface CheckResetPasswordTokenDTO {
     resetPasswordToken: string;
@@ -22,6 +22,6 @@ export default class AuthCheckResetPasswordTokenUseCase implements AuthCheckRese
 
         if (resetPasswordTokenExist) return { success: true };
 
-        throw new ClientException(ErrorsMessages.RESET_PASSWORD_TOKEN_INVALID);
+        throw new Error(ErrorsMessages.RESET_PASSWORD_TOKEN_INVALID);
     }
 }
