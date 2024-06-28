@@ -1,38 +1,37 @@
 import DateTime from "../utils/date-time.util";
 import { StripeRepositoryPort } from "../repositories/stripe.repository";
 import { UsersRepositoryPort } from "../repositories/users.repository";
-import { Error } from "../utils/exceptions.util";
 import { ErrorsMessages } from "../utils/errors-messages.util";
 import TelegramLog from "../config/telegram-logger.config";
 
 export interface StripeWebhookInvoiceFinalizedUseCasePort {
-    execute(event: any): void;
+	execute(event: any): void;
 }
 
 export default class StripeWebhookInvoiceFinalizedUseCase implements StripeWebhookInvoiceFinalizedUseCasePort {
-    constructor(
-        private readonly stripeRepository: StripeRepositoryPort,
-        private readonly usersRepository: UsersRepositoryPort,
-    ) {}
+	constructor(
+		private readonly stripeRepository: StripeRepositoryPort,
+		private readonly usersRepository: UsersRepositoryPort,
+	) { }
 
-    async execute(event: any) {
-        const { user } = await this.usersRepository.findByEmail(event.data.object.customer_email);
+	async execute(event: any) {
+		const { user } = await this.usersRepository.findByEmail(event.data.object.customer_email);
 
-        if (user) {
-            const userUpdated = await this.usersRepository.updateStripeSubscriptionInfo(user, {
-                customerId: event.data.object.customer ?? null,
-                invoiceId: event.data.object.id ?? null,
-                hostedInvoiceUrl: event.data.object.hosted_invoice_url ?? null,
-                amount: event.data.object.amount_due,
-                startAt: DateTime.timestampToGetNow(event.data.object.lines.data[0].period.start) ?? null,
-                endsAt: DateTime.timestampToGetNow(event.data.object.lines.data[0].period.end) ?? null,
-                createdAt: String(new Date(event.created)),
-                createdAtBrazil: DateTime.timestampToGetNow(event.created) ?? null,
-            });
+		if (user) {
+			const userUpdated = await this.usersRepository.updateStripeSubscriptionInfo(user, {
+				customerId: event.data.object.customer ?? null,
+				invoiceId: event.data.object.id ?? null,
+				hostedInvoiceUrl: event.data.object.hosted_invoice_url ?? null,
+				amount: event.data.object.amount_due,
+				startAt: DateTime.timestampToGetNow(event.data.object.lines.data[0].period.start) ?? null,
+				endsAt: DateTime.timestampToGetNow(event.data.object.lines.data[0].period.end) ?? null,
+				createdAt: String(new Date(event.created)),
+				createdAtBrazil: DateTime.timestampToGetNow(event.created) ?? null,
+			});
 
-            this.stripeRepository.saveInvoiceWebhookEventLog(event);
+			this.stripeRepository.saveInvoiceWebhookEventLog(event);
 
-            TelegramLog.info(`\n
+			TelegramLog.info(`\n
             	<b>STRIPE CHARGE ID:</b> ${userUpdated.stripe.subscription.charge_id}
             	<b>STRIPE CHARGE PAID:</b> ${userUpdated.stripe.subscription.active}
             	<b>STRIPE RECEIPT URL:</b> ${userUpdated.stripe.subscription.receipt_url}
@@ -49,8 +48,8 @@ export default class StripeWebhookInvoiceFinalizedUseCase implements StripeWebho
             	<b>CUSTOMER SUBSCRIPTION ACTIVE: </b> ${userUpdated.stripe.subscription.active}
             	<b>CUSTOMER API TOKEN: </b> ${userUpdated.api_key}
             	`);
-        } else {
-            throw new Error(ErrorsMessages.USER_NOT_FOUND);
-        }
-    }
+		} else {
+			throw new Error(ErrorsMessages.USER_NOT_FOUND);
+		}
+	}
 }
