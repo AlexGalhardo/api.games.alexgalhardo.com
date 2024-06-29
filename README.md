@@ -78,11 +78,6 @@ a. Run all tests
 npm run test
 ```
 
-b. Run integrations tests
-```bash
-npm run test:integration
-```
-
 ## API Requests
 
 - You can see the HTTP Requests references inside folder **rest-client/**
