@@ -1,1 +1,3 @@
-GET http://localhost:3000/games/random HTTP/1.1
+GET http://localhost:3000/games/random
+Content-Type: application/json
+Authorizaton: Bearer api_key_admin

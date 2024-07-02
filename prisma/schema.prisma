@@ -21,7 +21,7 @@ model Users {
   reset_password_token_expires_at        String?
   stripe_customer_id                     String?   @unique
   stripe_subscription_active             Boolean   @default(false)
-  stripe_subscription_name               String?   @default("NOOB")
+  stripe_subscription_name               String
   stripe_subscription_starts_at          String?
   stripe_subscription_ends_at            String?
   stripe_subscription_charge_id          String?   @unique
@@ -36,6 +36,12 @@ model Users {
 
   @@unique(fields: [email, reset_password_token], name: "resetPasswordTokenIsValid")
   @@map("users")
+}
+
+enum SubscriptionName {
+	NOOB
+	CASUAL
+	PRO
 }
 
 model Games {

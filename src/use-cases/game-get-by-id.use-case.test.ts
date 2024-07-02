@@ -3,29 +3,29 @@ import { Game, GamesRepositoryPort } from "../repositories/games.repository";
 import { GameGetByIdUseCasePort } from "../use-cases/game-get-by-id.use-case";
 import { mock } from "jest-mock-extended";
 
-describe("Test GameGetByIdUseCase", () => {
-    beforeAll(async () => {
-        await Test.createTestingModule({
-            controllers: [],
-            providers: [
-                { provide: "GameGetByIdUseCasePort", useValue: mock<GameGetByIdUseCasePort>() },
-                { provide: "GamesRepositoryPort", useValue: mock<GamesRepositoryPort>() },
-            ],
-        }).compile();
-    });
+describe("...Testing Game Get By Id Use Case", () => {
+	beforeAll(async () => {
+		await Test.createTestingModule({
+			controllers: [],
+			providers: [
+				{ provide: "GameGetByIdUseCasePort", useValue: mock<GameGetByIdUseCasePort>() },
+				{ provide: "GamesRepositoryPort", useValue: mock<GamesRepositoryPort>() },
+			],
+		}).compile();
+	});
 
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
+	beforeEach(() => {
+		jest.clearAllMocks();
+	});
 
-    it("should return a game by id with correct data", async () => {
-        const mockGetGameByIdUseCase = mock<GameGetByIdUseCasePort>();
-        const mockGame = mock<Game>();
-        mockGetGameByIdUseCase.execute.mockResolvedValueOnce({ success: true, data: mockGame });
+	it("should return a game by id with correct data", async () => {
+		const mockGetGameByIdUseCase = mock<GameGetByIdUseCasePort>();
+		const mockGame = mock<Game>();
+		mockGetGameByIdUseCase.execute.mockResolvedValueOnce({ success: true, data: mockGame });
 
-        const { success, data } = await mockGetGameByIdUseCase.execute(mockGame.id, process.env.API_KEY_ADMIN);
+		const { success, data } = await mockGetGameByIdUseCase.execute(mockGame.id, process.env.API_KEY_ADMIN);
 
-        expect(success).toBeTruthy();
-        expect(data).toBe(mockGame);
-    });
+		expect(success).toBeTruthy();
+		expect(data).toBe(mockGame);
+	});
 });

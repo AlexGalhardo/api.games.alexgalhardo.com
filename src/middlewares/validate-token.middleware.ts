@@ -1,24 +1,28 @@
 import { HttpStatus, Injectable, NestMiddleware } from "@nestjs/common";
-import { Request, Response, NextFunction } from "express";
+import { FastifyRequest, FastifyReply } from 'fastify';
 import { ErrorsMessages } from "../utils/errors-messages.util";
 
 @Injectable()
 export class ValidateToken implements NestMiddleware {
-    use(request: Request, response: Response, next: NextFunction) {
-        if (
-            !request.headers?.authorization ||
-            !request.headers.authorization.startsWith("Bearer") ||
-            !request.headers.authorization.split(" ")[1]
-        ) {
-            return response
-                .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, error: ErrorsMessages.MISSING_HEADER_AUTHORIZATION_BEARER_TOKEN });
-        }
+	use(req: FastifyRequest['raw'], res: FastifyReply['raw'], next: () => void) {
+		const authorization = req.headers.authorizaton as string
 
-        const token = request.headers.authorization.split(" ")[1];
+		if (
+			!authorization ||
+			!authorization.startsWith("Bearer") ||
+			!authorization.split(" ")[1]
+		) {
+			return res
+				// .status(HttpStatus.BAD_REQUEST)
+				.end(JSON.stringify({ success: false, error: ErrorsMessages.MISSING_HEADER_AUTHORIZATION_BEARER_TOKEN }));
+		}
 
-        response.locals.token = token;
+		const token = authorization.split(" ")[1];
 
-        next();
-    }
+		req.headers['token'] = token;
+
+		console.log("req.headers['token'] => ", req.headers['token'])
+
+		next();
+	}
 }

@@ -3,61 +3,61 @@ import { APP_URL } from "../utils/constants.util";
 import { ErrorsMessages } from "../utils/errors-messages.util";
 import GenerateRandomToken from "../utils/generate-random-token.util";
 import { SMTP } from "../config/smtp.config";
-import emailValidator from "../validators/email.validator";
+import { z } from "zod";
 
 export interface AuthForgetPasswordUseCasePort {
-    execute(authForgetPasswordDTO: AuthForgetPasswordDTO): Promise<AuthForgetPasswordUseCaseResponse>;
+	execute(authForgetPasswordDTO: AuthForgetPasswordDTO): Promise<AuthForgetPasswordUseCaseResponse>;
 }
 
 export interface AuthForgetPasswordDTO {
-    email: string;
+	email: string;
 }
 
 interface AuthForgetPasswordUseCaseResponse {
-    success: boolean;
-    reset_password_token?: string;
+	success: boolean;
+	reset_password_token?: string;
 }
 
 export default class AuthForgetPasswordUseCase implements AuthForgetPasswordUseCasePort {
-    constructor(
-        private readonly usersRepository: UsersRepositoryPort,
-        private readonly smtp = SMTP,
-    ) {}
+	constructor(
+		private readonly usersRepository: UsersRepositoryPort,
+		private readonly smtp = SMTP,
+	) { }
 
-    async execute(authForgetPasswordDTO: AuthForgetPasswordDTO): Promise<AuthForgetPasswordUseCaseResponse> {
-        const { email } = authForgetPasswordDTO;
+	async execute(authForgetPasswordDTO: AuthForgetPasswordDTO): Promise<AuthForgetPasswordUseCaseResponse> {
+		z.object({ email: z.string().email() }).parse(authForgetPasswordDTO);
 
-        if (!emailValidator.validate(email)) throw new Error(ErrorsMessages.EMAIL_INVALID);
+		const { email } = authForgetPasswordDTO;
 
-        const { user } = await this.usersRepository.findByEmail(email);
+		const { user } = await this.usersRepository.findByEmail(email);
 
-        if (user) {
-            const reset_password_token = GenerateRandomToken();
+		if (user) {
+			const reset_password_token = GenerateRandomToken();
 
-            await this.usersRepository.saveResetPasswordToken(user.id, reset_password_token);
+			await this.usersRepository.saveResetPasswordToken(user.id, reset_password_token);
 
-            const resetPasswordLink = `${APP_URL}/reset-password/${reset_password_token}`;
+			const resetPasswordLink = `${APP_URL}/reset-password/${reset_password_token}`;
 
-            const sendEmailForgetPasswordResponse = await this.smtp.sendMail({
-                from: process.env.SMTP_EMAIL_FROM,
-                to: "aleexgvieira@gmail.com", // email
-                subject: `NerdAPI: Forget Password Link To ${email}`,
-                html: `
+			const sendEmailForgetPasswordResponse = await this.smtp.sendMail({
+				from: process.env.SMTP_EMAIL_FROM,
+				to: "aleexgvieira@gmail.com", // email
+				subject: `NerdAPI: Forget Password Link To ${email}`,
+				html: `
 					<p>Hello ${user.username},</p>
 					<p>To recover your password, click on this link do reset your password: </p>
 					<p><strong>${resetPasswordLink}</strong></p>
 					<hr>
 					<p>NerdAPI</p>
 				`,
-            });
+			});
 
-            if (sendEmailForgetPasswordResponse) {
-                return { success: true, reset_password_token };
-            } else {
-                throw new Error(ErrorsMessages.EMAIL_FORGET_PASSWORD_NOT_SEND);
-            }
-        }
+			if (sendEmailForgetPasswordResponse) {
+				return { success: true, reset_password_token };
+			} else {
+				throw new Error(ErrorsMessages.EMAIL_FORGET_PASSWORD_NOT_SEND);
+			}
+		}
 
-        throw new Error(ErrorsMessages.USER_NOT_FOUND);
-    }
+		throw new Error(ErrorsMessages.USER_NOT_FOUND);
+	}
 }
