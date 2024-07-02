@@ -5,35 +5,37 @@ import { Contact } from "../entities/contact.entity";
 import { ContactSendMessageDTO, ContactSendMessageUseCasePort } from "../use-cases/contact-send-message.use-case";
 
 interface ContactUseCaseResponse {
-	success: boolean;
-	message?: string;
+    success: boolean;
+    message?: string;
 }
 interface ContactControllerPort {
-	contactSendMessage(
-		contactSendMessageDTO: ContactSendMessageDTO,
-		response: Response,
-	): Promise<Response<ContactUseCaseResponse>>;
+    contactSendMessage(
+        contactSendMessageDTO: ContactSendMessageDTO,
+        response: Response,
+    ): Promise<Response<ContactUseCaseResponse>>;
 }
 
 @Controller()
 @ApiTags("contact")
 export class ContactController implements ContactControllerPort {
-	constructor(
-		@Inject("ContactSendMessageUseCasePort")
-		private readonly contactSendMessageUseCase: ContactSendMessageUseCasePort,
-	) { }
+    constructor(
+        @Inject("ContactSendMessageUseCasePort")
+        private readonly contactSendMessageUseCase: ContactSendMessageUseCasePort,
+    ) {}
 
-	@Post("/contact")
-	@ApiResponse({ status: 200, type: Contact })
-	async contactSendMessage(
-		@Body() contactSendMessageDTO: ContactSendMessageDTO,
-		@Res() response: Response,
-	): Promise<Response<ContactUseCaseResponse>> {
-		try {
-			const { success } = await this.contactSendMessageUseCase.execute(contactSendMessageDTO);
-			if (success) return response.status(HttpStatus.OK).json({ success: true });
-		} catch (error: any) {
-			return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message: error.issues ?? error.message });
-		}
-	}
+    @Post("/contact")
+    @ApiResponse({ status: 200, type: Contact })
+    async contactSendMessage(
+        @Body() contactSendMessageDTO: ContactSendMessageDTO,
+        @Res() response: Response,
+    ): Promise<Response<ContactUseCaseResponse>> {
+        try {
+            const { success } = await this.contactSendMessageUseCase.execute(contactSendMessageDTO);
+            if (success) return response.status(HttpStatus.OK).json({ success: true });
+        } catch (error: any) {
+            return response
+                .status(HttpStatus.BAD_REQUEST)
+                .json({ success: false, message: error.issues ?? error.message });
+        }
+    }
 }

@@ -6,28 +6,28 @@ import { randomUUID } from "node:crypto";
 import * as jwt from "jsonwebtoken";
 
 describe("...Testing Auth Register Use Case", () => {
-	beforeAll(async () => {
-		await Test.createTestingModule({
-			controllers: [],
-			providers: [
-				{ provide: "UsersRepositoryPort", useValue: mock<UsersRepositoryPort>() },
-				{ provide: "AuthRegisterUseCasePort", useValue: mock<AuthRegisterUseCasePort>() },
-			],
-		}).compile();
-	});
+    beforeAll(async () => {
+        await Test.createTestingModule({
+            controllers: [],
+            providers: [
+                { provide: "UsersRepositoryPort", useValue: mock<UsersRepositoryPort>() },
+                { provide: "AuthRegisterUseCasePort", useValue: mock<AuthRegisterUseCasePort>() },
+            ],
+        }).compile();
+    });
 
-	beforeEach(() => {
-		jest.clearAllMocks();
-	});
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
 
-	it("should register a user", async () => {
-		const authRegisterDTO = mock<AuthRegisterDTO>();
-		const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
-		const jwtToken = jwt.sign({ userID: randomUUID() }, "jwtsecret");
-		mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: jwtToken });
-		const { success, jwt_token } = await mockAuthRegisterUseCase.execute(authRegisterDTO);
+    it("should register a user", async () => {
+        const authRegisterDTO = mock<AuthRegisterDTO>();
+        const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
+        const jwtToken = jwt.sign({ userID: randomUUID() }, "jwtsecret");
+        mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: jwtToken });
+        const { success, jwt_token } = await mockAuthRegisterUseCase.execute(authRegisterDTO);
 
-		expect(success).toBeTruthy();
-		expect(jwt_token).toBe(jwtToken);
-	});
+        expect(success).toBeTruthy();
+        expect(jwt_token).toBe(jwtToken);
+    });
 });

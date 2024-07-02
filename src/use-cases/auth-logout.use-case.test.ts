@@ -11,65 +11,65 @@ import PasswordValidator from "../validators/password.validator";
 import PhoneValidator from "../validators/phone.validator";
 
 describe("...Testing Auth Logout Use Case", () => {
-	beforeAll(async () => {
-		await Test.createTestingModule({
-			controllers: [],
-			providers: [
-				{ provide: "UsersRepositoryPort", useValue: mock<UsersRepositoryPort>() },
-				{ provide: "AuthRegisterUseCasePort", useValue: mock<AuthRegisterUseCasePort>() },
-				{ provide: "AuthLoginUseCasePort", useValue: mock<AuthLoginUseCasePort>() },
-				{ provide: "AuthLogoutUseCasePort", useValue: mock<AuthLogoutUseCasePort>() },
-			],
-		}).compile();
-	});
+    beforeAll(async () => {
+        await Test.createTestingModule({
+            controllers: [],
+            providers: [
+                { provide: "UsersRepositoryPort", useValue: mock<UsersRepositoryPort>() },
+                { provide: "AuthRegisterUseCasePort", useValue: mock<AuthRegisterUseCasePort>() },
+                { provide: "AuthLoginUseCasePort", useValue: mock<AuthLoginUseCasePort>() },
+                { provide: "AuthLogoutUseCasePort", useValue: mock<AuthLogoutUseCasePort>() },
+            ],
+        }).compile();
+    });
 
-	beforeEach(() => {
-		jest.clearAllMocks();
-	});
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
 
-	const userEmail = EmailValidator.generate();
-	const userPassword = PasswordValidator.generate();
-	let loginToken = null;
+    const userEmail = EmailValidator.generate();
+    const userPassword = PasswordValidator.generate();
+    let loginToken = null;
 
-	it("should register a user", async () => {
-		const authRegisterDTO = mock<AuthRegisterDTO>({
-			username: "Testing Logout Test",
-			email: userEmail,
-			telegramNumber: PhoneValidator.generate(),
-			password: userPassword,
-		});
-		const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
-		const jwtToken = jwt.sign({ userID: randomUUID() }, "jwtsecret");
-		mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: jwtToken });
-		const { success, jwt_token } = await mockAuthRegisterUseCase.execute(authRegisterDTO);
+    it("should register a user", async () => {
+        const authRegisterDTO = mock<AuthRegisterDTO>({
+            username: "Testing Logout Test",
+            email: userEmail,
+            telegramNumber: PhoneValidator.generate(),
+            password: userPassword,
+        });
+        const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
+        const jwtToken = jwt.sign({ userID: randomUUID() }, "jwtsecret");
+        mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: jwtToken });
+        const { success, jwt_token } = await mockAuthRegisterUseCase.execute(authRegisterDTO);
 
-		expect(success).toBeTruthy();
-		expect(jwt_token).toBe(jwtToken);
-	});
+        expect(success).toBeTruthy();
+        expect(jwt_token).toBe(jwtToken);
+    });
 
-	it("should login a user", async () => {
-		const mockAuthLoginDTO = mock<AuthLoginDTO>({
-			email: userEmail,
-			password: userPassword,
-		});
-		const mockAuthLoginUseCasePort = mock<AuthLoginUseCasePort>();
-		mockAuthLoginUseCasePort.execute.mockResolvedValueOnce({ success: true, jwt_token: "jwtotken" });
+    it("should login a user", async () => {
+        const mockAuthLoginDTO = mock<AuthLoginDTO>({
+            email: userEmail,
+            password: userPassword,
+        });
+        const mockAuthLoginUseCasePort = mock<AuthLoginUseCasePort>();
+        mockAuthLoginUseCasePort.execute.mockResolvedValueOnce({ success: true, jwt_token: "jwtotken" });
 
-		let response = await mockAuthLoginUseCasePort.execute(mockAuthLoginDTO);
+        let response = await mockAuthLoginUseCasePort.execute(mockAuthLoginDTO);
 
-		loginToken = response.jwt_token;
+        loginToken = response.jwt_token;
 
-		expect(response).toStrictEqual({
-			success: true,
-			jwt_token: loginToken,
-		});
-	});
+        expect(response).toStrictEqual({
+            success: true,
+            jwt_token: loginToken,
+        });
+    });
 
-	it("should logout a user", async () => {
-		const mockAuthLogoutUseCasePort = mock<AuthLogoutUseCasePort>();
-		mockAuthLogoutUseCasePort.execute.mockResolvedValueOnce({ success: true });
-		const { success } = await mockAuthLogoutUseCasePort.execute(loginToken);
+    it("should logout a user", async () => {
+        const mockAuthLogoutUseCasePort = mock<AuthLogoutUseCasePort>();
+        mockAuthLogoutUseCasePort.execute.mockResolvedValueOnce({ success: true });
+        const { success } = await mockAuthLogoutUseCasePort.execute(loginToken);
 
-		expect(success).toBeTruthy();
-	});
+        expect(success).toBeTruthy();
+    });
 });

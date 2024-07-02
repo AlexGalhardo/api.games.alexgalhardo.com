@@ -5,46 +5,46 @@ import * as jwt from "jsonwebtoken";
 import AuthLoginValidator from "src/validators/auth-login.validator";
 
 export interface AuthLoginUseCasePort {
-	execute(authLoginDTO: AuthLoginDTO): Promise<UserLoginUseCaseResponse>;
+    execute(authLoginDTO: AuthLoginDTO): Promise<UserLoginUseCaseResponse>;
 }
 
 export interface AuthLoginDTO {
-	email: string;
-	password: string;
+    email: string;
+    password: string;
 }
 
 interface UserLoginUseCaseResponse {
-	success: boolean;
-	jwt_token?: string;
-	message?: string;
+    success: boolean;
+    jwt_token?: string;
+    message?: string;
 }
 
 export default class AuthLoginUseCase implements AuthLoginUseCasePort {
-	constructor(private readonly usersRepository: UsersRepositoryPort) { }
+    constructor(private readonly usersRepository: UsersRepositoryPort) {}
 
-	async execute(authLoginPayload: AuthLoginDTO): Promise<UserLoginUseCaseResponse> {
-		AuthLoginValidator.parse(authLoginPayload);
+    async execute(authLoginPayload: AuthLoginDTO): Promise<UserLoginUseCaseResponse> {
+        AuthLoginValidator.parse(authLoginPayload);
 
-		const { email, password } = authLoginPayload
+        const { email, password } = authLoginPayload;
 
-		if (email && password) {
-			const { user, index } = await this.usersRepository.findByEmail(email);
+        if (email && password) {
+            const { user, index } = await this.usersRepository.findByEmail(email);
 
-			if (user) {
-				if (!(await Bcrypt.compare(password, user.password))) {
-					return { success: false, message: ErrorsMessages.EMAIL_OR_PASSWORD_INVALID };
-				}
+            if (user) {
+                if (!(await Bcrypt.compare(password, user.password))) {
+                    return { success: false, message: ErrorsMessages.EMAIL_OR_PASSWORD_INVALID };
+                }
 
-				const jwt_token = jwt.sign({ userID: user.id }, process.env.JWT_SECRET);
-				user.jwt_token = jwt_token;
-				await this.usersRepository.save(user, index);
+                const jwt_token = jwt.sign({ userID: user.id }, process.env.JWT_SECRET);
+                user.jwt_token = jwt_token;
+                await this.usersRepository.save(user, index);
 
-				return { success: true, jwt_token };
-			}
+                return { success: true, jwt_token };
+            }
 
-			throw new Error(ErrorsMessages.USER_NOT_FOUND);
-		}
+            throw new Error(ErrorsMessages.USER_NOT_FOUND);
+        }
 
-		throw new Error(ErrorsMessages.EMAIL_OR_PASSWORD_INVALID);
-	}
+        throw new Error(ErrorsMessages.EMAIL_OR_PASSWORD_INVALID);
+    }
 }
