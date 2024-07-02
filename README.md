@@ -1,21 +1,39 @@
 <div align="center">
- <h1 align="center"><a href="https://api.nerdapi.com/" target="_blank">api.nerdapi.com v2</a></h1>
+	<h1 align="center"><a href="https://api.nerdapi.com/" target="_blank">api.nerdapi.com v2</a></h1>
 </div>
 
 ## Introduction
 
-- A personal project I created to learn and improve my skills in:
-   - Clean/Hexagonal Architecture Principles (ports, useCases, repositories, etc)
-   - Stateless Authentication & Authorization using JWT
-   - API (REST) development and documentation
-   - Tests (Unit, integration, TDD, etc)
-   - Web Scrapping
-   - API Requests Handling & Limit & Quota
-   - SaaS (Software as a Service) Backend Development
-   - And so on
-- This project use 2 databases:
-   - JSONs files for simplicity and fast development.
-   - PostgresSQL using PrismaORM (migrations, seeds, prisma studio) and Docker
+- Backend REST API for <https://nerdapi.com>
+
+## Technologies & Tools
+- [x] NestJS
+- [x] Typescript
+- [x] Docker
+- [x] PrismaORM
+- [x] PostgreSQL
+- [x] JSON Database
+- [x] Fastify
+- [x] JWT
+- [x] Prettier
+- [x] Jest
+- [x] Stripe Subscription Checkout API Integration
+- [x] Weebhooks listening to Stripe events
+- [x] Resend for emails
+- [x] Zod to validate payloads inputs
+
+## Features
+- [x] Stateless Authentication & Authorization using JWT
+- [x] Social Login Authentication (Github & Google)
+- [x] Clean/Hexagonal Architecture Principles (ports, useCases, repositories, etc)
+- [x] Unit Tests using mocks
+- [x] Integration tests using supertest
+- [x] Telegram Logger
+- [x] API Rate Limiter & Throttler
+- [x] Web Security Policies (CORs, Helmet, etc)
+- [x] Swagger API Documentation
+- [x] API Authentication using API Keys
+- [x] Email service for contact and payment transactions
 
 ## FrontEnd & Docs
 - FrontEnd Source Code: <https://github.com/AlexGalhardo/nerdapi.com>
