@@ -251,7 +251,7 @@ export default class UsersRepository implements UsersRepositoryPort {
                     }
                 }
 
-                throw new Error(ErrorsMessages.USER_NOT_FOUND);
+                return null;
             }
 
             const user = await this.database.users.findUnique({
@@ -277,7 +277,7 @@ export default class UsersRepository implements UsersRepositoryPort {
                 }
             }
 
-            throw new Error(ErrorsMessages.USER_NOT_FOUND);
+            return null;
         }
 
         const user = await this.database.users.findFirst({

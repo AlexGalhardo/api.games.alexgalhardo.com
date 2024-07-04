@@ -21,7 +21,7 @@ import { APP_GUARD } from "@nestjs/core";
         ConfigModule.forRoot({ isGlobal: true }),
         ThrottlerModule.forRoot([
             {
-                ttl: 2000, // milliseconds
+                ttl: 1000, // milliseconds
                 limit: 1, // 1 request each ttl
             },
         ]),
