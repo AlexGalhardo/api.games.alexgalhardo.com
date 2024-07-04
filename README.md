@@ -4,7 +4,7 @@
 
 ## Introduction
 
-- A personal project I created to learn and improve my skills in:
+- A side project I created to learn and improve my skills in:
    - Clean/Hexagonal Architecture Principles (ports, useCases, repositories, etc)
    - Stateless Authentication & Authorization using JWT
    - API (REST) development and documentation
