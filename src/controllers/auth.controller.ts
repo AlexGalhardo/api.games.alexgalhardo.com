@@ -14,6 +14,7 @@ import { AuthResetPasswordDTO, AuthResetPasswordUseCasePort } from "../use-cases
 import { AuthCheckUserJWTTokenUseCasePort } from "../use-cases/auth-check-user-jwt-token.use-case";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Auth } from "../entities/auth.entity";
+import { FastifyRequest, FastifyReply } from "fastify";
 
 interface AuthUseCaseResponse {
     success: boolean;
@@ -24,7 +25,7 @@ interface AuthUseCaseResponse {
 
 interface AuthControllerPort {
     login(authLoginDTO: AuthLoginDTO, response: Response): Promise<Response<AuthUseCaseResponse>>;
-    register(authRegisterDTO: AuthRegisterDTO, response: Response): Promise<Response<AuthUseCaseResponse>>;
+    register(authRegisterDTO: AuthRegisterDTO, response: FastifyReply): Promise<Response<AuthUseCaseResponse>>;
     logout(response: Response): Promise<Response<AuthUseCaseResponse>>;
     tokenUser(response: Response): Promise<Response<AuthUseCaseResponse>>;
     forgetPassword(
@@ -66,12 +67,12 @@ export class AuthController implements AuthControllerPort {
     ): Promise<Response<AuthUseCaseResponse>> {
         try {
             const { success, jwt_token, message } = await this.authLoginUseCase.execute(authLoginPayload);
-            if (success === true) return response.status(HttpStatus.OK).json({ success: true, jwt_token });
-            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message });
+            if (success === true) return response.status(HttpStatus.OK).send({ success: true, jwt_token });
+            return response.status(HttpStatus.BAD_REQUEST).send({ success: false, message });
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 
@@ -79,15 +80,15 @@ export class AuthController implements AuthControllerPort {
     @ApiResponse({ status: 201, type: Auth })
     async register(
         @Body() authRegisterPayload: AuthRegisterDTO,
-        @Res() response: Response,
+        @Res() response: FastifyReply,
     ): Promise<Response<AuthUseCaseResponse>> {
         try {
             const { success, jwt_token } = await this.authRegisterUseCase.execute(authRegisterPayload);
-            if (success === true) return response.status(HttpStatus.OK).json({ success: true, jwt_token });
+            if (success === true) return response.status(HttpStatus.OK).send({ success: true, jwt_token });
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 
@@ -98,11 +99,11 @@ export class AuthController implements AuthControllerPort {
         try {
             const userJWTToken = response.locals.token;
             const { success } = await this.authLogoutUseCase.execute(userJWTToken);
-            if (success) return response.status(HttpStatus.OK).json({ success: true });
+            if (success) return response.status(HttpStatus.OK).send({ success: true });
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 
@@ -113,11 +114,11 @@ export class AuthController implements AuthControllerPort {
         try {
             const userJWTToken = response.locals.token;
             const { success, data } = await this.authCheckUserJWTTokenUseCase.execute(userJWTToken);
-            if (success) return response.status(HttpStatus.OK).json({ success: true, data });
+            if (success) return response.status(HttpStatus.OK).send({ success: true, data });
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 
@@ -129,11 +130,11 @@ export class AuthController implements AuthControllerPort {
     ): Promise<Response<AuthUseCaseResponse>> {
         try {
             const { success } = await this.authForgetPasswordUseCase.execute(authForgetPasswordPayload);
-            if (success) return response.status(HttpStatus.OK).json({ success: true });
+            if (success) return response.status(HttpStatus.OK).send({ success: true });
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 
@@ -150,11 +151,11 @@ export class AuthController implements AuthControllerPort {
                 reset_password_token,
                 authResetPasswordPayload,
             );
-            if (success) return response.status(HttpStatus.OK).json({ success: true });
+            if (success) return response.status(HttpStatus.OK).send({ success: true });
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 
@@ -166,11 +167,11 @@ export class AuthController implements AuthControllerPort {
     ): Promise<Response<AuthUseCaseResponse>> {
         try {
             const { success } = await this.authCheckResetPasswordTokenUseCase.execute(resetPasswordToken);
-            if (success) return response.status(HttpStatus.OK).json({ success: true });
+            if (success) return response.status(HttpStatus.OK).send({ success: true });
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 
@@ -185,7 +186,7 @@ export class AuthController implements AuthControllerPort {
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 
@@ -200,7 +201,7 @@ export class AuthController implements AuthControllerPort {
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 }

@@ -1,6 +1,6 @@
 import { Controller, Res, HttpStatus, Get, Inject, Req } from "@nestjs/common";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { Request, Response } from "express";
+import { FastifyRequest, FastifyReply } from "fastify";
 import { GameEntity } from "../entities/game.entity";
 import { Game } from "../repositories/games.repository";
 import { GameGetByIdUseCasePort } from "../use-cases/game-get-by-id.use-case";
@@ -15,9 +15,9 @@ interface GameUseCaseResponse {
 }
 
 interface GamesControllerPort {
-    getRandom(req: any, reply): Promise<Response<GameUseCaseResponse>>;
-    findById(req: any, reply): Promise<Response<GameUseCaseResponse>>;
-    getByTitle(req: any, reply): Promise<Response<GameUseCaseResponse>>;
+    getRandom(req: any, reply): Promise<GameUseCaseResponse>;
+    findById(req: any, reply): Promise<GameUseCaseResponse>;
+    getByTitle(req: any, reply): Promise<GameUseCaseResponse>;
 }
 
 @Controller("games")
@@ -32,23 +32,22 @@ export class GamesController implements GamesControllerPort {
     @Get("/random")
     @ApiBearerAuth()
     @ApiResponse({ status: 200, description: "Use api_key_admin in Authorize", type: GameEntity })
-    async getRandom(@Req req: Request, @Res reply: Response): Promise<Response<GameUseCaseResponse>> {
+    async getRandom(@Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<GameUseCaseResponse> {
         try {
-            const userAPIKey = req.headers["token"];
-            console.log("userAPIKey => ", userAPIKey);
+            const userAPIKey = request.headers["token"] as string;
             const { success, data, error, api_requests_today } = await this.gameGetRandomUseCase.execute(userAPIKey);
-            if (success) return reply.status(HttpStatus.OK).send({ success: true, api_requests_today, data });
-            return reply.status(HttpStatus.OK).send({ success: false, error, api_requests_today });
+            if (success) return response.status(HttpStatus.OK).send({ success: true, api_requests_today, data });
+            return response.status(HttpStatus.OK).send({ success: false, error, api_requests_today });
         } catch (error: any) {
-            return reply.send({ success: false, error: error.issues ?? error.message });
+            return response.send({ success: false, error: error.issues ?? error.message });
         }
     }
 
     @Get("/id/:game_id")
-    async findById(@Req() request: Request, @Res() response: Response): Promise<Response<GameUseCaseResponse>> {
+    async findById(@Req() request, @Res() response: FastifyReply): Promise<GameUseCaseResponse> {
         try {
             const { game_id } = request.params;
-            const userAPIKey = response.locals.token;
+            const userAPIKey = request.headers["token"] as string;
             const { success, data, error, api_requests_today } = await this.gameGetByIdUseCase.execute(
                 game_id,
                 userAPIKey,
@@ -63,10 +62,10 @@ export class GamesController implements GamesControllerPort {
     }
 
     @Get("/title/:game_title")
-    async getByTitle(@Req() request: Request, @Res() response: Response): Promise<Response<GameUseCaseResponse>> {
+    async getByTitle(@Req() request, @Res() response: FastifyReply): Promise<GameUseCaseResponse> {
         try {
             const { game_title } = request.params;
-            const userAPIKey = response.locals.token;
+            const userAPIKey = request.headers["token"] as string;
             const { success, data, error, api_requests_today } = await this.gameGetByTitleUseCase.execute(
                 game_title,
                 userAPIKey,

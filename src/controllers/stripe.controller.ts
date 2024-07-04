@@ -68,11 +68,11 @@ export class StripeController implements StripeControllerPort {
                 userJWTToken,
                 stripeCreateCheckoutSessionDTO,
             );
-            if (success) return response.status(HttpStatus.OK).json({ success: true, redirect });
+            if (success) return response.status(HttpStatus.OK).send({ success: true, redirect });
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 
@@ -88,11 +88,11 @@ export class StripeController implements StripeControllerPort {
                 userJWTToken,
                 stripeCreatePortalSessionDTO,
             );
-            if (success) return response.status(HttpStatus.OK).json({ success: true, redirect });
+            if (success) return response.status(HttpStatus.OK).send({ success: true, redirect });
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 
@@ -182,9 +182,9 @@ export class StripeController implements StripeControllerPort {
                     TelegramLog.error(event.type);
             }
 
-            return response.json({ received: true });
+            return response.send({ received: true });
         } catch (error: any) {
-            return response.json({ received: false });
+            return response.send({ received: false });
         }
     }
 }

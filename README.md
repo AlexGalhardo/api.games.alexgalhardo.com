@@ -1,18 +1,18 @@
 <div align="center">
-	<h1 align="center"><a href="https://api.nerdapi.com/" target="_blank">api.nerdapi.com v2</a></h1>
+		<h1 align="center"><a href="https://api.nerdapi.com/" target="_blank">api.nerdapi.com v2</a></h1>
 </div>
 
 ## Introduction
 
 - Backend REST API for <https://nerdapi.com>
+- I created this project to learn how to program a backend for a micro SaaS product.
 
 ## Technologies & Tools
 - [x] NestJS
 - [x] Typescript
 - [x] Docker
 - [x] PrismaORM
-- [x] PostgreSQL
-- [x] JSON Database
+- [x] PostgreSQL & JSON Database
 - [x] Fastify
 - [x] JWT
 - [x] Prettier
@@ -21,6 +21,8 @@
 - [x] Weebhooks listening to Stripe events
 - [x] Resend for emails
 - [x] Zod to validate payloads inputs
+- [x] Husky Git Hook
+- [x] Github Actions for CI/CD
 
 ## Features
 - [x] Stateless Authentication & Authorization using JWT
@@ -29,6 +31,7 @@
 - [x] Unit Tests using mocks
 - [x] Integration tests using supertest
 - [x] Telegram Logger
+- [x] Migrations & Seeders
 - [x] API Rate Limiter & Throttler
 - [x] Web Security Policies (CORs, Helmet, etc)
 - [x] Swagger API Documentation

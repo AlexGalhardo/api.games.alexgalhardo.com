@@ -31,11 +31,11 @@ export class ContactController implements ContactControllerPort {
     ): Promise<Response<ContactUseCaseResponse>> {
         try {
             const { success } = await this.contactSendMessageUseCase.execute(contactSendMessageDTO);
-            if (success) return response.status(HttpStatus.OK).json({ success: true });
+            if (success) return response.status(HttpStatus.OK).send({ success: true });
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 }

@@ -1,64 +1,95 @@
 [
-	{
-		"id": "f91c072c-eec4-4396-9a14-8f87447a5195",
-		"username": "User Admin",
-		"email": "admin@gmail.com",
-		"telegram_number": "5518999999999",
-		"password": "$2b$12$pblOZPSJpwcTVKtA8gQY4uhpWzVW6r0zSa2aXkwmt47j3Tsa4O71i",
-		"jwt_token": null,
-		"api_key": "api_key_admin",
-		"api_requests_today": 0,
-		"date_last_api_request": null,
-		"reset_password_token": null,
-		"reset_password_token_expires_at": null,
-		"stripe": {
-			"customer_id": null,
-			"subscription": {
-				"active": false,
-				"name": "PRO",
-				"starts_at": null,
-				"ends_at": null,
-				"charge_id": null,
-				"receipt_url": null,
-				"hosted_invoice_url": null
-			},
-			"updated_at": null,
-			"updated_at_pt_br": null
-		},
-		"created_at": "Sat Sep 16 2023 12:44:41 GMT-0300 (Brasilia Standard Time)",
-		"updated_at": null,
-		"created_at_pt_br": "16/09/2023 12:44:41",
-		"updated_at_pt_br": null
-	},
-	{
-		"id": "e33c3f78-79be-40a4-a7a6-60f124c9b44e",
-		"username": "User Test",
-		"email": "test@gmail.com",
-		"telegram_number": "5518999999888",
-		"password": "$2b$12$9FEpD0ZoXvQ5L9.xgwPHpuxb2yFfUBFQPJ2nkBoLar3T6dL0phZue",
-		"jwt_token": null,
-		"api_key": "279f5eb1486f1fef16015dcf806dbca5ae92decda209c15c",
-		"api_requests_today": 30,
-		"date_last_api_request": "2024-06-23T16:47:17.484Z",
-		"reset_password_token": null,
-		"reset_password_token_expires_at": null,
-		"stripe": {
-			"customer_id": null,
-			"subscription": {
-				"active": false,
-				"name": "NOOB",
-				"starts_at": null,
-				"ends_at": null,
-				"charge_id": null,
-				"receipt_url": null,
-				"hosted_invoice_url": null
-			},
-			"updated_at": null,
-			"updated_at_pt_br": null
-		},
-		"created_at": "Sat Sep 16 2023 12:44:41 GMT-0300 (Brasilia Standard Time)",
-		"updated_at": null,
-		"created_at_pt_br": "16/09/2023 12:44:41",
-		"updated_at_pt_br": null
-	}
+    {
+        "id": "f91c072c-eec4-4396-9a14-8f87447a5195",
+        "username": "User Admin",
+        "email": "admin@gmail.com",
+        "telegram_number": "5518999999999",
+        "password": "$2b$12$pblOZPSJpwcTVKtA8gQY4uhpWzVW6r0zSa2aXkwmt47j3Tsa4O71i",
+        "jwt_token": null,
+        "api_key": "api_key_admin",
+        "api_requests_today": 0,
+        "date_last_api_request": null,
+        "reset_password_token": null,
+        "reset_password_token_expires_at": null,
+        "stripe": {
+            "customer_id": null,
+            "subscription": {
+                "active": false,
+                "name": "PRO",
+                "starts_at": null,
+                "ends_at": null,
+                "charge_id": null,
+                "receipt_url": null,
+                "hosted_invoice_url": null
+            },
+            "updated_at": null,
+            "updated_at_pt_br": null
+        },
+        "created_at": "Sat Sep 16 2023 12:44:41 GMT-0300 (Brasilia Standard Time)",
+        "updated_at": null,
+        "created_at_pt_br": "16/09/2023 12:44:41",
+        "updated_at_pt_br": null
+    },
+    {
+        "id": "e33c3f78-79be-40a4-a7a6-60f124c9b44e",
+        "username": "User Test",
+        "email": "test@gmail.com",
+        "telegram_number": "5518999999888",
+        "password": "$2b$12$9FEpD0ZoXvQ5L9.xgwPHpuxb2yFfUBFQPJ2nkBoLar3T6dL0phZue",
+        "jwt_token": null,
+        "api_key": "279f5eb1486f1fef16015dcf806dbca5ae92decda209c15c",
+        "api_requests_today": 30,
+        "date_last_api_request": "2024-06-23T16:47:17.484Z",
+        "reset_password_token": null,
+        "reset_password_token_expires_at": null,
+        "stripe": {
+            "customer_id": null,
+            "subscription": {
+                "active": false,
+                "name": "NOOB",
+                "starts_at": null,
+                "ends_at": null,
+                "charge_id": null,
+                "receipt_url": null,
+                "hosted_invoice_url": null
+            },
+            "updated_at": null,
+            "updated_at_pt_br": null
+        },
+        "created_at": "Sat Sep 16 2023 12:44:41 GMT-0300 (Brasilia Standard Time)",
+        "updated_at": null,
+        "created_at_pt_br": "16/09/2023 12:44:41",
+        "updated_at_pt_br": null
+    },
+    {
+        "id": "12ebaec5-fe7c-4896-b0ce-ad69b81ce066",
+        "username": "User Admin",
+        "email": "paokspaos@gmail.com",
+        "telegram_number": "5518999999999",
+        "password": "$2b$12$NxwkimwWK/Yi.sgP2vsFjuAwW3WHopoOmaoczcPo5/qUDXPouXWye",
+        "jwt_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIxMmViYWVjNS1mZTdjLTQ4OTYtYjBjZS1hZDY5YjgxY2UwNjYiLCJpYXQiOjE3MjAxMDE5OTJ9.R3DreOrW_GpXaY-RlaFygiUxBFbTW60EHVoE448aL88",
+        "api_key": "ecea1e2c6664e663950be9c631da4cd5f42cd456f61d15d6",
+        "api_requests_today": 0,
+        "date_last_api_request": null,
+        "reset_password_token": null,
+        "reset_password_token_expires_at": null,
+        "stripe": {
+            "customer_id": null,
+            "subscription": {
+                "active": false,
+                "name": "NOOB",
+                "starts_at": null,
+                "ends_at": null,
+                "charge_id": null,
+                "receipt_url": null,
+                "hosted_invoice_url": null
+            },
+            "updated_at": null,
+            "updated_at_pt_br": null
+        },
+        "created_at": "Thu Jul 04 2024 11:06:32 GMT-0300 (Brasilia Standard Time)",
+        "updated_at": null,
+        "created_at_pt_br": "04/07/2024 11:06:32",
+        "updated_at_pt_br": null
+    }
 ]

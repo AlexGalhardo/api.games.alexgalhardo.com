@@ -10,6 +10,7 @@
 		"start:debug": "npx @nestjs/cli start --debug --watch",
 		"start:prod": "node dist/src/main.js",
 		"format": "prettier --write \"src/**/*.ts\"",
+		"test:file": "jest contact-send-message.use-case.integration.test.ts",
 		"test": "jest",
 		"test:contact": "jest contact-send-message.use-case.test.ts",
 		"test:watch": "jest --watch",

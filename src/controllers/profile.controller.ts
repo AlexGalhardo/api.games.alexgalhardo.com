@@ -29,11 +29,11 @@ export class ProfileController implements ProfileControllerPort {
         try {
             const userJWTToken = response.locals.token;
             const { success, data } = await this.profileUpdateUseCase.execute(userJWTToken, profileUpdateDTO);
-            if (success) return response.status(HttpStatus.OK).json({ success: true, data });
+            if (success) return response.status(HttpStatus.OK).send({ success: true, data });
         } catch (error: any) {
             return response
                 .status(HttpStatus.BAD_REQUEST)
-                .json({ success: false, message: error.issues ?? error.message });
+                .send({ success: false, message: error.issues ?? error.message });
         }
     }
 }

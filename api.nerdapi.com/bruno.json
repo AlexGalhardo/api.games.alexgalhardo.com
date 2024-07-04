@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "api.nerdapi.com",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
