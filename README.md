@@ -1,5 +1,5 @@
 <div align="center">
- <h1 align="center"><a href="https://api.nerdapi.com/" target="_blank">api.nerdapi.com v2</a></h1>
+ <h1 align="center"><a href="https://api.games.alexgalhardo.com/" target="_blank">api.games.alexgalhardo.com v2</a></h1>
 </div>
 
 ## Introduction
@@ -18,21 +18,21 @@
    - PostgresSQL using PrismaORM (migrations, seeds, prisma studio) and Docker
 
 ## FrontEnd & Docs
-- FrontEnd Source Code: <https://github.com/AlexGalhardo/nerdapi.com>
-- Documentation Source code: <https://github.com/AlexGalhardo/docs.nerdapi.com>
-- Docs Live: <https://docs.nerdapi.com>
+- FrontEnd Source Code: <https://github.com/AlexGalhardo/games.alexgalhardo.com>
+- Documentation Source code: <https://github.com/AlexGalhardo/docs.games.alexgalhardo.com>
+- Docs Live: <https://docs.games.alexgalhardo.com>
 - Legacy v1: <https://github.com/AlexGalhardo/legacy.api.nerdapi.com>
 
 ## Development Setup Local
 
 1. Clone repository
 ```bash
-git clone git@github.com:AlexGalhardo/api.nerdapi.com.git
+git clone git@github.com:AlexGalhardo/api.games.alexgalhardo.com.git
 ```
 
 2. Enter repository
 ```bash
-cd api.nerdapi.com/
+cd api.games.alexgalhardo.com/
 ```
 
 3. Install dependencies
