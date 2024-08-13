@@ -6,11 +6,11 @@ import { Bcrypt } from "../utils/bcrypt.util";
 import { Injectable } from "@nestjs/common";
 import { Database } from "../config/database.config";
 import { SubscriptionName } from "../use-cases/auth-register.use-case";
-import { ProfileUpdateDTO } from "../dtos/profile-update.dto";
+import { SwaggerProfileUpdateBodyDTO } from "src/swagger/profile-update.swagger";
 
 export interface User {
     id: string;
-    username: string;
+    name: string;
     email: string;
     telegram_number: string | null;
     password: string;
@@ -31,17 +31,15 @@ export interface User {
             receipt_url: string | null;
             hosted_invoice_url: string | null;
         };
-        updated_at: string | null;
-        updated_at_pt_br: string | null;
+        updated_at: Date | null;
     };
-    created_at: string;
-    updated_at: string | null;
-    created_at_pt_br: string;
-    updated_at_pt_br: string | null;
+    created_at: string | Date;
+    updated_at: string | Date | null;
+    deleted_at?: string | Date | null;
 }
 
 export interface UserUpdated {
-    username: string;
+    name: string;
     email?: string;
     telegramNumber: string;
 }
@@ -80,7 +78,7 @@ export interface UsersRepositoryPort {
     findById(userId: string): Promise<UserResponse>;
     findByResetPasswordToken(resetPasswordToken: string): Promise<UserResponse>;
     create(user: User): Promise<void>;
-    update(userId: string, profileUpdatePayload: ProfileUpdateDTO): Promise<UserUpdated>;
+    update(userId: string, profileUpdatePayload: SwaggerProfileUpdateBodyDTO): Promise<UserUpdated>;
     deleteByEmail(email: string): Promise<void>;
     logout(userId: string): Promise<void>;
     saveResetPasswordToken(userId: string, resetPasswordToken: string): Promise<void>;
@@ -117,7 +115,7 @@ export default class UsersRepository implements UsersRepositoryPort {
                 },
                 data: {
                     id: user.id,
-                    username: user.username,
+                    name: user.name,
                     email: user.email,
                     telegram_number: user.telegram_number,
                     password: user.password,
@@ -134,11 +132,9 @@ export default class UsersRepository implements UsersRepositoryPort {
                     stripe_subscription_receipt_url: user.stripe.subscription.receipt_url,
                     stripe_subscription_hosted_invoice_url: user.stripe.subscription.hosted_invoice_url,
                     stripe_updated_at: user.stripe.updated_at,
-                    stripe_updated_at_pt_br: user.stripe.updated_at_pt_br,
                     created_at: user.created_at,
                     updated_at: user.updated_at,
-                    created_at_pt_br: user.created_at_pt_br,
-                    updated_at_pt_br: user.updated_at_pt_br,
+                    deleted_at: null,
                 },
             });
         }
@@ -148,7 +144,7 @@ export default class UsersRepository implements UsersRepositoryPort {
         return {
             user: {
                 id: user.id,
-                username: user.username,
+                name: user.name,
                 email: user.email,
                 telegram_number: user.telegram_number,
                 password: user.password,
@@ -170,12 +166,10 @@ export default class UsersRepository implements UsersRepositoryPort {
                         hosted_invoice_url: user.stripe_subscription_hosted_invoice_url,
                     },
                     updated_at: user.stripe_updated_at,
-                    updated_at_pt_br: user.stripe_updated_at_pt_br,
                 },
                 created_at: user.created_at,
                 updated_at: user.updated_at,
-                created_at_pt_br: user.created_at_pt_br,
-                updated_at_pt_br: user.updated_at_pt_br,
+                deleted_at: null,
             },
             index: null,
         };
@@ -184,7 +178,7 @@ export default class UsersRepository implements UsersRepositoryPort {
     public transformToUser(user): User {
         return {
             id: user.id,
-            username: user.username,
+            name: user.name,
             email: user.email,
             telegram_number: user.telegram_number,
             password: user.password,
@@ -206,12 +200,10 @@ export default class UsersRepository implements UsersRepositoryPort {
                     hosted_invoice_url: user.stripe_subscription_hosted_invoice_url,
                 },
                 updated_at: user.stripe_updated_at,
-                updated_at_pt_br: user.stripe_updated_at_pt_br,
             },
             created_at: user.created_at,
             updated_at: user.updated_at,
-            created_at_pt_br: user.created_at_pt_br,
-            updated_at_pt_br: user.updated_at_pt_br,
+            deleted_at: null,
         };
     }
 
@@ -301,7 +293,7 @@ export default class UsersRepository implements UsersRepositoryPort {
         await this.database.users.create({
             data: {
                 id: user.id,
-                username: user.username,
+                name: user.name,
                 email: user.email,
                 telegram_number: user.telegram_number,
                 password: user.password,
@@ -318,20 +310,18 @@ export default class UsersRepository implements UsersRepositoryPort {
                 stripe_subscription_receipt_url: user.stripe.subscription.receipt_url,
                 stripe_subscription_hosted_invoice_url: user.stripe.subscription.hosted_invoice_url,
                 stripe_updated_at: user.stripe.updated_at,
-                stripe_updated_at_pt_br: user.stripe.updated_at_pt_br,
                 created_at: user.created_at,
                 updated_at: user.updated_at,
-                created_at_pt_br: user.created_at_pt_br,
-                updated_at_pt_br: user.updated_at_pt_br,
+                deleted_at: null,
             },
         });
     }
 
-    public async update(userId: string, profileUpdatePayload: ProfileUpdateDTO): Promise<UserUpdated> {
+    public async update(userId: string, profileUpdatePayload: SwaggerProfileUpdateBodyDTO): Promise<UserUpdated> {
         if (process.env.USE_JSON_DATABASE === "true") {
             for (let i = 0; i < this.users.length; i++) {
                 if (this.users[i].id === userId) {
-                    this.users[i].username = profileUpdatePayload.username ?? this.users[i].username;
+                    this.users[i].name = profileUpdatePayload.name ?? this.users[i].name;
 
                     this.users[i].telegram_number =
                         profileUpdatePayload.telegramNumber ?? this.users[i].telegram_number;
@@ -342,7 +332,7 @@ export default class UsersRepository implements UsersRepositoryPort {
                     this.save();
 
                     return {
-                        username: this.users[i].username,
+                        name: this.users[i].name,
                         email: this.users[i].email,
                         telegramNumber: this.users[i].telegram_number,
                     };
@@ -355,7 +345,7 @@ export default class UsersRepository implements UsersRepositoryPort {
                 id: userId,
             },
             data: {
-                username: profileUpdatePayload.username ? profileUpdatePayload.username : undefined,
+                name: profileUpdatePayload.name ? profileUpdatePayload.name : undefined,
                 telegram_number: profileUpdatePayload.telegramNumber ? profileUpdatePayload.telegramNumber : undefined,
                 password: profileUpdatePayload.newPassword
                     ? await Bcrypt.hash(profileUpdatePayload.newPassword)
@@ -364,7 +354,7 @@ export default class UsersRepository implements UsersRepositoryPort {
         });
 
         return {
-            username: userUpdated.username,
+            name: userUpdated.name,
             email: userUpdated.email,
             telegramNumber: userUpdated.telegram_number,
         };
@@ -544,10 +534,7 @@ export default class UsersRepository implements UsersRepositoryPort {
                         stripeSubscriptionInfo.startAt ?? this.users[i].stripe.subscription.starts_at;
                     this.users[i].stripe.subscription.ends_at =
                         stripeSubscriptionInfo.endsAt ?? this.users[i].stripe.subscription.ends_at;
-                    this.users[i].stripe.updated_at =
-                        stripeSubscriptionInfo.createdAt ?? this.users[i].stripe.updated_at;
-                    this.users[i].stripe.updated_at_pt_br =
-                        stripeSubscriptionInfo.createdAtBrazil ?? this.users[i].stripe.updated_at_pt_br;
+                    this.users[i].stripe.updated_at = new Date();
 
                     this.save();
 
@@ -573,7 +560,6 @@ export default class UsersRepository implements UsersRepositoryPort {
                 stripe_subscription_starts_at: stripeSubscriptionInfo.startAt,
                 stripe_subscription_ends_at: stripeSubscriptionInfo.endsAt,
                 stripe_updated_at: stripeSubscriptionInfo.createdAt,
-                stripe_updated_at_pt_br: stripeSubscriptionInfo.createdAtBrazil,
             },
         });
 
@@ -600,8 +586,7 @@ export default class UsersRepository implements UsersRepositoryPort {
                             this.users[i].stripe.subscription.hosted_invoice_url = null;
                             this.users[i].stripe.subscription.starts_at = null;
                             this.users[i].stripe.subscription.ends_at = null;
-                            this.users[i].stripe.updated_at = String(new Date());
-                            this.users[i].stripe.updated_at_pt_br = DateTime.getNow();
+                            this.users[i].stripe.updated_at = new Date();
                             this.save();
                             return;
                         }
@@ -620,8 +605,7 @@ export default class UsersRepository implements UsersRepositoryPort {
                         stripe_subscription_hosted_invoice_url: null,
                         stripe_subscription_starts_at: null,
                         stripe_subscription_ends_at: null,
-                        stripe_updated_at: String(new Date()),
-                        stripe_updated_at_pt_br: DateTime.getNow(),
+                        stripe_updated_at: new Date(),
                     },
                 });
             }

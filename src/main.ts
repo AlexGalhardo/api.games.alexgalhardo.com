@@ -12,9 +12,8 @@ async function bootstrap() {
 
     const config = new DocumentBuilder()
         .setTitle("Example")
-        .setDescription("The Nerd API Documentation")
+        .setDescription("games.alexgalhardo.com Swagger API Documentation")
         .setVersion("1.0")
-        .addTag("example")
         .addBearerAuth()
         .build();
     const document = SwaggerModule.createDocument(app, config);

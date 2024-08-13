@@ -43,7 +43,7 @@ export default class StripeWebhookInvoiceFinalizedUseCase implements StripeWebho
             	<b>SUBSCRIPTION ENDS AT:</b> ${userUpdated.stripe.subscription.ends_at}
             	---------------------------------------------
             	<b>STRIPE CUSTOMER ID:</b> ${userUpdated.stripe.customer_id}
-            	<b>CUSTOMER NAME:</b> ${userUpdated.username}
+            	<b>CUSTOMER NAME:</b> ${userUpdated.name}
             	<b>CUSTOMER EMAIL:</b> ${userUpdated.email}
             	<b>CUSTOMER SUBSCRIPTION ACTIVE: </b> ${userUpdated.stripe.subscription.active}
             	<b>CUSTOMER API TOKEN: </b> ${userUpdated.api_key}

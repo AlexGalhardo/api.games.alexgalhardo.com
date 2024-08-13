@@ -1,9 +1,10 @@
 import { Test } from "@nestjs/testing";
 import { UsersRepositoryPort } from "../repositories/users.repository";
-import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
+import { AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
 import { mock } from "jest-mock-extended";
 import { randomUUID } from "node:crypto";
 import * as jwt from "jsonwebtoken";
+import { SwaggerAuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
 
 describe("Test AuthRegisterUseCase", () => {
     beforeAll(async () => {
@@ -21,7 +22,7 @@ describe("Test AuthRegisterUseCase", () => {
     });
 
     it("should register a user", async () => {
-        const authRegisterDTO = mock<AuthRegisterDTO>();
+        const authRegisterDTO = mock<SwaggerAuthRegisterBodyDTO>();
         const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
         const jwtToken = jwt.sign({ userID: randomUUID() }, "jwtsecret");
         mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: jwtToken });

@@ -1,5 +1,5 @@
 import { UsersRepositoryPort } from "../repositories/users.repository";
-import { APP_URL } from "../utils/constants.util";
+import { FRONT_END_URL } from "../utils/constants.util";
 import { ErrorsMessages } from "../utils/errors-messages.util";
 import GenerateRandomToken from "../utils/generate-random-token.util";
 import { SMTP } from "../config/smtp.config";
@@ -36,14 +36,14 @@ export default class AuthForgetPasswordUseCase implements AuthForgetPasswordUseC
 
             await this.usersRepository.saveResetPasswordToken(user.id, reset_password_token);
 
-            const resetPasswordLink = `${APP_URL}/reset-password/${reset_password_token}`;
+            const resetPasswordLink = `${FRONT_END_URL}/reset-password/${reset_password_token}`;
 
             const sendEmailForgetPasswordResponse = await this.smtp.sendMail({
                 from: process.env.SMTP_EMAIL_FROM,
                 to: "aleexgvieira@gmail.com", // email
                 subject: `NerdAPI: Forget Password Link To ${email}`,
                 html: `
-					<p>Hello ${user.username},</p>
+					<p>Hello ${user.name},</p>
 					<p>To recover your password, click on this link do reset your password: </p>
 					<p><strong>${resetPasswordLink}</strong></p>
 					<hr>

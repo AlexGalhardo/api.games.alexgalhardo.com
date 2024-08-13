@@ -1,10 +1,11 @@
 import { Test } from "@nestjs/testing";
 import { mock } from "jest-mock-extended";
-import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
+import { AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
 import { ProfileUpdateUseCasePort } from "../use-cases/profile-update.use-case";
 import { UserDeleteUseCasePort } from "../use-cases/user-delete.use-case";
-import { ProfileUpdateDTO } from "../dtos/profile-update.dto";
 import { UsersRepositoryPort } from "../repositories/users.repository";
+import { SwaggerAuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
+import { SwaggerProfileUpdateBodyDTO } from "src/swagger/profile-update.swagger";
 
 describe("Test ProfileUpdateUseCase", () => {
     beforeAll(async () => {
@@ -24,7 +25,7 @@ describe("Test ProfileUpdateUseCase", () => {
     });
 
     it("should register a user", async () => {
-        const authRegisterDTO = mock<AuthRegisterDTO>();
+        const authRegisterDTO = mock<SwaggerAuthRegisterBodyDTO>();
         const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
         mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: "jwttoken" });
         const response = await mockAuthRegisterUseCase.execute(authRegisterDTO);
@@ -37,7 +38,7 @@ describe("Test ProfileUpdateUseCase", () => {
 
     it("should update profile", async () => {
         const mockProfileUpdateUseCase = mock<ProfileUpdateUseCasePort>();
-        const mockProfileUpdateDTO = mock<ProfileUpdateDTO>();
+        const mockProfileUpdateDTO = mock<SwaggerProfileUpdateBodyDTO>();
         mockProfileUpdateUseCase.execute.mockResolvedValueOnce({ success: true, data: mockProfileUpdateDTO });
 
         const response = await mockProfileUpdateUseCase.execute("jwttoken", mockProfileUpdateDTO);

@@ -1,5 +1,5 @@
 import { UsersRepositoryPort } from "../repositories/users.repository";
-import { APP_URL } from "../utils/constants.util";
+import { FRONT_END_URL } from "../utils/constants.util";
 import { stripe } from "../config/stripe.config";
 import * as jwt from "jsonwebtoken";
 import { ErrorsMessages } from "../utils/errors-messages.util";
@@ -50,11 +50,11 @@ export default class StripeCreateCheckoutSessionUseCase implements StripeCreateC
                     },
                 ],
                 mode: "subscription",
-                success_url: `${APP_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}&plan=${lookup_key.replace(
+                success_url: `${FRONT_END_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}&plan=${lookup_key.replace(
                     "plan_",
                     "",
                 )}`,
-                cancel_url: `${APP_URL}/pricing`,
+                cancel_url: `${FRONT_END_URL}/pricing`,
             });
 
             return { success: true, redirect: session.url };

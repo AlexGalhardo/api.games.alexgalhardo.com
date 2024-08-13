@@ -4,24 +4,40 @@
 
 ## Introduction
 
-- A side project I created to learn and improve my skills in:
-   - Clean/Hexagonal Architecture Principles (ports, useCases, repositories, etc)
-   - Stateless Authentication & Authorization using JWT
-   - API (REST) development and documentation
-   - Tests (Unit, integration, TDD, etc)
-   - Web Scrapping
-   - API Requests Handling & Limit & Quota
-   - SaaS (Software as a Service) Backend Development
-   - And so on
-- This project use 2 databases:
-   - JSONs files for simplicity and fast development.
-   - PostgresSQL using PrismaORM (migrations, seeds, prisma studio) and Docker
+- A side project I created to learn and improve my skills about how to develop a backend for a micro-saas.
+
+## Technologies
+- [NodeJS](https://nodejs.org/en)
+- [NestJS](https://nestjs.com/)
+- [PrismaORM](https://www.prisma.io/)
+- [Docker](https://docs.docker.com/)
+- [PostgreSQL](https://www.postgresql.org/)
 
 ## FrontEnd & Docs
 - FrontEnd Source Code: <https://github.com/AlexGalhardo/games.alexgalhardo.com>
 - Documentation Source code: <https://github.com/AlexGalhardo/docs.games.alexgalhardo.com>
 - Docs Live: <https://docs.games.alexgalhardo.com>
 - Legacy v1: <https://github.com/AlexGalhardo/legacy.api.nerdapi.com>
+
+## Features
+- [x] CRUD API REST
+- [x] Authentication (Email & Password, Google & Github)
+- [x] Send Emails
+- [x] Subscriptions Payments with Webhooks
+- [x] Unit Tests using Jest Mocks
+- [x] Git Hooks using Husky (pre-commit and pre-push)
+- [x] Following clean architecture principles (use-case, repositories, dependency injection, IoC, etc)
+- [x] CI/CD using Github Actions (linter, tests, build)
+- [x] Middlewares to verify authentication & authorization
+- [x] Migrations & Seeds & Database GUI
+- [x] Swagger OpenAPI Specification v3 Documentation
+- [x] Multi tenant (single database, shared schema)
+- [x] Logs & Monitoring
+- [x] Zod validation for payload requests
+- [x] Security configs (rate-limiter, cors, exception errors handlers, etc)
+- [ ] Git tags for releases
+- [ ] Integration tests
+- [ ] Healthcheck endpoint (databases conections, memory usage, etc)
 
 ## Development Setup Local
 
@@ -73,15 +89,20 @@ npm run start
 
 ## Tests
 
-a. Run all tests
+a. Run all unit tests
 ```bash
 npm run test
 ```
 
 ## API Requests
 
-- You can see the HTTP Requests references inside folder **rest-client/**
-- You can also see Swagger API documentation in: <http://localhost:3000/api>
+- You can see the HTTP Requests references inside folder [rest-client/](rest-client/)
+- You can also see Swagger API documentation in:
+   - Localhost: <http://localhost:3000/api>
+   - Live: <https://api.games.alexgalhardo.com/api>
+
+## Documentation
+- Read and add usefull documentation (markdown, notes, images, best practices, etc) about this project inside folder [docs/](docs/)
 
 ## License
 

@@ -3,23 +3,13 @@ import { UsersRepositoryPort } from "../repositories/users.repository";
 import { Bcrypt } from "../utils/bcrypt.util";
 import { ErrorsMessages } from "../utils/errors-messages.util";
 import * as jwt from "jsonwebtoken";
-import DateTime from "../utils/date-time.util";
 import GenerateRandomToken from "../utils/generate-random-token.util";
-import EmailValidator from "../validators/email.validator";
-import PhoneValidator from "../validators/phone.validator";
-import PasswordValidator from "../validators/password.validator";
-import UsernameValidator from "src/validators/user-name.validator";
+import AuthRegisterValidator from "src/validators/auth-register.validator";
+import { SwaggerAuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
 
 interface AuthRegisterUseCaseResponse {
     success: boolean;
     jwt_token?: string;
-}
-
-export interface AuthRegisterDTO {
-    username: string;
-    email: string;
-    telegramNumber: string | null;
-    password: string;
 }
 
 export enum SubscriptionName {
@@ -29,37 +19,30 @@ export enum SubscriptionName {
 }
 
 export interface AuthRegisterUseCasePort {
-    execute(authRegisterDTO: AuthRegisterDTO): Promise<AuthRegisterUseCaseResponse>;
+    execute(authRegisterPayload: SwaggerAuthRegisterBodyDTO): Promise<AuthRegisterUseCaseResponse>;
 }
 
 export default class AuthRegisterUseCase implements AuthRegisterUseCasePort {
     constructor(private readonly usersRepository: UsersRepositoryPort) {}
 
-    async execute(authRegisterDTO: AuthRegisterDTO): Promise<AuthRegisterUseCaseResponse> {
-        const { username, email, telegramNumber, password } = authRegisterDTO;
+    async execute(authRegisterPayload: SwaggerAuthRegisterBodyDTO): Promise<AuthRegisterUseCaseResponse> {
+        AuthRegisterValidator.parse(authRegisterPayload);
 
-        if (username && !UsernameValidator.validate(username)) throw new Error(ErrorsMessages.USERNAME_INVALID);
+        const { name, email, password } = authRegisterPayload;
 
-        if (email && !EmailValidator.validate(email)) throw new Error(ErrorsMessages.EMAIL_INVALID);
+        const emailAlreadyRegistered = await this.usersRepository.findByEmail(email);
 
-        if (telegramNumber && !PhoneValidator.validate(telegramNumber))
-            throw new Error(ErrorsMessages.INVALID_PHONE_NUMBER);
-
-        if (password && !PasswordValidator.validate(password)) throw new Error(ErrorsMessages.PASSWORD_INSECURE);
-
-        const hashedPassword = await Bcrypt.hash(password);
-
-        if (!(await this.usersRepository.findByEmail(email))) {
+        if (!emailAlreadyRegistered) {
             const userId = randomUUID();
 
-            const jwt_token = jwt.sign({ userID: userId }, process.env.JWT_SECRET);
+            const jwt_token = jwt.sign({ userID: userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
             await this.usersRepository.create({
                 id: userId,
-                username,
+                name,
                 email,
-                telegram_number: telegramNumber,
-                password: hashedPassword,
+                telegram_number: authRegisterPayload.telegramNumber ?? null,
+                password: await Bcrypt.hash(password),
                 jwt_token,
                 api_key: GenerateRandomToken(),
                 api_requests_today: 0,
@@ -78,12 +61,10 @@ export default class AuthRegisterUseCase implements AuthRegisterUseCasePort {
                         hosted_invoice_url: null,
                     },
                     updated_at: null,
-                    updated_at_pt_br: null,
                 },
-                created_at: String(new Date()),
+                created_at: new Date(),
                 updated_at: null,
-                created_at_pt_br: DateTime.getNow(),
-                updated_at_pt_br: null,
+                deleted_at: null,
             });
 
             return { success: true, jwt_token };

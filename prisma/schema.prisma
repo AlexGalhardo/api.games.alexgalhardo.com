@@ -9,7 +9,7 @@ datasource db {
 
 model Users {
   id                                     String    @id @default(uuid())
-  username                               String
+  name                               	 String
   email                                  String    @unique
   telegram_number                        String?   @unique
   jwt_token                              String?   @unique
@@ -27,12 +27,11 @@ model Users {
   stripe_subscription_charge_id          String?   @unique
   stripe_subscription_receipt_url        String?   @unique
   stripe_subscription_hosted_invoice_url String?   @unique
-  stripe_updated_at                      String?
-  stripe_updated_at_pt_br                String?
-  created_at                             String
-  updated_at                             String?
-  created_at_pt_br                       String
-  updated_at_pt_br                       String?
+  stripe_updated_at                      DateTime? @updatedAt
+
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  deleted_at DateTime?
 
   @@unique(fields: [email, reset_password_token], name: "resetPasswordTokenIsValid")
   @@map("users")
@@ -57,14 +56,19 @@ model Games {
   platforms_available Json
   genres              Json
 
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  deleted_at DateTime?
+
   @@map("games")
 }
 
 model StripeWebhookBillingPortalLogs {
   id         String    @id @default(uuid())
   event_log  Json
+
   created_at DateTime  @default(now())
-  updated_at DateTime?
+  updated_at DateTime? @updatedAt
 
   @@map("stripe_webhook_billing_portal_logs")
 }
@@ -72,8 +76,9 @@ model StripeWebhookBillingPortalLogs {
 model StripeWebhookChargesLogs {
   id         String    @id @default(uuid())
   event_log  Json
+
   created_at DateTime  @default(now())
-  updated_at DateTime?
+  updated_at DateTime? @updatedAt
 
   @@map("stripe_webhook_charges_logs")
 }
@@ -81,8 +86,9 @@ model StripeWebhookChargesLogs {
 model StripeWebhookCheckoutsLogs {
   id         String    @id @default(uuid())
   event_log  Json
+
   created_at DateTime  @default(now())
-  updated_at DateTime?
+  updated_at DateTime? @updatedAt
 
   @@map("stripe_webhook_checkouts_logs")
 }
@@ -90,8 +96,9 @@ model StripeWebhookCheckoutsLogs {
 model StripeWebhookCustomersLogs {
   id         String    @id @default(uuid())
   event_log  Json
+
   created_at DateTime  @default(now())
-  updated_at DateTime?
+  updated_at DateTime? @updatedAt
 
   @@map("stripe_webhook_customers_logs")
 }
@@ -99,8 +106,9 @@ model StripeWebhookCustomersLogs {
 model StripeWebhookInvoicesLogs {
   id         String    @id @default(uuid())
   event_log  Json
+
   created_at DateTime  @default(now())
-  updated_at DateTime?
+  updated_at DateTime? @updatedAt
 
   @@map("stripe_webhook_invoices_logs")
 }
@@ -108,8 +116,9 @@ model StripeWebhookInvoicesLogs {
 model StripeWebhookPaymentsLogs {
   id         String    @id @default(uuid())
   event_log  Json
+
   created_at DateTime  @default(now())
-  updated_at DateTime?
+  updated_at DateTime? @updatedAt
 
   @@map("stripe_webhook_payments_logs")
 }

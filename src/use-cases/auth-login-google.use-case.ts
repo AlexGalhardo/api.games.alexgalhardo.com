@@ -5,7 +5,7 @@ import * as jwt from "jsonwebtoken";
 import { Request } from "express";
 import { OAuth2Client } from "google-auth-library";
 import { randomUUID } from "node:crypto";
-import { APP_URL } from "../utils/constants.util";
+import { FRONT_END_URL } from "../utils/constants.util";
 import GenerateRandomToken from "../utils/generate-random-token.util";
 import { SubscriptionName } from "./auth-register.use-case";
 import emailValidator from "../validators/email.validator";
@@ -53,7 +53,7 @@ export default class AuthLoginGoogleUseCase implements AuthLoginGoogleUseCasePor
                 return {
                     success: true,
                     jwt_token,
-                    redirect: `${APP_URL}/profile?token=${jwt_token}&registred=${false}`,
+                    redirect: `${FRONT_END_URL}/profile?token=${jwt_token}&registred=${false}`,
                 };
             } else {
                 const userId = randomUUID();
@@ -62,7 +62,7 @@ export default class AuthLoginGoogleUseCase implements AuthLoginGoogleUseCasePor
 
                 await this.usersRepository.create({
                     id: userId,
-                    username: name,
+                    name: name,
                     email,
                     telegram_number: null,
                     password: await Bcrypt.hash(email),
@@ -84,18 +84,16 @@ export default class AuthLoginGoogleUseCase implements AuthLoginGoogleUseCasePor
                             hosted_invoice_url: null,
                         },
                         updated_at: null,
-                        updated_at_pt_br: null,
                     },
-                    created_at: String(new Date()),
+                    created_at: new Date(),
                     updated_at: null,
-                    created_at_pt_br: DateTime.getNow(),
-                    updated_at_pt_br: null,
+                    deleted_at: null,
                 });
 
                 return {
                     success: true,
                     jwt_token,
-                    redirect: `${APP_URL}/profile?token=${jwt_token}&registred=${true}`,
+                    redirect: `${FRONT_END_URL}/profile?token=${jwt_token}&registred=${true}`,
                 };
             }
         } catch (error: any) {

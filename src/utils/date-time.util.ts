@@ -11,6 +11,10 @@ export default class DateTime {
         return `${date} ${time}`;
     }
 
+    static getTimestampNow() {
+        return Math.floor(Date.now() / 1000);
+    }
+
     static isToday(dateLastAPIRequest: Date) {
         return new Date().getDate() === dateLastAPIRequest.getDate();
     }
@@ -19,43 +23,31 @@ export default class DateTime {
         return dateToCheck <= new Date();
     }
 
-    public secondsToMilliseconds(seconds: number): number {
+    static secondsToMilliseconds(seconds: number): number {
         return seconds * 1000;
     }
 
-    public minutesToMilliseconds(minutes: number): number {
+    static minutesToMilliseconds(minutes: number): number {
         return minutes * 60000;
     }
 
-    public hoursToMilliseconds(hours: number): number {
+    static hoursToMilliseconds(hours: number): number {
         return hours * 3600000;
     }
 
-    public daysToMilliseconds(days: number): number {
+    static daysToMilliseconds(days: number): number {
         return days * 86300000;
     }
 
-    public get secondInMilliseconds() {
+    static get secondInMilliseconds() {
         return 1000;
     }
 
-    public get minuteInMilliseconds() {
+    static get minuteInMilliseconds() {
         return 60000;
     }
 
-    public get hourInMilliseconds() {
+    static get hourInMilliseconds() {
         return 3600000;
-    }
-
-    public get methods() {
-        return {
-            secondsToMilliseconds: this.secondsToMilliseconds,
-            minutesToMilliseconds: this.minutesToMilliseconds,
-            hoursToMilliseconds: this.hoursToMilliseconds,
-            daysToMilliseconds: this.daysToMilliseconds,
-            secondInMilliseconds: this.secondInMilliseconds,
-            minuteInMilliseconds: this.minuteInMilliseconds,
-            hourInMilliseconds: this.hourInMilliseconds,
-        };
     }
 }

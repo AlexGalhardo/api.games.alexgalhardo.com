@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import DateTime from "../src/utils/date-time.util";
 import * as gamesJSONDatabase from "../src/repositories/jsons/games.json";
 import { Bcrypt } from "../src/utils/bcrypt.util";
 import GenerateRandomToken from "../src/utils/generate-random-token.util";
@@ -39,7 +38,7 @@ const seedDatabase = async () => {
 	await prisma.users.createMany({
 		data: [
 			{
-				username: "ADMIN",
+				name: "ADMIN",
 				email: "admin@gmail.com",
 				telegram_number: PhoneValidator.generate(),
 				jwt_token: null,
@@ -56,14 +55,12 @@ const seedDatabase = async () => {
 				stripe_subscription_receipt_url: null,
 				stripe_subscription_hosted_invoice_url: null,
 				stripe_updated_at: null,
-				stripe_updated_at_pt_br: null,
-				created_at: String(new Date()),
+				created_at: new Date(),
 				updated_at: null,
-				created_at_pt_br: DateTime.getNow(),
-				updated_at_pt_br: null,
+				deleted_at: null
 			},
 			{
-				username: "TEST USER",
+				name: "TEST USER",
 				email: "test@gmail.com",
 				telegram_number: PhoneValidator.generate(),
 				jwt_token: null,
@@ -80,11 +77,9 @@ const seedDatabase = async () => {
 				stripe_subscription_receipt_url: null,
 				stripe_subscription_hosted_invoice_url: null,
 				stripe_updated_at: null,
-				stripe_updated_at_pt_br: null,
-				created_at: String(new Date()),
+				created_at: new Date(),
 				updated_at: null,
-				created_at_pt_br: DateTime.getNow(),
-				updated_at_pt_br: null,
+				deleted_at: null
 			},
 		],
 		skipDuplicates: true,
