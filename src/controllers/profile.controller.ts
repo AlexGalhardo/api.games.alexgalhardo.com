@@ -1,17 +1,16 @@
 import { Body, Controller, HttpStatus, Inject, Put, Res } from "@nestjs/common";
 import { Response } from "express";
 import { ProfileUpdateUseCasePort } from "../use-cases/profile-update.use-case";
-import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ProfileUpdateDTO } from "../dtos/profile-update.dto";
-import { Profile } from "../entities/profile.entity";
-
-interface ProfileUseCaseResponse {
-    success: boolean;
-    data?: any;
-}
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { SwaggerProfileUpdateBodyDTO } from "../swagger/profile-update.swagger";
+import { SwaggerProfileResponse } from "src/swagger/profile-response.swagger";
+import TelegramLog from "src/config/telegram-logger.config";
 
 interface ProfileControllerPort {
-    update(profileUpdateDTO: ProfileUpdateDTO, response: Response): Promise<Response<ProfileUseCaseResponse>>;
+    update(
+        profileUpdateDTO: SwaggerProfileUpdateBodyDTO,
+        response: Response,
+    ): Promise<Response<SwaggerProfileResponse>>;
 }
 
 @ApiBearerAuth()
@@ -21,17 +20,20 @@ export class ProfileController implements ProfileControllerPort {
     constructor(@Inject("ProfileUpdateUseCasePort") private readonly profileUpdateUseCase: ProfileUpdateUseCasePort) {}
 
     @Put("/")
-    @ApiResponse({ status: 200, type: Profile })
+    @ApiBody({ type: SwaggerProfileUpdateBodyDTO })
+    @ApiResponse({ status: 200, type: SwaggerProfileResponse })
     async update(
-        @Body() profileUpdateDTO: ProfileUpdateDTO,
+        @Body() profileUpdatePayload: SwaggerProfileUpdateBodyDTO,
         @Res() response: Response,
-    ): Promise<Response<ProfileUseCaseResponse>> {
+    ): Promise<Response<SwaggerProfileResponse>> {
         try {
             const userJWTToken = response.locals.token;
-            const { success, data } = await this.profileUpdateUseCase.execute(userJWTToken, profileUpdateDTO);
+            const { success, data } = await this.profileUpdateUseCase.execute(userJWTToken, profileUpdatePayload);
             if (success) return response.status(HttpStatus.OK).json({ success: true, data });
+            return response.status(HttpStatus.BAD_REQUEST).json({ success: false });
         } catch (error: any) {
-            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message: error.message });
+            TelegramLog.error(`ERROR Profile Update: ${error.message}`);
+            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });
         }
     }
 }

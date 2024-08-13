@@ -1,23 +1,16 @@
-import { Controller, Res, HttpStatus, Get, Inject, Req } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { Request, Response } from "express";
-import { GameEntity } from "../entities/game.entity";
-import { Game } from "../repositories/games.repository";
+import { Controller, Res, HttpStatus, Get, Inject, Param } from "@nestjs/common";
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Response } from "express";
 import { GameGetByIdUseCasePort } from "../use-cases/game-get-by-id.use-case";
 import { GameGetByTitleUseCasePort } from "../use-cases/game-get-by-title.use-case";
 import { GameGetRandomUseCasePort } from "../use-cases/game-get-random.use-case";
-
-interface GameUseCaseResponse {
-    success: boolean;
-    error?: string;
-    data?: Game | Game[];
-    api_requests_today?: number;
-}
+import TelegramLog from "src/config/telegram-logger.config";
+import { SwaggerGamesResponse } from "src/swagger/game-response.swagger";
 
 interface GamesControllerPort {
-    getRandom(response: Response): Promise<Response<GameUseCaseResponse>>;
-    findById(request: Request, response: Response): Promise<Response<GameUseCaseResponse>>;
-    getByTitle(request: Request, response: Response): Promise<Response<GameUseCaseResponse>>;
+    getRandom(response: Response): Promise<Response<SwaggerGamesResponse>>;
+    findById(game_id: string, response: Response): Promise<Response<SwaggerGamesResponse>>;
+    getByTitle(game_title: string, response: Response): Promise<Response<SwaggerGamesResponse>>;
 }
 
 @Controller("games")
@@ -31,22 +24,34 @@ export class GamesController implements GamesControllerPort {
 
     @Get("/random")
     @ApiBearerAuth()
-    @ApiResponse({ status: 200, description: "Use api_key_admin in Authorize", type: GameEntity })
-    async getRandom(@Res() response: Response): Promise<Response<GameUseCaseResponse>> {
+    @ApiResponse({ status: 200, description: "Get random game", type: SwaggerGamesResponse })
+    async getRandom(@Res() response: Response): Promise<Response<SwaggerGamesResponse>> {
         try {
             const userAPIKey = response.locals.token;
             const { success, data, error, api_requests_today } = await this.gameGetRandomUseCase.execute(userAPIKey);
             if (success) return response.status(HttpStatus.OK).json({ success: true, api_requests_today, data });
-            return response.status(HttpStatus.OK).json({ success: false, error, api_requests_today });
+            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error, api_requests_today });
         } catch (error: any) {
+            TelegramLog.error(`ERROR Game get random: ${error.message}`);
             return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });
         }
     }
 
     @Get("/id/:game_id")
-    async findById(@Req() request: Request, @Res() response: Response): Promise<Response<GameUseCaseResponse>> {
+    @ApiBearerAuth()
+    @ApiParam({
+        name: "game_id",
+        description: "Reset password token",
+        example: "d7e4596d-748d-4050-904f-aaed7863f687",
+        required: true,
+        type: String,
+    })
+    @ApiResponse({ status: 200, description: "Get game by id", type: SwaggerGamesResponse })
+    async findById(
+        @Param("game_id") game_id: string,
+        @Res() response: Response,
+    ): Promise<Response<SwaggerGamesResponse>> {
         try {
-            const { game_id } = request.params;
             const userAPIKey = response.locals.token;
             const { success, data, error, api_requests_today } = await this.gameGetByIdUseCase.execute(
                 game_id,
@@ -55,22 +60,35 @@ export class GamesController implements GamesControllerPort {
             if (success) return response.status(HttpStatus.OK).json({ success: true, api_requests_today, data });
             return response.status(HttpStatus.OK).json({ success: false, api_requests_today, error });
         } catch (error: any) {
+            TelegramLog.error(`ERROR Game get by id: ${error.message}`);
             return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });
         }
     }
 
     @Get("/title/:game_title")
-    async getByTitle(@Req() request: Request, @Res() response: Response): Promise<Response<GameUseCaseResponse>> {
+    @ApiBearerAuth()
+    @ApiParam({
+        name: "game_title",
+        description: "Reset password token",
+        example: "God Of War",
+        required: true,
+        type: String,
+    })
+    @ApiResponse({ status: 200, description: "Get game by title", type: SwaggerGamesResponse })
+    async getByTitle(
+        @Param("game_title") game_title: string,
+        @Res() response: Response,
+    ): Promise<Response<SwaggerGamesResponse>> {
         try {
-            const { game_title } = request.params;
             const userAPIKey = response.locals.token;
             const { success, data, error, api_requests_today } = await this.gameGetByTitleUseCase.execute(
                 game_title,
                 userAPIKey,
             );
             if (success) return response.status(HttpStatus.OK).json({ success: true, api_requests_today, data });
-            return response.status(HttpStatus.OK).json({ success: false, api_requests_today, error });
+            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, api_requests_today, error });
         } catch (error: any) {
+            TelegramLog.error(`ERROR Game get by title: ${error.message}`);
             return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });
         }
     }

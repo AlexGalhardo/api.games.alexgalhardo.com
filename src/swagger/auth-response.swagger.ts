@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class Auth {
+export class SwaggerAuthResponse {
     @ApiProperty()
     success: boolean;
 
@@ -9,6 +9,9 @@ export class Auth {
 
     @ApiProperty()
     message?: string;
+
+    @ApiProperty()
+    error?: string;
 
     @ApiProperty()
     redirect?: string;

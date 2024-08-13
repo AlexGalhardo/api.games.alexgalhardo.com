@@ -1,5 +1,5 @@
 import { UsersRepositoryPort } from "../repositories/users.repository";
-import { APP_URL } from "../utils/constants.util";
+import { FRONT_END_URL } from "../utils/constants.util";
 import { stripe } from "../config/stripe.config";
 import * as jwt from "jsonwebtoken";
 import { ErrorsMessages } from "../utils/errors-messages.util";
@@ -37,7 +37,7 @@ export default class StripeCreatePortalSessionUseCase implements StripeCreatePor
 
             const portalSession = await stripe.billingPortal.sessions.create({
                 customer: checkoutSession.customer as string,
-                return_url: `${APP_URL}/profile`,
+                return_url: `${FRONT_END_URL}/profile`,
             });
 
             return { success: true, redirect: portalSession.url };

@@ -70,7 +70,7 @@ export class StripeController implements StripeControllerPort {
             );
             if (success) return response.status(HttpStatus.OK).json({ success: true, redirect });
         } catch (error: any) {
-            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message: error.message });
+            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });
         }
     }
 
@@ -88,7 +88,7 @@ export class StripeController implements StripeControllerPort {
             );
             if (success) return response.status(HttpStatus.OK).json({ success: true, redirect });
         } catch (error: any) {
-            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message: error.message });
+            return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });
         }
     }
 

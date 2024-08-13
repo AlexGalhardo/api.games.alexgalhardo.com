@@ -1,14 +1,15 @@
 import { Test } from "@nestjs/testing";
 import { UsersRepositoryPort } from "../repositories/users.repository";
-import { AuthRegisterDTO, AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
+import { AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
 import { mock } from "jest-mock-extended";
 import { randomUUID } from "node:crypto";
 import * as jwt from "jsonwebtoken";
 import { AuthLoginDTO, AuthLoginUseCasePort } from "../use-cases/auth-login.use-case";
 import { AuthLogoutUseCasePort } from "../use-cases/auth-logout.use-case";
-// import EmailValidator from "../validators/email.validator";
-// import PasswordValidator from "../validators/password.validator";
-// import PhoneValidator from "../validators/phone.validator";
+import { SwaggerAuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
+import EmailValidator from "src/validators/email.validator";
+import PasswordValidator from "src/validators/password.validator";
+import PhoneValidator from "src/validators/phone.validator";
 
 describe("Test AuthLogoutUseCase", () => {
     beforeAll(async () => {
@@ -27,15 +28,15 @@ describe("Test AuthLogoutUseCase", () => {
         jest.clearAllMocks();
     });
 
-    const userEmail = "emailtest@gmail.com"; // EmailValidator.generate();
-    const userPassword = "testing@123"; // PasswordValidator.generate();
+    const userEmail = EmailValidator.generate();
+    const userPassword = PasswordValidator.generate();
     let loginToken = null;
 
     it("should register a user", async () => {
-        const authRegisterDTO = mock<AuthRegisterDTO>({
-            username: "Testing Logout Test",
+        const authRegisterDTO = mock<SwaggerAuthRegisterBodyDTO>({
+            name: "Testing Logout Test",
             email: userEmail,
-            telegramNumber: "1899999999", //PhoneValidator.generate(),
+            telegramNumber: PhoneValidator.generate(),
             password: userPassword,
         });
         const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();

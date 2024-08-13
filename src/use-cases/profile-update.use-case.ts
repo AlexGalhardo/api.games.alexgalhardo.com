@@ -1,10 +1,10 @@
 import { UsersRepositoryPort, UserUpdated } from "../repositories/users.repository";
 import { ErrorsMessages } from "../utils/errors-messages.util";
 import * as jwt from "jsonwebtoken";
-import { ProfileUpdateDTO } from "../dtos/profile-update.dto";
 import PhoneValidator from "../validators/phone.validator";
 import PasswordValidator from "../validators/password.validator";
 import UsernameValidator from "../validators/user-name.validator";
+import { SwaggerProfileUpdateBodyDTO } from "src/swagger/profile-update.swagger";
 
 interface ProfileUpdateUseCaseResponse {
     success: boolean;
@@ -12,20 +12,23 @@ interface ProfileUpdateUseCaseResponse {
 }
 
 export interface ProfileUpdateUseCasePort {
-    execute(jwtToken: string, profileUpdateDTO: ProfileUpdateDTO): Promise<ProfileUpdateUseCaseResponse>;
+    execute(jwtToken: string, profileUpdateDTO: SwaggerProfileUpdateBodyDTO): Promise<ProfileUpdateUseCaseResponse>;
 }
 
 export default class ProfileUpdateUseCase implements ProfileUpdateUseCasePort {
     constructor(private readonly usersRepository: UsersRepositoryPort) {}
 
-    async execute(jwtToken: string, profileUpdateDTO: ProfileUpdateDTO): Promise<ProfileUpdateUseCaseResponse> {
+    async execute(
+        jwtToken: string,
+        profileUpdateDTO: SwaggerProfileUpdateBodyDTO,
+    ): Promise<ProfileUpdateUseCaseResponse> {
         const { userID } = jwt.verify(jwtToken, process.env.JWT_SECRET) as jwt.JwtPayload;
 
         const { user } = await this.usersRepository.findById(userID);
 
         if (user) {
-            if (profileUpdateDTO.username) {
-                if (!UsernameValidator.validate(profileUpdateDTO.username)) {
+            if (profileUpdateDTO.name) {
+                if (!UsernameValidator.validate(profileUpdateDTO.name)) {
                     throw new Error(ErrorsMessages.USERNAME_INVALID);
                 }
             }
