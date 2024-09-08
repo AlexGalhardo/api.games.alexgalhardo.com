@@ -1,6 +1,6 @@
 import { IsString } from "class-validator";
 
-export class SwaggerProfileUpdateBodyDTO {
+export class ProfileUpdateBodyDTO {
     @IsString()
     readonly name: string;
 

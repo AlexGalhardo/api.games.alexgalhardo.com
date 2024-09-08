@@ -3,7 +3,7 @@ import { User, UsersRepositoryPort } from "../repositories/users.repository";
 import { AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
 import { mock } from "jest-mock-extended";
 import { AuthCheckUserJWTTokenUseCasePort } from "../use-cases/auth-check-user-jwt-token.use-case";
-import { SwaggerAuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
+import { AuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
 
 describe("Test AuthRegisterUseCase", () => {
     beforeAll(async () => {
@@ -22,7 +22,7 @@ describe("Test AuthRegisterUseCase", () => {
     });
 
     it("should register a user", async () => {
-        const authRegisterDTO = mock<SwaggerAuthRegisterBodyDTO>();
+        const authRegisterDTO = mock<AuthRegisterBodyDTO>();
         const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
         mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: "jwttoken" });
         const response = await mockAuthRegisterUseCase.execute(authRegisterDTO);

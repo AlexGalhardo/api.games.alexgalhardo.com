@@ -30,7 +30,7 @@
 - [x] CI/CD using Github Actions (linter, tests, build)
 - [x] Middlewares to verify authentication & authorization
 - [x] Migrations & Seeds & Database GUI
-- [x] Swagger OpenAPI Specification v3 Documentation
+- [x]  OpenAPI Specification v3 Documentation
 - [x] Multi tenant (single database, shared schema)
 - [x] Logs & Monitoring
 - [x] Zod validation for payload requests
@@ -97,9 +97,9 @@ npm run test
 ## API Requests
 
 - You can see the HTTP Requests references inside folder [rest-client/](rest-client/)
-- You can also see Swagger API documentation in:
-   - Localhost: <http://localhost:3000/api>
-   - Live: <https://api.games.alexgalhardo.com/api>
+- You can also see  API documentation in:
+   - Localhost: <http://localhost:3000/docs>
+   - Live: <https://api.games.alexgalhardo.com/docs>
 
 ## Documentation
 - Read and add usefull documentation (markdown, notes, images, best practices, etc) about this project inside folder [docs/](docs/)

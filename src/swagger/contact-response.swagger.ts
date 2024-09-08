@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class SwaggerContactResponse {
+export class ContactResponse {
     @ApiProperty()
     success: boolean;
 }

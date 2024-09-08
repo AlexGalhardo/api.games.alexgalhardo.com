@@ -12,13 +12,13 @@ async function bootstrap() {
 
     const config = new DocumentBuilder()
         .setTitle("Example")
-        .setDescription("games.alexgalhardo.com Swagger API Documentation")
+        .setDescription("games.alexgalhardo.com  API Documentation")
         .setVersion("1.0")
         .addBearerAuth()
         .build();
     const document = SwaggerModule.createDocument(app, config);
 
-    SwaggerModule.setup("api", app, document);
+    SwaggerModule.setup("docs", app, document);
 
     await app.listen(Number(process.env.PORT) || 3000, "0.0.0.0", () => {
         console.log(`\n\napi.games.alexgalhardo.com running on http://localhost:${Number(process.env.PORT) || 3000}`);

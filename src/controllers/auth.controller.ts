@@ -13,28 +13,25 @@ import { AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
 import { AuthResetPasswordDTO, AuthResetPasswordUseCasePort } from "../use-cases/auth-reset-password.use-case";
 import { AuthCheckUserJWTTokenUseCasePort } from "../use-cases/auth-check-user-jwt-token.use-case";
 import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { SwaggerAuthLoginBodyDTO } from "src/swagger/auth-login.swagger";
-import { SwaggerAuthResponse } from "src/swagger/auth-response.swagger";
-import { SwaggerAuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
+import { AuthLoginBodyDTO } from "src/swagger/auth-login.swagger";
+import { AuthResponse } from "src/swagger/auth-response.swagger";
+import { AuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
 import TelegramLog from "src/config/telegram-logger.config";
-import { SwaggerAuthForgetPasswordBodyDTO } from "src/swagger/auth-forget-password.swagger";
+import { AuthForgetPasswordBodyDTO } from "src/swagger/auth-forget-password.swagger";
 
 interface AuthControllerPort {
-    login(authLoginDTO: AuthLoginDTO, response: Response): Promise<Response<SwaggerAuthResponse>>;
-    register(authRegisterDTO: SwaggerAuthRegisterBodyDTO, response: Response): Promise<Response<SwaggerAuthResponse>>;
-    logout(response: Response): Promise<Response<SwaggerAuthResponse>>;
-    tokenUser(response: Response): Promise<Response<SwaggerAuthResponse>>;
-    forgetPassword(
-        authForgetPasswordDTO: AuthForgetPasswordDTO,
-        response: Response,
-    ): Promise<Response<SwaggerAuthResponse>>;
+    login(authLoginDTO: AuthLoginDTO, response: Response): Promise<Response<AuthResponse>>;
+    register(authRegisterDTO: AuthRegisterBodyDTO, response: Response): Promise<Response<AuthResponse>>;
+    logout(response: Response): Promise<Response<AuthResponse>>;
+    tokenUser(response: Response): Promise<Response<AuthResponse>>;
+    forgetPassword(authForgetPasswordDTO: AuthForgetPasswordDTO, response: Response): Promise<Response<AuthResponse>>;
     resetPassword(
         authResetPasswordDTO: AuthResetPasswordDTO,
         reset_password_token: string,
         response: Response,
-    ): Promise<Response<SwaggerAuthResponse>>;
-    loginGoogle(request: Request, response: Response): Promise<Response<SwaggerAuthResponse>>;
-    loginGithub(request: Request, response: Response): Promise<Response<SwaggerAuthResponse>>;
+    ): Promise<Response<AuthResponse>>;
+    loginGoogle(request: Request, response: Response): Promise<Response<AuthResponse>>;
+    loginGithub(request: Request, response: Response): Promise<Response<AuthResponse>>;
 }
 
 @ApiTags("auth")
@@ -56,12 +53,9 @@ export class AuthController implements AuthControllerPort {
     ) {}
 
     @Post("/login")
-    @ApiBody({ type: SwaggerAuthLoginBodyDTO })
-    @ApiResponse({ status: 200, type: SwaggerAuthResponse })
-    async login(
-        @Body() authLoginPayload: AuthLoginDTO,
-        @Res() response: Response,
-    ): Promise<Response<SwaggerAuthResponse>> {
+    @ApiBody({ type: AuthLoginBodyDTO })
+    @ApiResponse({ status: 200, type: AuthResponse })
+    async login(@Body() authLoginPayload: AuthLoginDTO, @Res() response: Response): Promise<Response<AuthResponse>> {
         try {
             const { success, jwt_token, message } = await this.authLoginUseCase.execute(authLoginPayload);
             if (success === true) return response.status(HttpStatus.OK).json({ success: true, jwt_token });
@@ -73,12 +67,12 @@ export class AuthController implements AuthControllerPort {
     }
 
     @Post("/register")
-    @ApiBody({ type: SwaggerAuthRegisterBodyDTO })
-    @ApiResponse({ status: 201, type: SwaggerAuthResponse })
+    @ApiBody({ type: AuthRegisterBodyDTO })
+    @ApiResponse({ status: 201, type: AuthResponse })
     async register(
-        @Body() authRegisterPayload: SwaggerAuthRegisterBodyDTO,
+        @Body() authRegisterPayload: AuthRegisterBodyDTO,
         @Res() response: Response,
-    ): Promise<Response<SwaggerAuthResponse>> {
+    ): Promise<Response<AuthResponse>> {
         try {
             const { success, jwt_token } = await this.authRegisterUseCase.execute(authRegisterPayload);
             if (success === true) return response.status(HttpStatus.CREATED).json({ success: true, jwt_token });
@@ -91,8 +85,8 @@ export class AuthController implements AuthControllerPort {
 
     @Post("/logout")
     @ApiBearerAuth()
-    @ApiResponse({ status: 200, type: SwaggerAuthResponse })
-    async logout(@Res() response: Response): Promise<Response<SwaggerAuthResponse>> {
+    @ApiResponse({ status: 200, type: AuthResponse })
+    async logout(@Res() response: Response): Promise<Response<AuthResponse>> {
         try {
             const userJWTToken = response.locals.token;
             const { success } = await this.authLogoutUseCase.execute(userJWTToken);
@@ -106,8 +100,8 @@ export class AuthController implements AuthControllerPort {
 
     @Post("/check-user-jwt-token")
     @ApiBearerAuth()
-    @ApiResponse({ status: 200, type: SwaggerAuthResponse })
-    async tokenUser(@Res() response: Response): Promise<Response<SwaggerAuthResponse>> {
+    @ApiResponse({ status: 200, type: AuthResponse })
+    async tokenUser(@Res() response: Response): Promise<Response<AuthResponse>> {
         try {
             const userJWTToken = response.locals.token;
             const { success, data } = await this.authCheckUserJWTTokenUseCase.execute(userJWTToken);
@@ -119,12 +113,12 @@ export class AuthController implements AuthControllerPort {
     }
 
     @Post("/forget-password")
-    @ApiBody({ type: SwaggerAuthForgetPasswordBodyDTO })
-    @ApiResponse({ status: 200, type: SwaggerAuthResponse })
+    @ApiBody({ type: AuthForgetPasswordBodyDTO })
+    @ApiResponse({ status: 200, type: AuthResponse })
     async forgetPassword(
         @Body() authForgetPasswordPayload: AuthForgetPasswordDTO,
         @Res() response: Response,
-    ): Promise<Response<SwaggerAuthResponse>> {
+    ): Promise<Response<AuthResponse>> {
         try {
             const { success } = await this.authForgetPasswordUseCase.execute(authForgetPasswordPayload);
             if (success) return response.status(HttpStatus.OK).json({ success: true });
@@ -142,12 +136,12 @@ export class AuthController implements AuthControllerPort {
         required: true,
         type: String,
     })
-    @ApiResponse({ status: 200, type: SwaggerAuthResponse })
+    @ApiResponse({ status: 200, type: AuthResponse })
     async resetPassword(
         @Body() authResetPasswordPayload: AuthResetPasswordDTO,
         @Param("reset_password_token") reset_password_token: string,
         @Res() response: Response,
-    ): Promise<Response<SwaggerAuthResponse>> {
+    ): Promise<Response<AuthResponse>> {
         try {
             const { success } = await this.authResetPasswordUseCase.execute(
                 reset_password_token,
@@ -161,12 +155,12 @@ export class AuthController implements AuthControllerPort {
     }
 
     @Post("/check-reset-password-token")
-    @ApiBody({ type: SwaggerAuthForgetPasswordBodyDTO })
-    @ApiResponse({ status: 200, type: SwaggerAuthResponse })
+    @ApiBody({ type: AuthForgetPasswordBodyDTO })
+    @ApiResponse({ status: 200, type: AuthResponse })
     async checkResetPasswordToken(
         @Body() { resetPasswordToken }: CheckResetPasswordTokenDTO,
         @Res() response: Response,
-    ): Promise<Response<SwaggerAuthResponse>> {
+    ): Promise<Response<AuthResponse>> {
         try {
             const { success } = await this.authCheckResetPasswordTokenUseCase.execute(resetPasswordToken);
             if (success) return response.status(HttpStatus.OK).json({ success: true });
@@ -178,8 +172,8 @@ export class AuthController implements AuthControllerPort {
     }
 
     @Post("/login/google/callback")
-    @ApiResponse({ status: 200, type: SwaggerAuthResponse })
-    async loginGoogle(@Req() request: Request, @Res() response: Response): Promise<Response<SwaggerAuthResponse>> {
+    @ApiResponse({ status: 200, type: AuthResponse })
+    async loginGoogle(@Req() request: Request, @Res() response: Response): Promise<Response<AuthResponse>> {
         try {
             const { success, redirect } = await this.authLoginGoogleUseCase.execute(request);
             if (success) {
@@ -193,8 +187,8 @@ export class AuthController implements AuthControllerPort {
     }
 
     @Get("/login/github/callback")
-    @ApiResponse({ status: 200, type: SwaggerAuthResponse })
-    async loginGithub(@Req() request: Request, @Res() response: Response): Promise<Response<SwaggerAuthResponse>> {
+    @ApiResponse({ status: 200, type: AuthResponse })
+    async loginGithub(@Req() request: Request, @Res() response: Response): Promise<Response<AuthResponse>> {
         try {
             const { success, redirect } = await this.authLoginGitHubUseCase.execute(request);
             if (success) {

@@ -6,7 +6,7 @@ import { Bcrypt } from "../utils/bcrypt.util";
 import { Injectable } from "@nestjs/common";
 import { Database } from "../config/database.config";
 import { SubscriptionName } from "../use-cases/auth-register.use-case";
-import { SwaggerProfileUpdateBodyDTO } from "src/swagger/profile-update.swagger";
+import { ProfileUpdateBodyDTO } from "src/swagger/profile-update.swagger";
 
 export interface User {
     id: string;
@@ -78,7 +78,7 @@ export interface UsersRepositoryPort {
     findById(userId: string): Promise<UserResponse>;
     findByResetPasswordToken(resetPasswordToken: string): Promise<UserResponse>;
     create(user: User): Promise<void>;
-    update(userId: string, profileUpdatePayload: SwaggerProfileUpdateBodyDTO): Promise<UserUpdated>;
+    update(userId: string, profileUpdatePayload: ProfileUpdateBodyDTO): Promise<UserUpdated>;
     deleteByEmail(email: string): Promise<void>;
     logout(userId: string): Promise<void>;
     saveResetPasswordToken(userId: string, resetPasswordToken: string): Promise<void>;
@@ -317,7 +317,7 @@ export default class UsersRepository implements UsersRepositoryPort {
         });
     }
 
-    public async update(userId: string, profileUpdatePayload: SwaggerProfileUpdateBodyDTO): Promise<UserUpdated> {
+    public async update(userId: string, profileUpdatePayload: ProfileUpdateBodyDTO): Promise<UserUpdated> {
         if (process.env.USE_JSON_DATABASE === "true") {
             for (let i = 0; i < this.users.length; i++) {
                 if (this.users[i].id === userId) {

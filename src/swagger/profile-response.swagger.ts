@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class SwaggerProfileResponse {
+export class ProfileResponse {
     @ApiProperty()
     success: boolean;
 

@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Game } from "src/repositories/games.repository";
 
-export class SwaggerGamesResponse {
+export class GamesResponse {
     @ApiProperty()
     success: boolean;
 

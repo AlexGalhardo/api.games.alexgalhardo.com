@@ -4,8 +4,8 @@ import { AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
 import { ProfileUpdateUseCasePort } from "../use-cases/profile-update.use-case";
 import { UserDeleteUseCasePort } from "../use-cases/user-delete.use-case";
 import { UsersRepositoryPort } from "../repositories/users.repository";
-import { SwaggerAuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
-import { SwaggerProfileUpdateBodyDTO } from "src/swagger/profile-update.swagger";
+import { AuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
+import { ProfileUpdateBodyDTO } from "src/swagger/profile-update.swagger";
 
 describe("Test ProfileUpdateUseCase", () => {
     beforeAll(async () => {
@@ -25,7 +25,7 @@ describe("Test ProfileUpdateUseCase", () => {
     });
 
     it("should register a user", async () => {
-        const authRegisterDTO = mock<SwaggerAuthRegisterBodyDTO>();
+        const authRegisterDTO = mock<AuthRegisterBodyDTO>();
         const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
         mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: "jwttoken" });
         const response = await mockAuthRegisterUseCase.execute(authRegisterDTO);
@@ -38,7 +38,7 @@ describe("Test ProfileUpdateUseCase", () => {
 
     it("should update profile", async () => {
         const mockProfileUpdateUseCase = mock<ProfileUpdateUseCasePort>();
-        const mockProfileUpdateDTO = mock<SwaggerProfileUpdateBodyDTO>();
+        const mockProfileUpdateDTO = mock<ProfileUpdateBodyDTO>();
         mockProfileUpdateUseCase.execute.mockResolvedValueOnce({ success: true, data: mockProfileUpdateDTO });
 
         const response = await mockProfileUpdateUseCase.execute("jwttoken", mockProfileUpdateDTO);

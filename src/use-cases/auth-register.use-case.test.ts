@@ -4,7 +4,7 @@ import { AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
 import { mock } from "jest-mock-extended";
 import { randomUUID } from "node:crypto";
 import * as jwt from "jsonwebtoken";
-import { SwaggerAuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
+import { AuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
 
 describe("Test AuthRegisterUseCase", () => {
     beforeAll(async () => {
@@ -22,7 +22,7 @@ describe("Test AuthRegisterUseCase", () => {
     });
 
     it("should register a user", async () => {
-        const authRegisterDTO = mock<SwaggerAuthRegisterBodyDTO>();
+        const authRegisterDTO = mock<AuthRegisterBodyDTO>();
         const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
         const jwtToken = jwt.sign({ userID: randomUUID() }, "jwtsecret");
         mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: jwtToken });

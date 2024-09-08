@@ -2,15 +2,12 @@ import { Body, Controller, HttpStatus, Inject, Put, Res } from "@nestjs/common";
 import { Response } from "express";
 import { ProfileUpdateUseCasePort } from "../use-cases/profile-update.use-case";
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { SwaggerProfileUpdateBodyDTO } from "../swagger/profile-update.swagger";
-import { SwaggerProfileResponse } from "src/swagger/profile-response.swagger";
+import { ProfileUpdateBodyDTO } from "../swagger/profile-update.swagger";
+import { ProfileResponse } from "src/swagger/profile-response.swagger";
 import TelegramLog from "src/config/telegram-logger.config";
 
 interface ProfileControllerPort {
-    update(
-        profileUpdateDTO: SwaggerProfileUpdateBodyDTO,
-        response: Response,
-    ): Promise<Response<SwaggerProfileResponse>>;
+    update(profileUpdateDTO: ProfileUpdateBodyDTO, response: Response): Promise<Response<ProfileResponse>>;
 }
 
 @ApiBearerAuth()
@@ -20,12 +17,12 @@ export class ProfileController implements ProfileControllerPort {
     constructor(@Inject("ProfileUpdateUseCasePort") private readonly profileUpdateUseCase: ProfileUpdateUseCasePort) {}
 
     @Put("/")
-    @ApiBody({ type: SwaggerProfileUpdateBodyDTO })
-    @ApiResponse({ status: 200, type: SwaggerProfileResponse })
+    @ApiBody({ type: ProfileUpdateBodyDTO })
+    @ApiResponse({ status: 200, type: ProfileResponse })
     async update(
-        @Body() profileUpdatePayload: SwaggerProfileUpdateBodyDTO,
+        @Body() profileUpdatePayload: ProfileUpdateBodyDTO,
         @Res() response: Response,
-    ): Promise<Response<SwaggerProfileResponse>> {
+    ): Promise<Response<ProfileResponse>> {
         try {
             const userJWTToken = response.locals.token;
             const { success, data } = await this.profileUpdateUseCase.execute(userJWTToken, profileUpdatePayload);

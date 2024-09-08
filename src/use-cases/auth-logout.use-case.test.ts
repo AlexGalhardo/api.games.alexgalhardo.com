@@ -6,7 +6,7 @@ import { randomUUID } from "node:crypto";
 import * as jwt from "jsonwebtoken";
 import { AuthLoginDTO, AuthLoginUseCasePort } from "../use-cases/auth-login.use-case";
 import { AuthLogoutUseCasePort } from "../use-cases/auth-logout.use-case";
-import { SwaggerAuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
+import { AuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
 import EmailValidator from "src/validators/email.validator";
 import PasswordValidator from "src/validators/password.validator";
 import PhoneValidator from "src/validators/phone.validator";
@@ -33,7 +33,7 @@ describe("Test AuthLogoutUseCase", () => {
     let loginToken = null;
 
     it("should register a user", async () => {
-        const authRegisterDTO = mock<SwaggerAuthRegisterBodyDTO>({
+        const authRegisterDTO = mock<AuthRegisterBodyDTO>({
             name: "Testing Logout Test",
             email: userEmail,
             telegramNumber: PhoneValidator.generate(),

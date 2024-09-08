@@ -4,7 +4,7 @@ import * as jwt from "jsonwebtoken";
 import PhoneValidator from "../validators/phone.validator";
 import PasswordValidator from "../validators/password.validator";
 import UsernameValidator from "../validators/user-name.validator";
-import { SwaggerProfileUpdateBodyDTO } from "src/swagger/profile-update.swagger";
+import { ProfileUpdateBodyDTO } from "src/swagger/profile-update.swagger";
 
 interface ProfileUpdateUseCaseResponse {
     success: boolean;
@@ -12,16 +12,13 @@ interface ProfileUpdateUseCaseResponse {
 }
 
 export interface ProfileUpdateUseCasePort {
-    execute(jwtToken: string, profileUpdateDTO: SwaggerProfileUpdateBodyDTO): Promise<ProfileUpdateUseCaseResponse>;
+    execute(jwtToken: string, profileUpdateDTO: ProfileUpdateBodyDTO): Promise<ProfileUpdateUseCaseResponse>;
 }
 
 export default class ProfileUpdateUseCase implements ProfileUpdateUseCasePort {
     constructor(private readonly usersRepository: UsersRepositoryPort) {}
 
-    async execute(
-        jwtToken: string,
-        profileUpdateDTO: SwaggerProfileUpdateBodyDTO,
-    ): Promise<ProfileUpdateUseCaseResponse> {
+    async execute(jwtToken: string, profileUpdateDTO: ProfileUpdateBodyDTO): Promise<ProfileUpdateUseCaseResponse> {
         const { userID } = jwt.verify(jwtToken, process.env.JWT_SECRET) as jwt.JwtPayload;
 
         const { user } = await this.usersRepository.findById(userID);

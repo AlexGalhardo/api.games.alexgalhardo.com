@@ -1,14 +1,14 @@
 import { Controller, Res, HttpStatus, Get } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import { SwaggerHealthCheckResponse } from "../swagger/health-check.swagger";
+import { HealthCheckResponse } from "../swagger/health-check.swagger";
 import { API_URL } from "src/utils/constants.util";
 
 @Controller()
 @ApiTags("health-check")
 export class HealthCheckController {
     @Get("/")
-    @ApiResponse({ status: 200, type: SwaggerHealthCheckResponse })
+    @ApiResponse({ status: 200, type: HealthCheckResponse })
     async login(@Res() response: Response) {
         return response.status(HttpStatus.OK).json({
             success: true,

@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class SwaggerAuthRegisterBodyDTO {
+export class AuthRegisterBodyDTO {
     @ApiProperty({ example: "John Doe", description: "User name" })
     name: string;
 

@@ -5,11 +5,9 @@ import * as jwt from "jsonwebtoken";
 import { Request } from "express";
 import { randomUUID } from "node:crypto";
 import { FRONT_END_URL } from "../utils/constants.util";
-
 import GenerateRandomToken from "../utils/generate-random-token.util";
 import { SubscriptionName } from "./auth-register.use-case";
 import emailValidator from "../validators/email.validator";
-import DateTime from "../utils/date-time.util";
 
 export interface AuthLoginGitHubUseCasePort {
     execute(request: Request): Promise<AuthLoginGitHubUseCaseResponse>;

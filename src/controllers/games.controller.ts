@@ -5,12 +5,12 @@ import { GameGetByIdUseCasePort } from "../use-cases/game-get-by-id.use-case";
 import { GameGetByTitleUseCasePort } from "../use-cases/game-get-by-title.use-case";
 import { GameGetRandomUseCasePort } from "../use-cases/game-get-random.use-case";
 import TelegramLog from "src/config/telegram-logger.config";
-import { SwaggerGamesResponse } from "src/swagger/game-response.swagger";
+import { GamesResponse } from "src/swagger/game-response.swagger";
 
 interface GamesControllerPort {
-    getRandom(response: Response): Promise<Response<SwaggerGamesResponse>>;
-    findById(game_id: string, response: Response): Promise<Response<SwaggerGamesResponse>>;
-    getByTitle(game_title: string, response: Response): Promise<Response<SwaggerGamesResponse>>;
+    getRandom(response: Response): Promise<Response<GamesResponse>>;
+    findById(game_id: string, response: Response): Promise<Response<GamesResponse>>;
+    getByTitle(game_title: string, response: Response): Promise<Response<GamesResponse>>;
 }
 
 @Controller("games")
@@ -24,8 +24,8 @@ export class GamesController implements GamesControllerPort {
 
     @Get("/random")
     @ApiBearerAuth()
-    @ApiResponse({ status: 200, description: "Get random game", type: SwaggerGamesResponse })
-    async getRandom(@Res() response: Response): Promise<Response<SwaggerGamesResponse>> {
+    @ApiResponse({ status: 200, description: "Get random game", type: GamesResponse })
+    async getRandom(@Res() response: Response): Promise<Response<GamesResponse>> {
         try {
             const userAPIKey = response.locals.token;
             const { success, data, error, api_requests_today } = await this.gameGetRandomUseCase.execute(userAPIKey);
@@ -46,11 +46,8 @@ export class GamesController implements GamesControllerPort {
         required: true,
         type: String,
     })
-    @ApiResponse({ status: 200, description: "Get game by id", type: SwaggerGamesResponse })
-    async findById(
-        @Param("game_id") game_id: string,
-        @Res() response: Response,
-    ): Promise<Response<SwaggerGamesResponse>> {
+    @ApiResponse({ status: 200, description: "Get game by id", type: GamesResponse })
+    async findById(@Param("game_id") game_id: string, @Res() response: Response): Promise<Response<GamesResponse>> {
         try {
             const userAPIKey = response.locals.token;
             const { success, data, error, api_requests_today } = await this.gameGetByIdUseCase.execute(
@@ -74,11 +71,11 @@ export class GamesController implements GamesControllerPort {
         required: true,
         type: String,
     })
-    @ApiResponse({ status: 200, description: "Get game by title", type: SwaggerGamesResponse })
+    @ApiResponse({ status: 200, description: "Get game by title", type: GamesResponse })
     async getByTitle(
         @Param("game_title") game_title: string,
         @Res() response: Response,
-    ): Promise<Response<SwaggerGamesResponse>> {
+    ): Promise<Response<GamesResponse>> {
         try {
             const userAPIKey = response.locals.token;
             const { success, data, error, api_requests_today } = await this.gameGetByTitleUseCase.execute(

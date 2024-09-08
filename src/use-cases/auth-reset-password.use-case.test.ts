@@ -8,7 +8,7 @@ import { randomUUID } from "node:crypto";
 import * as jwt from "jsonwebtoken";
 import EmailValidator from "src/validators/email.validator";
 import PasswordValidator from "src/validators/password.validator";
-import { SwaggerAuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
+import { AuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
 
 describe("Test AuthForgetPasswordUseCase", () => {
     beforeAll(async () => {
@@ -31,7 +31,7 @@ describe("Test AuthForgetPasswordUseCase", () => {
     let resetPasswordToken = null;
 
     it("should register a user", async () => {
-        const authRegisterDTO = mock<SwaggerAuthRegisterBodyDTO>();
+        const authRegisterDTO = mock<AuthRegisterBodyDTO>();
         const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
         const jwtToken = jwt.sign({ userID: randomUUID() }, "jwtsecret");
         mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: jwtToken });

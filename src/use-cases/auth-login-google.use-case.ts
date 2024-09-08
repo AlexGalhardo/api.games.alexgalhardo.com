@@ -9,7 +9,6 @@ import { FRONT_END_URL } from "../utils/constants.util";
 import GenerateRandomToken from "../utils/generate-random-token.util";
 import { SubscriptionName } from "./auth-register.use-case";
 import emailValidator from "../validators/email.validator";
-import DateTime from "../utils/date-time.util";
 
 export interface AuthLoginGoogleUseCasePort {
     execute(request: Request): Promise<AuthLoginGoogleUseCaseResponse>;

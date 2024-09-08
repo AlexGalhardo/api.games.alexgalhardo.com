@@ -5,7 +5,7 @@ import { ErrorsMessages } from "../utils/errors-messages.util";
 import * as jwt from "jsonwebtoken";
 import GenerateRandomToken from "../utils/generate-random-token.util";
 import AuthRegisterValidator from "src/validators/auth-register.validator";
-import { SwaggerAuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
+import { AuthRegisterBodyDTO } from "src/swagger/auth-register.swagger";
 
 interface AuthRegisterUseCaseResponse {
     success: boolean;
@@ -19,13 +19,13 @@ export enum SubscriptionName {
 }
 
 export interface AuthRegisterUseCasePort {
-    execute(authRegisterPayload: SwaggerAuthRegisterBodyDTO): Promise<AuthRegisterUseCaseResponse>;
+    execute(authRegisterPayload: AuthRegisterBodyDTO): Promise<AuthRegisterUseCaseResponse>;
 }
 
 export default class AuthRegisterUseCase implements AuthRegisterUseCasePort {
     constructor(private readonly usersRepository: UsersRepositoryPort) {}
 
-    async execute(authRegisterPayload: SwaggerAuthRegisterBodyDTO): Promise<AuthRegisterUseCaseResponse> {
+    async execute(authRegisterPayload: AuthRegisterBodyDTO): Promise<AuthRegisterUseCaseResponse> {
         AuthRegisterValidator.parse(authRegisterPayload);
 
         const { name, email, password } = authRegisterPayload;
