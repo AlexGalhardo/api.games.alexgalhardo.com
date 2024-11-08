@@ -1,10 +1,10 @@
-PUT http://localhost:3000/profile HTTP/1.1
+PUT http://localhost:3000/profile
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3MjBiZjhlZi0zZWNmLTRhY2EtYWEyNi1lMDk2NzY2NDExYjIiLCJpYXQiOjE3MTIwNjA3NTl9.4i3r_3Prn-atg6kBGfRc3ntKFZNxvI6uUFTLjbxGr7w
 
 {
 	"name": "Updated Test User",
-	"telegramNumber": "5518999888888",
+	"phone_number": "5518999888888",
 	"olderPassword": "newPASSWORD!123",
 	"newPassword": "passwordUPDATED!123"
 }

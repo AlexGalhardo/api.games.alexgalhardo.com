@@ -11,14 +11,14 @@ model Users {
   id                                     String    @id @default(uuid())
   name                               	 String
   email                                  String    @unique
-  telegram_number                        String?   @unique
+  phone_number                        	 String?   @unique
   jwt_token                              String?   @unique
   api_key                                String?   @unique
   api_requests_today                     Int       @default(0)
   date_last_api_request                  String?
   password                               String
   reset_password_token                   String?   @unique
-  reset_password_token_expires_at        String?
+  reset_password_token_expires_at        DateTime?
   stripe_customer_id                     String?   @unique
   stripe_subscription_active             Boolean   @default(false)
   stripe_subscription_name               String?   @default("NOOB")

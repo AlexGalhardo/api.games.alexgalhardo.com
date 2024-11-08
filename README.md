@@ -1,6 +1,4 @@
-<div align="center">
- <h1 align="center"><a href="https://api.games.alexgalhardo.com/" target="_blank">api.games.alexgalhardo.com v2</a></h1>
-</div>
+<h1 align="center"><a href="https://api.games.alexgalhardo.com/" target="_blank">api.games.alexgalhardo.com v3</a></h1>
 
 ## Introduction
 
@@ -30,14 +28,14 @@
 - [x] CI/CD using Github Actions (linter, tests, build)
 - [x] Middlewares to verify authentication & authorization
 - [x] Migrations & Seeds & Database GUI
-- [x]  OpenAPI Specification v3 Documentation
+- [x] OpenAPI Specification Swagger v3 Documentation
 - [x] Multi tenant (single database, shared schema)
 - [x] Logs & Monitoring
 - [x] Zod validation for payload requests
 - [x] Security configs (rate-limiter, cors, exception errors handlers, etc)
 - [ ] Git tags for releases
 - [ ] Integration tests
-- [ ] Healthcheck endpoint (databases conections, memory usage, etc)
+- [x] Healthcheck endpoint (databases conections, memory usage, etc)
 
 ## Development Setup Local
 
@@ -93,6 +91,9 @@ a. Run all unit tests
 ```bash
 npm run test
 ```
+
+## Logs
+- You can see [Errsole Web Dashboard](https://github.com/errsole) on <http://localhost:3000/errsole>
 
 ## API Requests
 
