@@ -3,7 +3,7 @@ import { ErrorsMessages } from "../../../utils/errors-messages.util";
 
 interface ProfileDeleteUseCaseResponse {
 	success: boolean;
-	jwt_token?: string;
+	auth_token?: string;
 }
 
 export interface ProfileDeleteUseCasePort {

@@ -10,6 +10,8 @@ export class Database extends PrismaClient implements OnModuleInit {
 				log: ["query", "info", "warn", "error"],
 				errorFormat: "minimal",
 			});
+		} else {
+			super();
 		}
 	}
 

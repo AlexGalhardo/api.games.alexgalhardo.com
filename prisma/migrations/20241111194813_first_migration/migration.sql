@@ -4,7 +4,7 @@ CREATE TABLE "users" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phone_number" TEXT,
-    "jwt_token" TEXT,
+    "auth_token" TEXT,
     "api_key" TEXT,
     "api_requests_today" INTEGER NOT NULL DEFAULT 0,
     "date_last_api_request" TEXT,
@@ -120,7 +120,7 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "users_phone_number_key" ON "users"("phone_number");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "users_jwt_token_key" ON "users"("jwt_token");
+CREATE UNIQUE INDEX "users_auth_token_key" ON "users"("auth_token");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_api_key_key" ON "users"("api_key");

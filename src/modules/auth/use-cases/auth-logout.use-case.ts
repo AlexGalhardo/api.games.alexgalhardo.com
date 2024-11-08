@@ -1,9 +1,8 @@
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { ErrorsMessages } from "../../../utils/errors-messages.util";
-import * as jwt from "jsonwebtoken";
 
 export interface AuthLogoutUseCasePort {
-	execute(jwtToken: string): Promise<AuthLogoutUseCaseResponse>;
+	execute(userId: string): Promise<AuthLogoutUseCaseResponse>;
 }
 
 interface AuthLogoutUseCaseResponse {
@@ -13,11 +12,9 @@ interface AuthLogoutUseCaseResponse {
 export default class AuthLogoutUseCase implements AuthLogoutUseCasePort {
 	constructor(private readonly usersRepository: UsersRepositoryPort) {}
 
-	async execute(jwtToken: string): Promise<AuthLogoutUseCaseResponse> {
-		const { userID } = jwt.verify(jwtToken, process.env.JWT_SECRET) as jwt.JwtPayload;
-
-		if (userID && (await this.usersRepository.findById(userID))) {
-			await this.usersRepository.logout(userID);
+	async execute(userId: string): Promise<AuthLogoutUseCaseResponse> {
+		if (userId && (await this.usersRepository.findById(userId))) {
+			await this.usersRepository.logout(userId);
 			return { success: true };
 		}
 

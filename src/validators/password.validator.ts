@@ -1,4 +1,4 @@
-export default class PasswordValidator {
+export class PasswordValidator {
 	static isEqual(firstPassword: string, secondPassword: string): boolean {
 		return firstPassword === secondPassword;
 	}

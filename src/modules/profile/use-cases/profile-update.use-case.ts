@@ -1,9 +1,9 @@
 import { UsersRepositoryPort, UserUpdated } from "../../../repositories/users.repository";
 import { ErrorsMessages } from "../../../utils/errors-messages.util";
 import * as jwt from "jsonwebtoken";
-import PhoneValidator from "../../../validators/phone.validator";
-import PasswordValidator from "../../../validators/password.validator";
-import UsernameValidator from "../../../validators/user-name.validator";
+import { PhoneValidator } from "../../../validators/phone.validator";
+import { PasswordValidator } from "../../../validators/password.validator";
+import { UsernameValidator } from "../../../validators/username.validator";
 import { ProfileUpdateBodyDTO } from "src/modules/profile/dtos/profile-update.swagger";
 
 interface ProfileUpdateUseCaseResponse {
@@ -12,16 +12,14 @@ interface ProfileUpdateUseCaseResponse {
 }
 
 export interface ProfileUpdateUseCasePort {
-	execute(jwtToken: string, profileUpdateDTO: ProfileUpdateBodyDTO): Promise<ProfileUpdateUseCaseResponse>;
+	execute(user_id: string, profileUpdateDTO: ProfileUpdateBodyDTO): Promise<ProfileUpdateUseCaseResponse>;
 }
 
 export default class ProfileUpdateUseCase implements ProfileUpdateUseCasePort {
 	constructor(private readonly usersRepository: UsersRepositoryPort) {}
 
-	async execute(jwtToken: string, profileUpdateDTO: ProfileUpdateBodyDTO): Promise<ProfileUpdateUseCaseResponse> {
-		const { userID } = jwt.verify(jwtToken, process.env.JWT_SECRET) as jwt.JwtPayload;
-
-		const { user } = await this.usersRepository.findById(userID);
+	async execute(user_id: string, profileUpdateDTO: ProfileUpdateBodyDTO): Promise<ProfileUpdateUseCaseResponse> {
+		const { user } = await this.usersRepository.findById(user_id);
 
 		if (user) {
 			if (profileUpdateDTO.name) {
@@ -50,7 +48,7 @@ export default class ProfileUpdateUseCase implements ProfileUpdateUseCasePort {
 				}
 			}
 
-			const userUpdated = await this.usersRepository.update(userID, profileUpdateDTO);
+			const userUpdated = await this.usersRepository.update(user_id, profileUpdateDTO);
 
 			return { success: true, data: userUpdated };
 		}

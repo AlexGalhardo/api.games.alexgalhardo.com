@@ -1,7 +1,8 @@
 import { z } from "zod";
 
-export const AuthLoginValidator = z.object({
-	email: z.string().email("Invalid email format"),
+export const AuthSignupValidator = z.object({
+	name: z.string().min(4, "name must have at least 4 characters"),
+	email: z.string().email("email format invalid"),
 	password: z
 		.string()
 		.min(8, "password must be at least 8 characters long")

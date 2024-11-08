@@ -1,11 +1,9 @@
 import { Test } from "@nestjs/testing";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
-import { AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
+import { AuthSignupUseCasePort } from "../use-cases/auth-register.use-case";
 import { mock } from "jest-mock-extended";
-import { randomUUID } from "node:crypto";
-import * as jwt from "jsonwebtoken";
 import { AuthForgetPasswordDTO, AuthForgetPasswordUseCasePort } from "../use-cases/auth-forget-password.use-case";
-import { AuthRegisterBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
+import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
 
 describe("Test AuthForgetPasswordUseCase", () => {
 	beforeAll(async () => {
@@ -13,7 +11,7 @@ describe("Test AuthForgetPasswordUseCase", () => {
 			controllers: [],
 			providers: [
 				{ provide: "UsersRepositoryPort", useValue: mock<UsersRepositoryPort>() },
-				{ provide: "AuthRegisterUseCasePort", useValue: mock<AuthRegisterUseCasePort>() },
+				{ provide: "AuthSignupUseCasePort", useValue: mock<AuthSignupUseCasePort>() },
 				{ provide: "AuthForgetPasswordUseCasePort", useValue: mock<AuthForgetPasswordUseCasePort>() },
 			],
 		}).compile();
@@ -24,14 +22,13 @@ describe("Test AuthForgetPasswordUseCase", () => {
 	});
 
 	it("should register a user", async () => {
-		const authRegisterDTO = mock<AuthRegisterBodyDTO>();
-		const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
-		const jwtToken = jwt.sign({ userID: randomUUID() }, "jwtsecret");
-		mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: jwtToken });
-		const { success, jwt_token } = await mockAuthRegisterUseCase.execute(authRegisterDTO);
+		const authRegisterDTO = mock<AuthSignupBodyDTO>();
+		const mockAuthRegisterUseCase = mock<AuthSignupUseCasePort>();
+		mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, auth_token: "authToken" });
+		const { success, auth_token } = await mockAuthRegisterUseCase.execute(authRegisterDTO);
 
 		expect(success).toBeTruthy();
-		expect(jwt_token).toBe(jwtToken);
+		expect(auth_token).toBe("authToken");
 	});
 
 	it("should send a email with reset_password_token to user reset his password", async () => {

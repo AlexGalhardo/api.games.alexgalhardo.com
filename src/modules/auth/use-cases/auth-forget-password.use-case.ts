@@ -3,7 +3,7 @@ import { FRONT_END_URL } from "../../../utils/constants.util";
 import { ErrorsMessages } from "../../../utils/errors-messages.util";
 import GenerateRandomToken from "../../../utils/generate-random-token.util";
 import { SMTP } from "../../../config/smtp.config";
-import emailValidator from "../../../validators/email.validator";
+import { EmailValidator } from "../../../validators/email.validator";
 
 export interface AuthForgetPasswordUseCasePort {
 	execute(authForgetPasswordDTO: AuthForgetPasswordDTO): Promise<AuthForgetPasswordUseCaseResponse>;
@@ -27,7 +27,7 @@ export default class AuthForgetPasswordUseCase implements AuthForgetPasswordUseC
 	async execute(authForgetPasswordDTO: AuthForgetPasswordDTO): Promise<AuthForgetPasswordUseCaseResponse> {
 		const { email } = authForgetPasswordDTO;
 
-		if (!emailValidator.validate(email)) throw new Error(ErrorsMessages.EMAIL_INVALID);
+		if (!EmailValidator.validate(email)) throw new Error(ErrorsMessages.EMAIL_INVALID);
 
 		const { user } = await this.usersRepository.findByEmail(email);
 

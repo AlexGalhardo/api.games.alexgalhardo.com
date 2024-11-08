@@ -1,15 +1,13 @@
 import { Test } from "@nestjs/testing";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
-import { AuthRegisterUseCasePort } from "../use-cases/auth-register.use-case";
+import { AuthSignupUseCasePort } from "../use-cases/auth-register.use-case";
 import { mock } from "jest-mock-extended";
-import { randomUUID } from "node:crypto";
-import * as jwt from "jsonwebtoken";
 import { AuthLoginDTO, AuthLoginUseCasePort } from "../use-cases/auth-login.use-case";
 import { AuthLogoutUseCasePort } from "../use-cases/auth-logout.use-case";
-import { AuthRegisterBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
-import EmailValidator from "src/validators/email.validator";
-import PasswordValidator from "src/validators/password.validator";
-import PhoneValidator from "src/validators/phone.validator";
+import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
+import { EmailValidator } from "src/validators/email.validator";
+import { PasswordValidator } from "src/validators/password.validator";
+import { PhoneValidator } from "src/validators/phone.validator";
 
 describe("Test AuthLogoutUseCase", () => {
 	beforeAll(async () => {
@@ -17,7 +15,7 @@ describe("Test AuthLogoutUseCase", () => {
 			controllers: [],
 			providers: [
 				{ provide: "UsersRepositoryPort", useValue: mock<UsersRepositoryPort>() },
-				{ provide: "AuthRegisterUseCasePort", useValue: mock<AuthRegisterUseCasePort>() },
+				{ provide: "AuthSignupUseCasePort", useValue: mock<AuthSignupUseCasePort>() },
 				{ provide: "AuthLoginUseCasePort", useValue: mock<AuthLoginUseCasePort>() },
 				{ provide: "AuthLogoutUseCasePort", useValue: mock<AuthLogoutUseCasePort>() },
 			],
@@ -33,19 +31,18 @@ describe("Test AuthLogoutUseCase", () => {
 	let loginToken = null;
 
 	it("should register a user", async () => {
-		const authRegisterDTO = mock<AuthRegisterBodyDTO>({
+		const authRegisterDTO = mock<AuthSignupBodyDTO>({
 			name: "Testing Logout Test",
 			email: userEmail,
 			phone_number: PhoneValidator.generate(),
 			password: userPassword,
 		});
-		const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
-		const jwtToken = jwt.sign({ userID: randomUUID() }, "jwtsecret");
-		mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: jwtToken });
-		const { success, jwt_token } = await mockAuthRegisterUseCase.execute(authRegisterDTO);
+		const mockAuthRegisterUseCase = mock<AuthSignupUseCasePort>();
+		mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, auth_token: "authToken" });
+		const { success, auth_token } = await mockAuthRegisterUseCase.execute(authRegisterDTO);
 
 		expect(success).toBeTruthy();
-		expect(jwt_token).toBe(jwtToken);
+		expect(auth_token).toBe("authToken");
 	});
 
 	it("should login a user", async () => {
@@ -54,15 +51,15 @@ describe("Test AuthLogoutUseCase", () => {
 			password: userPassword,
 		});
 		const mockAuthLoginUseCasePort = mock<AuthLoginUseCasePort>();
-		mockAuthLoginUseCasePort.execute.mockResolvedValueOnce({ success: true, jwt_token: "jwtotken" });
+		mockAuthLoginUseCasePort.execute.mockResolvedValueOnce({ success: true, auth_token: "jwtotken" });
 
 		let response = await mockAuthLoginUseCasePort.execute(mockAuthLoginDTO);
 
-		loginToken = response.jwt_token;
+		loginToken = response.auth_token;
 
 		expect(response).toStrictEqual({
 			success: true,
-			jwt_token: loginToken,
+			auth_token: loginToken,
 		});
 	});
 

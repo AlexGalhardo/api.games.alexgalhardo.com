@@ -6,11 +6,11 @@ import AuthLoginUseCase from "./use-cases/auth-login.use-case";
 import AuthLoginGitHubUseCase from "./use-cases/auth-login-github.use-case";
 import AuthLoginGoogleUseCase from "./use-cases/auth-login-google.use-case";
 import AuthLogoutUseCase from "./use-cases/auth-logout.use-case";
-import AuthRegisterUseCase from "./use-cases/auth-register.use-case";
+import AuthSignupUseCase from "./use-cases/auth-register.use-case";
 import AuthResetPasswordUseCase from "./use-cases/auth-reset-password.use-case";
 import { Database } from "../../config/database.config";
-import AuthCheckUserJWTTokenUseCase from "./use-cases/auth-check-user-jwt-token.use-case";
 import { AuthController } from "./auth.controller";
+import AuthCheckUserAuthTokenUseCase from "./use-cases/auth-check-user-auth-token.use-case";
 
 @Module({
 	controllers: [AuthController],
@@ -45,10 +45,10 @@ import { AuthController } from "./auth.controller";
 			},
 		},
 		{
-			provide: "AuthRegisterUseCasePort",
+			provide: "AuthSignupUseCasePort",
 			inject: ["UsersRepositoryPort"],
 			useFactory: (usersRepository: UsersRepositoryPort) => {
-				return new AuthRegisterUseCase(usersRepository);
+				return new AuthSignupUseCase(usersRepository);
 			},
 		},
 		{
@@ -59,10 +59,10 @@ import { AuthController } from "./auth.controller";
 			},
 		},
 		{
-			provide: "AuthCheckUserJWTTokenUseCasePort",
+			provide: "AuthCheckUserAuthTokenUseCasePort",
 			inject: ["UsersRepositoryPort"],
 			useFactory: (usersRepository: UsersRepositoryPort) => {
-				return new AuthCheckUserJWTTokenUseCase(usersRepository);
+				return new AuthCheckUserAuthTokenUseCase(usersRepository);
 			},
 		},
 		{

@@ -1,13 +1,14 @@
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { Bcrypt } from "../../../utils/bcrypt.util";
 import { ErrorsMessages } from "../../../utils/errors-messages.util";
-import * as jwt from "jsonwebtoken";
 import { Request } from "express";
 import { randomUUID } from "node:crypto";
 import { FRONT_END_URL } from "../../../utils/constants.util";
 import GenerateRandomToken from "../../../utils/generate-random-token.util";
 import { SubscriptionName } from "./auth-register.use-case";
-import emailValidator from "../../../validators/email.validator";
+import { EmailValidator } from "../../../validators/email.validator";
+import { getJWEKeysFromEnv } from "src/utils/get-jwe-keys-from-env.util";
+import { CompactEncrypt } from "jose";
 
 export interface AuthLoginGitHubUseCasePort {
 	execute(request: Request): Promise<AuthLoginGitHubUseCaseResponse>;
@@ -21,7 +22,7 @@ export interface AuthLoginDTO {
 interface AuthLoginGitHubUseCaseResponse {
 	success: boolean;
 	redirect: string;
-	jwt_token?: string;
+	auth_token?: string;
 }
 
 export default class AuthLoginGitHubUseCase implements AuthLoginGitHubUseCasePort {
@@ -52,26 +53,39 @@ export default class AuthLoginGitHubUseCase implements AuthLoginGitHubUseCasePor
 
 			const responseGithubProfileJSON = await responseGithubProfile.json();
 
-			if (!emailValidator.validate(responseGithubProfileJSON.email))
+			if (!EmailValidator.validate(responseGithubProfileJSON.email))
 				throw new Error(ErrorsMessages.EMAIL_INVALID);
 
-			const userExists = await this.usersRepository.findByEmail(responseGithubProfileJSON.email);
+			const { user, index } = await this.usersRepository.findByEmail(responseGithubProfileJSON.email);
 
-			if (userExists) {
-				const { user, index } = await this.usersRepository.findByEmail(responseGithubProfileJSON.email);
-				const jwt_token = jwt.sign({ userID: user.id }, process.env.JWT_SECRET);
-				user.jwt_token = jwt_token;
+			if (user) {
+				const { JWE_PUBLIC_KEY } = await getJWEKeysFromEnv();
+				const encoder = new TextEncoder();
+				const encodedPayload = encoder.encode(JSON.stringify({ user_id: user?.id, user_email: user?.email }));
+
+				const auth_token = await new CompactEncrypt(encodedPayload)
+					.setProtectedHeader({ alg: "RSA-OAEP-256", enc: "A256GCM" })
+					.encrypt(JWE_PUBLIC_KEY);
+
+				user.auth_token = auth_token;
+
 				await this.usersRepository.save(user, index);
 
 				return {
 					success: true,
-					jwt_token,
-					redirect: `${FRONT_END_URL}/profile?token=${jwt_token}&registred=${false}`,
+					auth_token,
+					redirect: `${FRONT_END_URL}/profile?token=${auth_token}&registered=${false}`,
 				};
 			} else {
 				const userId = randomUUID();
 
-				const jwt_token = jwt.sign({ userID: userId }, process.env.JWT_SECRET);
+				const { JWE_PUBLIC_KEY } = await getJWEKeysFromEnv();
+				const encoder = new TextEncoder();
+				const encodedPayload = encoder.encode(JSON.stringify({ user_id: user?.id, user_email: user?.email }));
+
+				const auth_token = await new CompactEncrypt(encodedPayload)
+					.setProtectedHeader({ alg: "RSA-OAEP-256", enc: "A256GCM" })
+					.encrypt(JWE_PUBLIC_KEY);
 
 				await this.usersRepository.create({
 					id: userId,
@@ -79,7 +93,7 @@ export default class AuthLoginGitHubUseCase implements AuthLoginGitHubUseCasePor
 					email: responseGithubProfileJSON.email,
 					phone_number: null,
 					password: await Bcrypt.hash(responseGithubProfileJSON.email),
-					jwt_token,
+					auth_token,
 					api_key: GenerateRandomToken(),
 					api_requests_today: 0,
 					date_last_api_request: null,
@@ -105,8 +119,8 @@ export default class AuthLoginGitHubUseCase implements AuthLoginGitHubUseCasePor
 
 				return {
 					success: true,
-					jwt_token,
-					redirect: `${FRONT_END_URL}/profile?token=${jwt_token}&registred=${true}`,
+					auth_token,
+					redirect: `${FRONT_END_URL}/profile?token=${auth_token}&registered=${true}`,
 				};
 			}
 		} catch (error: any) {

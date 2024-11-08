@@ -14,7 +14,7 @@ export interface User {
 	email: string;
 	phone_number: string | null;
 	password: string;
-	jwt_token: string;
+	auth_token: string;
 	api_key: string | null;
 	api_requests_today: number;
 	date_last_api_request: null | string;
@@ -119,7 +119,7 @@ export default class UsersRepository implements UsersRepositoryPort {
 					email: user.email,
 					phone_number: user.phone_number,
 					password: user.password,
-					jwt_token: user.jwt_token,
+					auth_token: user.auth_token,
 					api_key: user.api_key,
 					reset_password_token: user.reset_password_token,
 					reset_password_token_expires_at: user.reset_password_token_expires_at,
@@ -148,7 +148,7 @@ export default class UsersRepository implements UsersRepositoryPort {
 				email: user.email,
 				phone_number: user.phone_number,
 				password: user.password,
-				jwt_token: user.jwt_token,
+				auth_token: user.auth_token,
 				api_key: user.api_key,
 				api_requests_today: user.api_requests_today,
 				date_last_api_request: user.date_last_api_request,
@@ -182,7 +182,7 @@ export default class UsersRepository implements UsersRepositoryPort {
 			email: user.email,
 			phone_number: user.phone_number,
 			password: user.password,
-			jwt_token: user.jwt_token,
+			auth_token: user.auth_token,
 			api_key: user.api_key,
 			api_requests_today: user.api_requests_today,
 			date_last_api_request: user.date_last_api_request,
@@ -297,7 +297,7 @@ export default class UsersRepository implements UsersRepositoryPort {
 				email: user.email,
 				phone_number: user.phone_number,
 				password: user.password,
-				jwt_token: user.jwt_token,
+				auth_token: user.auth_token,
 				api_key: user.api_key,
 				reset_password_token: user.reset_password_token,
 				reset_password_token_expires_at: user.reset_password_token_expires_at,
@@ -377,7 +377,7 @@ export default class UsersRepository implements UsersRepositoryPort {
 		if (process.env.USE_JSON_DATABASE === "true") {
 			for (let i = 0; i < this.users.length; i++) {
 				if (this.users[i].id === userId) {
-					this.users[i].jwt_token = null;
+					this.users[i].auth_token = null;
 					this.save();
 					break;
 				}
@@ -391,7 +391,7 @@ export default class UsersRepository implements UsersRepositoryPort {
 				id: userId,
 			},
 			data: {
-				jwt_token: null,
+				auth_token: null,
 			},
 		});
 	}

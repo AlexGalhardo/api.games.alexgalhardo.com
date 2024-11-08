@@ -1,8 +1,8 @@
 import { Test } from "@nestjs/testing";
 import { mock } from "jest-mock-extended";
-import { AuthRegisterUseCasePort } from "../../auth/use-cases/auth-register.use-case";
+import { AuthSignupUseCasePort } from "../../auth/use-cases/auth-register.use-case";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
-import { AuthRegisterBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
+import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
 import { ProfileUpdateBodyDTO } from "src/modules/profile/dtos/profile-update.swagger";
 import { ProfileUpdateUseCasePort } from "./profile-update.use-case";
 import { ProfileDeleteUseCasePort } from "./profile-delete.use-case";
@@ -13,7 +13,7 @@ describe("Test ProfileUpdateUseCase", () => {
 			controllers: [],
 			providers: [
 				{ provide: "UsersRepositoryPort", useValue: mock<UsersRepositoryPort>() },
-				{ provide: "AuthRegisterUseCasePort", useValue: mock<AuthRegisterUseCasePort>() },
+				{ provide: "AuthSignupUseCasePort", useValue: mock<AuthSignupUseCasePort>() },
 				{ provide: "ProfileUpdateUseCasePort", useValue: mock<ProfileUpdateUseCasePort>() },
 				{ provide: "ProfileDeleteUseCasePort", useValue: mock<ProfileDeleteUseCasePort>() },
 			],
@@ -25,14 +25,14 @@ describe("Test ProfileUpdateUseCase", () => {
 	});
 
 	it("should register a user", async () => {
-		const authRegisterDTO = mock<AuthRegisterBodyDTO>();
-		const mockAuthRegisterUseCase = mock<AuthRegisterUseCasePort>();
-		mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, jwt_token: "jwttoken" });
+		const authRegisterDTO = mock<AuthSignupBodyDTO>();
+		const mockAuthRegisterUseCase = mock<AuthSignupUseCasePort>();
+		mockAuthRegisterUseCase.execute.mockResolvedValueOnce({ success: true, auth_token: "jwttoken" });
 		const response = await mockAuthRegisterUseCase.execute(authRegisterDTO);
 
 		expect(response).toStrictEqual({
 			success: true,
-			jwt_token: "jwttoken",
+			auth_token: "jwttoken",
 		});
 	});
 

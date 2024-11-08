@@ -2,7 +2,6 @@ import { UsersRepositoryPort } from "src/repositories/users.repository";
 import { FRONT_END_URL } from "src/utils/constants.util";
 import { ErrorsMessages } from "src/utils/errors-messages.util";
 import { stripe } from "src/config/stripe.config";
-import * as jwt from "jsonwebtoken";
 
 interface StripeCreatePortalSessionUseCaseResponse {
 	success: boolean;
@@ -15,7 +14,7 @@ export interface StripeCreatePortalSessionDTO {
 
 export interface StripeCreatePortalSessionUseCasePort {
 	execute(
-		jwtToken: string,
+		user_id: string,
 		stripeCreatePortalSessionDTO: StripeCreatePortalSessionDTO,
 	): Promise<StripeCreatePortalSessionUseCaseResponse>;
 }
@@ -24,12 +23,10 @@ export default class StripeCreatePortalSessionUseCase implements StripeCreatePor
 	constructor(private readonly usersRepository: UsersRepositoryPort) {}
 
 	async execute(
-		jwtToken: string,
+		user_id: string,
 		stripeCreatePortalSessionDTO: StripeCreatePortalSessionDTO,
 	): Promise<StripeCreatePortalSessionUseCaseResponse> {
-		const { userID } = jwt.verify(jwtToken, process.env.JWT_SECRET) as jwt.JwtPayload;
-
-		const { user } = await this.usersRepository.findById(userID);
+		const { user } = await this.usersRepository.findById(user_id);
 
 		if (user) {
 			const { session_id } = stripeCreatePortalSessionDTO;
