@@ -4,7 +4,7 @@ export const FRONT_END_URL =
 export const API_URL =
 	process.env.NODE_ENV === "production"
 		? "https://api.games.alexgalhardo.com"
-		: `http://localhost:${process.env.SERVER_PORT}`;
+		: `http://localhost:${process.env.PORT}`;
 
 export const ENABLE_TELEGRAM_LOGS = process.env.ENABLE_TELEGRAM_LOGS === "true" ? true : false;
 

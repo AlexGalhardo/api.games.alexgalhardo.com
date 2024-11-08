@@ -1,8 +1,19 @@
 FROM node:latest
-WORKDIR /app
+
+WORKDIR /
+
 COPY package.json ./
-COPY package-lock.json ./
-COPY . .
+
 RUN npm install
+
+COPY . .
+
+RUN cp .env.example .env
+
+RUN npm run build
+
+RUN npx prisma generate
+
 EXPOSE 3000
-ENTRYPOINT ["npm", "run", "dev"]
+
+CMD ["npm", "run", "start"]

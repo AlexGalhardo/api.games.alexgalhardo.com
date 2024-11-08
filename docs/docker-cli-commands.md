@@ -22,12 +22,17 @@ docker logs container_id_or_name
 
 Build the image and give it a name:
 ```bash
-sudo docker build --platform linux/arm64/v8 -t api_nerdapi:latest .
+sudo docker build --platform linux/arm64/v8 -t api_games:latest .
 ```
 
 Run a container from the newly built image:
 ```bash
-sudo  docker run -d --name api_nerdapi api_nerdapi:latest
+sudo  docker run -d --name api_games api_games:latest
+```
+
+Show tail logs real time:
+```bash
+docker logs -f <BUILDED_CONTAINER_ID_HERE>
 ```
 
 Fixing error credentials on MacOS

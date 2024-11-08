@@ -3,14 +3,17 @@ import { envsLocalValidator } from "src/validators/envs-local.validator";
 import { envsProductionValidator } from "src/validators/envs-production.validator";
 
 export default function verifyEnvs() {
+	console.log("\n\n...Veryfing Environment Variables...");
+
 	if (process.env.NODE_ENV === "local") {
 		const envLocalVariables = {
 			NODE_ENV: process.env.NODE_ENV,
-			SERVER_PORT: Number(process.env.SERVER_PORT),
+			PORT: Number(process.env?.PORT) ?? 3000,
 			API_KEY_ADMIN: process.env.API_KEY_ADMIN,
 			USE_JSON_DATABASE: process.env.USE_JSON_DATABASE,
 			LOG_PRISMA_QUERIES: process.env.LOG_PRISMA_QUERIES,
 			ENABLE_TELEGRAM_LOGS: process.env.ENABLE_TELEGRAM_LOGS,
+			ENABLE_ERRSOLE: process.env.ENABLE_ERRSOLE,
 			APP_FRONT_URL_DEV: process.env.APP_FRONT_URL_DEV,
 			APP_FRONT_URL_PROD: process.env.APP_FRONT_URL_PROD,
 			JWT_SECRET: process.env.JWT_SECRET,
@@ -49,11 +52,12 @@ export default function verifyEnvs() {
 	} else if (process.env.NODE_ENV === "production") {
 		const envProductionVariables = {
 			NODE_ENV: process.env.NODE_ENV,
-			SERVER_PORT: Number(process.env.SERVER_PORT),
+			PORT: Number(process.env?.PORT) ?? 3000,
 			API_KEY_ADMIN: process.env.API_KEY_ADMIN,
 			USE_JSON_DATABASE: process.env.USE_JSON_DATABASE,
 			LOG_PRISMA_QUERIES: process.env.LOG_PRISMA_QUERIES,
 			ENABLE_TELEGRAM_LOGS: process.env.ENABLE_TELEGRAM_LOGS,
+			ENABLE_ERRSOLE: process.env.ENABLE_ERRSOLE,
 			APP_FRONT_URL_DEV: process.env.APP_FRONT_URL_DEV,
 			APP_FRONT_URL_PROD: process.env.APP_FRONT_URL_PROD,
 			JWT_SECRET: process.env.JWT_SECRET,

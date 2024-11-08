@@ -1,0 +1,31 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ErrorsMessages = void 0;
+var ErrorsMessages;
+(function (ErrorsMessages) {
+    ErrorsMessages["EMAIL_FORGET_PASSWORD_NOT_SEND"] = "Email forget password not send";
+    ErrorsMessages["USER_NOT_FOUND"] = "User not found";
+    ErrorsMessages["INVALID_PHONE_NUMBER"] = "Invalid telegram number";
+    ErrorsMessages["MISSING_HEADER_AUTHORIZATION_BEARER_TOKEN"] = "Missing Header Authorization Bearer Token";
+    ErrorsMessages["HEADER_AUTHORIZATION_BEARER_TOKEN_EXPIRED_OR_INVALID"] = "Header Authorization Bearer Token Invalid or Expired";
+    ErrorsMessages["USERNAME_INVALID"] = "Username invalid";
+    ErrorsMessages["PASSWORD_IS_INVALID"] = "Password invalid";
+    ErrorsMessages["PASSWORD_IS_REQUIRED"] = "Password required";
+    ErrorsMessages["PASSWORDS_NOT_EQUAL"] = "Passwords not equal";
+    ErrorsMessages["EMAIL_INVALID"] = "Email invalid";
+    ErrorsMessages["NEW_PASSWORD_IS_INSECURE"] = "New password is insecure";
+    ErrorsMessages["PASSWORD_INSECURE"] = "Password is insecure";
+    ErrorsMessages["PHONE_NUMBER_ALREADY_REGISTRED"] = "Phone number already registred";
+    ErrorsMessages["RESET_PASSWORD_TOKEN_EXPIRED"] = "Reset password token expired";
+    ErrorsMessages["EMAIL_ALREADY_REGISTRED"] = "Email already registred";
+    ErrorsMessages["EMAIL_OR_PASSWORD_INVALID"] = "Email and/or Password Invalid";
+    ErrorsMessages["USER_HAS_ACTIVE_PLAN"] = "User has active plan";
+    ErrorsMessages["GET_RANDOM_GAME_ERROR"] = "Get random game error";
+    ErrorsMessages["GET_GAME_BY_TITLE_ERROR"] = "Get game by title error";
+    ErrorsMessages["GET_GAME_BY_ID_ERROR"] = "Get game by id error";
+    ErrorsMessages["RESET_PASSWORD_TOKEN_INVALID"] = "Reset password token invalid";
+    ErrorsMessages["GAME_NOT_FOUND"] = "Game not found";
+    ErrorsMessages["INVALID_API_KEY"] = "You need to send request with a API Key";
+    ErrorsMessages["API_KEY_NOT_FOUND"] = "API Key not found";
+})(ErrorsMessages || (exports.ErrorsMessages = ErrorsMessages = {}));
+//# sourceMappingURL=errors-messages.util.js.map

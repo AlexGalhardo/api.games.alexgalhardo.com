@@ -2,11 +2,12 @@ import { z } from "zod";
 
 export const envsProductionValidator = z.object({
 	NODE_ENV: z.enum(["production"]),
-	SERVER_PORT: z.number().default(3000),
+	PORT: z.number().optional().default(3000),
 	API_KEY_ADMIN: z.string(),
 	USE_JSON_DATABASE: z.enum(["true", "false"]),
 	LOG_PRISMA_QUERIES: z.enum(["true", "false"]),
 	ENABLE_TELEGRAM_LOGS: z.enum(["true", "false"]),
+	ENABLE_ERRSOLE: z.enum(["true", "false"]),
 	APP_FRONT_URL_DEV: z.string(),
 	APP_FRONT_URL_PROD: z.string(),
 	JWT_SECRET: z.string(),
