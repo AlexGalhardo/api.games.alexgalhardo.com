@@ -1,7 +1,7 @@
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { Bcrypt } from "../../../utils/bcrypt.util";
 import { ErrorsMessages } from "../../../utils/errors-messages.util";
-import PasswordValidator from "../../../validators/password.validator";
+import { PasswordValidator } from "../../../validators/password.validator";
 
 export interface AuthResetPasswordUseCasePort {
 	execute(

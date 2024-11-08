@@ -39,7 +39,7 @@ export class AppModule implements NestModule {
 		consumer
 			.apply(ValidateHeaderAuthorizationBearerToken)
 			.forRoutes(
-				{ path: "/check-user-jwt-token", method: RequestMethod.POST },
+				{ path: "/check-user-auth-token", method: RequestMethod.POST },
 				{ path: "/logout", method: RequestMethod.POST },
 				{ path: "/profile", method: RequestMethod.PUT },
 				{ path: "/stripe/create-checkout-session", method: RequestMethod.POST },

@@ -1,4 +1,4 @@
-<h1 align="center"><a href="https://api.games.alexgalhardo.com/" target="_blank">api.games.alexgalhardo.com v3</a></h1>
+<h1 align="center"><a href="https://api.games.alexgalhardo.com" target="_blank">api.games.alexgalhardo.com</a></h1>
 
 ## Introduction
 
@@ -58,6 +58,9 @@ npm install
 ```bash
 cp .env.example .env
 ```
+   - Generating JWE Public and Private Keys:
+      - Install Bun: <https://bun.sh/>
+	  - Run command: `npm run generate:jwe:keys`
 
 5. Create Migrations and Seeds
 ```bash
@@ -92,8 +95,9 @@ a. Run all unit tests
 npm run test
 ```
 
-## Logs
-- You can see [Errsole Web Dashboard](https://github.com/errsole) on <http://localhost:3000/errsole>
+## Error Logs
+- If you wanna use Errosole, enable `ENABLE_ERRSOLE=true` on your `.env` file
+- Then, you can see [Errsole Web Dashboard](https://github.com/errsole) on <http://localhost:3000/errsole>
 
 ## API Requests
 

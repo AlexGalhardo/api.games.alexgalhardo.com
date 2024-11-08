@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export default class EmailValidator {
+export class EmailValidator {
 	static validate(email: string) {
 		const emailSchema = z.string().email();
 		try {

@@ -1,6 +1,6 @@
 import { BRAZIL_STATE_SYMBOL_BY_DDD, BRAZIL_VALID_PHONE_DDD } from "../utils/constants.util";
 
-export default class PhoneValidator {
+export class PhoneValidator {
 	static validate(phone: string): boolean {
 		phone = phone.replace(/\D/g, "");
 

@@ -5,10 +5,9 @@ export class AuthResponse {
 	success: boolean;
 
 	@ApiProperty()
-	jwt_token?: string;
+	auth_token?: string;
 
 	@ApiProperty()
-	message?: string;
 
 	@ApiProperty()
 	error?: string;

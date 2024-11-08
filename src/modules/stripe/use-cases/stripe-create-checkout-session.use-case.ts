@@ -1,4 +1,3 @@
-import * as jwt from "jsonwebtoken";
 import { stripe } from "src/config/stripe.config";
 import { UsersRepositoryPort } from "src/repositories/users.repository";
 import { FRONT_END_URL } from "src/utils/constants.util";
@@ -15,7 +14,7 @@ export interface StripeCreateCheckoutSessionDTO {
 
 export interface StripeCreateCheckoutSessionUseCasePort {
 	execute(
-		jwtToken: string,
+		user_id: string,
 		stripeCreateCheckoutSessionDTO: StripeCreateCheckoutSessionDTO,
 	): Promise<StripeCreateCheckoutSessionUseCaseResponse>;
 }
@@ -24,12 +23,10 @@ export default class StripeCreateCheckoutSessionUseCase implements StripeCreateC
 	constructor(private readonly usersRepository: UsersRepositoryPort) {}
 
 	async execute(
-		jwtToken: string,
+		user_id: string,
 		stripeCreateCheckoutSessionDTO: StripeCreateCheckoutSessionDTO,
 	): Promise<StripeCreateCheckoutSessionUseCaseResponse> {
-		const { userID } = jwt.verify(jwtToken, process.env.JWT_SECRET) as jwt.JwtPayload;
-
-		const { user } = await this.usersRepository.findById(userID);
+		const { user } = await this.usersRepository.findById(user_id);
 
 		if (user) {
 			if (user.stripe.subscription.active) throw new Error(ErrorsMessages.USER_HAS_ACTIVE_PLAN);

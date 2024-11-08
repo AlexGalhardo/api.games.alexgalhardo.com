@@ -27,8 +27,9 @@ export class GamesController implements GamesControllerPort {
 	@ApiResponse({ status: 200, description: "Get random game", type: GamesResponse })
 	async getRandom(@Res() response: Response): Promise<Response<GamesResponse>> {
 		try {
-			const userAPIKey = response.locals.token;
-			const { success, data, error, api_requests_today } = await this.gameGetRandomUseCase.execute(userAPIKey);
+			const { success, data, error, api_requests_today } = await this.gameGetRandomUseCase.execute(
+				response.locals?.api_key,
+			);
 			if (success) return response.status(HttpStatus.OK).json({ success: true, api_requests_today, data });
 			return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error, api_requests_today });
 		} catch (error: any) {
@@ -49,10 +50,9 @@ export class GamesController implements GamesControllerPort {
 	@ApiResponse({ status: 200, description: "Get game by id", type: GamesResponse })
 	async findById(@Param("game_id") game_id: string, @Res() response: Response): Promise<Response<GamesResponse>> {
 		try {
-			const userAPIKey = response.locals.token;
 			const { success, data, error, api_requests_today } = await this.gameGetByIdUseCase.execute(
 				game_id,
-				userAPIKey,
+				response.locals?.api_key,
 			);
 			if (success) return response.status(HttpStatus.OK).json({ success: true, api_requests_today, data });
 			return response.status(HttpStatus.OK).json({ success: false, api_requests_today, error });
@@ -77,10 +77,9 @@ export class GamesController implements GamesControllerPort {
 		@Res() response: Response,
 	): Promise<Response<GamesResponse>> {
 		try {
-			const userAPIKey = response.locals.token;
 			const { success, data, error, api_requests_today } = await this.gameGetByTitleUseCase.execute(
 				game_title,
-				userAPIKey,
+				response.locals?.api_key,
 			);
 			if (success) return response.status(HttpStatus.OK).json({ success: true, api_requests_today, data });
 			return response.status(HttpStatus.BAD_REQUEST).json({ success: false, api_requests_today, error });

@@ -24,8 +24,10 @@ export class ProfileController implements ProfileControllerPort {
 		@Res() response: Response,
 	): Promise<Response<ProfileResponse>> {
 		try {
-			const userJWTToken = response.locals.token;
-			const { success, data } = await this.profileUpdateUseCase.execute(userJWTToken, profileUpdatePayload);
+			const { success, data } = await this.profileUpdateUseCase.execute(
+				response.locals.auth?.user_id,
+				profileUpdatePayload,
+			);
 			if (success) return response.status(HttpStatus.OK).json({ success: true, data });
 			return response.status(HttpStatus.BAD_REQUEST).json({ success: false });
 		} catch (error: any) {

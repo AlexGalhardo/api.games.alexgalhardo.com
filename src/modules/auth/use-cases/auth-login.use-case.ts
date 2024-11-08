@@ -1,9 +1,10 @@
+import { getJWEKeysFromEnv } from "src/utils/get-jwe-keys-from-env.util";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { Bcrypt } from "../../../utils/bcrypt.util";
 import { ErrorsMessages } from "../../../utils/errors-messages.util";
-import * as jwt from "jsonwebtoken";
-import EmailValidator from "../../../validators/email.validator";
-import PasswordValidator from "src/validators/password.validator";
+import { EmailValidator } from "../../../validators/email.validator";
+import { PasswordValidator } from "src/validators/password.validator";
+import { CompactEncrypt } from "jose";
 
 export interface AuthLoginUseCasePort {
 	execute(authLoginDTO: AuthLoginDTO): Promise<UserLoginUseCaseResponse>;
@@ -16,7 +17,7 @@ export interface AuthLoginDTO {
 
 interface UserLoginUseCaseResponse {
 	success: boolean;
-	jwt_token?: string;
+	auth_token?: string;
 	message?: string;
 }
 
@@ -39,11 +40,15 @@ export default class AuthLoginUseCase implements AuthLoginUseCasePort {
 					return { success: false, message: ErrorsMessages.EMAIL_OR_PASSWORD_INVALID };
 				}
 
-				const jwt_token = jwt.sign({ userID: user.id }, process.env.JWT_SECRET);
-				user.jwt_token = jwt_token;
-				await this.usersRepository.save(user, index);
+				const { JWE_PUBLIC_KEY } = await getJWEKeysFromEnv();
+				const encoder = new TextEncoder();
+				const encodedPayload = encoder.encode(JSON.stringify({ user_id: user?.id, user_email: email }));
 
-				return { success: true, jwt_token };
+				const auth_token = await new CompactEncrypt(encodedPayload)
+					.setProtectedHeader({ alg: "RSA-OAEP-256", enc: "A256GCM" })
+					.encrypt(JWE_PUBLIC_KEY);
+
+				return { success: true, auth_token };
 			}
 
 			throw new Error(ErrorsMessages.USER_NOT_FOUND);

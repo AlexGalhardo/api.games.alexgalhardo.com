@@ -63,9 +63,8 @@ export class StripeController implements StripeControllerPort {
 		@Res() response: Response,
 	): Promise<Response<StripeUseCaseResponse>> {
 		try {
-			const userJWTToken = response.locals.token;
 			const { success, redirect } = await this.stripeCreateCheckoutSessionUseCase.execute(
-				userJWTToken,
+				response.locals.auth?.user_id,
 				stripeCreateCheckoutSessionDTO,
 			);
 			if (success) return response.status(HttpStatus.OK).json({ success: true, redirect });
@@ -81,9 +80,8 @@ export class StripeController implements StripeControllerPort {
 		@Res() response: Response,
 	): Promise<Response<StripeUseCaseResponse>> {
 		try {
-			const userJWTToken = response.locals.token;
 			const { success, redirect } = await this.stripeCreatePortalSessionUseCase.execute(
-				userJWTToken,
+				response.locals.auth?.user_id,
 				stripeCreatePortalSessionDTO,
 			);
 			if (success) return response.status(HttpStatus.OK).json({ success: true, redirect });

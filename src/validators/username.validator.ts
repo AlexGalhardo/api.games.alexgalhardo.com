@@ -1,4 +1,4 @@
-export default class UsernameValidator {
+export class UsernameValidator {
 	static isValidSingleName(name: string): boolean {
 		if (!name || name.length <= 3) return false;
 		const regexOfValidNamesWithAcents = /^[a-zA-ZÀ-ú]+$/g;
