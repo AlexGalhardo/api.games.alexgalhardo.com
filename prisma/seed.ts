@@ -40,7 +40,7 @@ const seedDatabase = async () => {
 			{
 				name: "ADMIN",
 				email: "admin@gmail.com",
-				telegram_number: PhoneValidator.generate(),
+				phone_number: PhoneValidator.generate(),
 				jwt_token: null,
 				api_key: "api_key_admin",
 				password: await Bcrypt.hash("testADMIN!123"),
@@ -62,7 +62,7 @@ const seedDatabase = async () => {
 			{
 				name: "TEST USER",
 				email: "test@gmail.com",
-				telegram_number: PhoneValidator.generate(),
+				phone_number: PhoneValidator.generate(),
 				jwt_token: null,
 				api_key: GenerateRandomToken(),
 				password: await Bcrypt.hash("testUSER!123"),
