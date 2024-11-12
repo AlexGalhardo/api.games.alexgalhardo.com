@@ -12,34 +12,34 @@ export class HealthCheckController {
 	@Get("/")
 	@ApiResponse({ status: 200, type: HealthCheckResponse })
 	async index(@Res() response: Response) {
-		const memoryUsage = process.memoryUsage();
-		const uptime = process.uptime();
-		let databaseStatus = "unhealthy";
+		// const memoryUsage = process.memoryUsage();
+		// const uptime = process.uptime();
+		// let databaseStatus = "unhealthy";
 
-		try {
-			const randomGame = await this.gamesRepository.getRandom();
-			if (randomGame) databaseStatus = "healthy";
-		} catch (error) {
-			return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-				success: false,
-				message: "Unable to connect to the database",
-				error: error?.message,
-			});
-		}
+		// try {
+		// 	const randomGame = await this.gamesRepository.getRandom();
+		// 	if (randomGame) databaseStatus = "healthy";
+		// } catch (error) {
+		// 	return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+		// 		success: false,
+		// 		message: "Unable to connect to the database",
+		// 		error: error?.message,
+		// 	});
+		// }
 
 		return response.status(HttpStatus.OK).json({
 			success: true,
 			swagger: `/docs`,
-			health: {
-				database: databaseStatus,
-				uptime: `${Math.floor(uptime / 60)} minutes`,
-				memoryUsage: {
-					rss: `${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`,
-					heapTotal: `${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB`,
-					heapUsed: `${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`,
-					external: `${(memoryUsage.external / 1024 / 1024).toFixed(2)} MB`,
-				},
-			},
+			// health: {
+			// 	database: databaseStatus,
+			// 	uptime: `${Math.floor(uptime / 60)} minutes`,
+			// 	memoryUsage: {
+			// 		rss: `${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`,
+			// 		heapTotal: `${(memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB`,
+			// 		heapUsed: `${(memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`,
+			// 		external: `${(memoryUsage.external / 1024 / 1024).toFixed(2)} MB`,
+			// 	},
+			// },
 		});
 	}
 }
