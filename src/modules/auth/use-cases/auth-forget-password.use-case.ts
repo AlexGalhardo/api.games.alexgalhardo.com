@@ -3,7 +3,7 @@ import { FRONT_END_URL } from "../../../utils/constants.util";
 import { ErrorsMessages } from "../../../utils/errors-messages.util";
 import GenerateRandomToken from "../../../utils/generate-random-token.util";
 import { SMTP } from "../../../config/smtp.config";
-import { EmailValidator } from "../../../validators/email.validator";
+import { z } from "zod";
 
 export interface AuthForgetPasswordUseCasePort {
 	execute(authForgetPasswordDTO: AuthForgetPasswordDTO): Promise<AuthForgetPasswordUseCaseResponse>;
@@ -24,10 +24,10 @@ export default class AuthForgetPasswordUseCase implements AuthForgetPasswordUseC
 		private readonly smtp = SMTP,
 	) {}
 
-	async execute(authForgetPasswordDTO: AuthForgetPasswordDTO): Promise<AuthForgetPasswordUseCaseResponse> {
-		const { email } = authForgetPasswordDTO;
+	async execute(payload: AuthForgetPasswordDTO): Promise<AuthForgetPasswordUseCaseResponse> {
+		const { email } = payload;
 
-		if (!EmailValidator.validate(email)) throw new Error(ErrorsMessages.EMAIL_INVALID);
+		z.string().email().parse(payload.email);
 
 		const { user } = await this.usersRepository.findByEmail(email);
 
@@ -41,13 +41,11 @@ export default class AuthForgetPasswordUseCase implements AuthForgetPasswordUseC
 			const sendEmailForgetPasswordResponse = await this.smtp.sendMail({
 				from: process.env.SMTP_EMAIL_FROM,
 				to: "aleexgvieira@gmail.com", // email
-				subject: `NerdAPI: Forget Password Link To ${email}`,
+				subject: `Games: Forget Password Link`,
 				html: `
 					<p>Hello ${user.name},</p>
 					<p>To recover your password, click on this link do reset your password: </p>
 					<p><strong>${resetPasswordLink}</strong></p>
-					<hr>
-					<p>NerdAPI</p>
 				`,
 			});
 

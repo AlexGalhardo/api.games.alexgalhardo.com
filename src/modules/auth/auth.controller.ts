@@ -57,9 +57,9 @@ export class AuthController implements AuthControllerPort {
 	@ApiResponse({ status: 200, type: AuthResponse })
 	async login(@Body() authLoginPayload: AuthLoginDTO, @Res() response: Response): Promise<Response<AuthResponse>> {
 		try {
-			const { success, auth_token, message } = await this.authLoginUseCase.execute(authLoginPayload);
+			const { success, auth_token, error } = await this.authLoginUseCase.execute(authLoginPayload);
 			if (success === true) return response.status(HttpStatus.OK).json({ success: true, auth_token });
-			return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message });
+			return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error });
 		} catch (error: any) {
 			TelegramLog.error(`ERROR Auth Login: ${error.message}`);
 			return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });

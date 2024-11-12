@@ -3,11 +3,11 @@ import { Response } from "express";
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ProfileResponse } from "src/modules/profile/dtos/profile-response.swagger";
 import TelegramLog from "src/config/telegram-logger.config";
-import { ProfileUpdateBodyDTO } from "./dtos/profile-update.swagger";
+import { ProfileUpdateDTO } from "./dtos/profile-update.swagger";
 import { ProfileUpdateUseCasePort } from "./use-cases/profile-update.use-case";
 
 interface ProfileControllerPort {
-	update(profileUpdateDTO: ProfileUpdateBodyDTO, response: Response): Promise<Response<ProfileResponse>>;
+	update(profileUpdateDTO: ProfileUpdateDTO, response: Response): Promise<Response<ProfileResponse>>;
 }
 
 @ApiBearerAuth()
@@ -17,10 +17,10 @@ export class ProfileController implements ProfileControllerPort {
 	constructor(@Inject("ProfileUpdateUseCasePort") private readonly profileUpdateUseCase: ProfileUpdateUseCasePort) {}
 
 	@Put("/")
-	@ApiBody({ type: ProfileUpdateBodyDTO })
+	@ApiBody({ type: ProfileUpdateDTO })
 	@ApiResponse({ status: 200, type: ProfileResponse })
 	async update(
-		@Body() profileUpdatePayload: ProfileUpdateBodyDTO,
+		@Body() profileUpdatePayload: ProfileUpdateDTO,
 		@Res() response: Response,
 	): Promise<Response<ProfileResponse>> {
 		try {

@@ -6,7 +6,7 @@ import { Bcrypt } from "../utils/bcrypt.util";
 import { Injectable } from "@nestjs/common";
 import { Database } from "../config/database.config";
 import { SubscriptionName } from "../modules/auth/use-cases/auth-register.use-case";
-import { ProfileUpdateBodyDTO } from "src/modules/profile/dtos/profile-update.swagger";
+import { ProfileUpdateDTO } from "src/modules/profile/dtos/profile-update.swagger";
 
 export interface User {
 	id: string;
@@ -78,7 +78,7 @@ export interface UsersRepositoryPort {
 	findById(userId: string): Promise<UserResponse>;
 	findByResetPasswordToken(resetPasswordToken: string): Promise<UserResponse>;
 	create(user: User): Promise<void>;
-	update(userId: string, profileUpdatePayload: ProfileUpdateBodyDTO): Promise<UserUpdated>;
+	update(userId: string, profileUpdatePayload: ProfileUpdateDTO): Promise<UserUpdated>;
 	deleteByEmail(email: string): Promise<void>;
 	logout(userId: string): Promise<void>;
 	saveResetPasswordToken(userId: string, resetPasswordToken: string): Promise<void>;
@@ -317,7 +317,7 @@ export default class UsersRepository implements UsersRepositoryPort {
 		});
 	}
 
-	public async update(userId: string, profileUpdatePayload: ProfileUpdateBodyDTO): Promise<UserUpdated> {
+	public async update(userId: string, profileUpdatePayload: ProfileUpdateDTO): Promise<UserUpdated> {
 		if (process.env.USE_JSON_DATABASE === "true") {
 			for (let i = 0; i < this.users.length; i++) {
 				if (this.users[i].id === userId) {
@@ -325,8 +325,8 @@ export default class UsersRepository implements UsersRepositoryPort {
 
 					this.users[i].phone_number = profileUpdatePayload.phone_number ?? this.users[i].phone_number;
 
-					if (profileUpdatePayload.newPassword)
-						this.users[i].password = await Bcrypt.hash(profileUpdatePayload.newPassword);
+					if (profileUpdatePayload.new_password)
+						this.users[i].password = await Bcrypt.hash(profileUpdatePayload.new_password);
 
 					this.save();
 
@@ -346,8 +346,8 @@ export default class UsersRepository implements UsersRepositoryPort {
 			data: {
 				name: profileUpdatePayload.name ? profileUpdatePayload.name : undefined,
 				phone_number: profileUpdatePayload.phone_number ? profileUpdatePayload.phone_number : undefined,
-				password: profileUpdatePayload.newPassword
-					? await Bcrypt.hash(profileUpdatePayload.newPassword)
+				password: profileUpdatePayload.new_password
+					? await Bcrypt.hash(profileUpdatePayload.new_password)
 					: undefined,
 			},
 		});

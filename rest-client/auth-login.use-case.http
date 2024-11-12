@@ -1,7 +1,8 @@
-POST http://localhost:3000/login
+# POST http://localhost:3000/login
+POST https://api.games.alexgalhardo.com/login
 content-type: application/json
 
 {
-	"email": "alex@gmail.com",
-	"password": "alexUSER!123"
+    "email": "alex@gmail.com",
+    "password": "alexBR@123"
 }

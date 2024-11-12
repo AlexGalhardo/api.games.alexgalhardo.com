@@ -6,9 +6,9 @@ import { randomUUID } from "node:crypto";
 import { FRONT_END_URL } from "../../../utils/constants.util";
 import GenerateRandomToken from "../../../utils/generate-random-token.util";
 import { SubscriptionName } from "./auth-register.use-case";
-import { EmailValidator } from "../../../validators/email.validator";
 import { getJWEKeysFromEnv } from "src/utils/get-jwe-keys-from-env.util";
 import { CompactEncrypt } from "jose";
+import { z } from "zod";
 
 export interface AuthLoginGitHubUseCasePort {
 	execute(request: Request): Promise<AuthLoginGitHubUseCaseResponse>;
@@ -53,8 +53,7 @@ export default class AuthLoginGitHubUseCase implements AuthLoginGitHubUseCasePor
 
 			const responseGithubProfileJSON = await responseGithubProfile.json();
 
-			if (!EmailValidator.validate(responseGithubProfileJSON.email))
-				throw new Error(ErrorsMessages.EMAIL_INVALID);
+			z.string().email().parse(responseGithubProfileJSON.email);
 
 			const { user, index } = await this.usersRepository.findByEmail(responseGithubProfileJSON.email);
 

@@ -1,16 +1,14 @@
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { Bcrypt } from "../../../utils/bcrypt.util";
-import { ErrorsMessages } from "../../../utils/errors-messages.util";
-import * as jwt from "jsonwebtoken";
 import { Request } from "express";
 import { OAuth2Client } from "google-auth-library";
 import { randomUUID } from "node:crypto";
 import { FRONT_END_URL } from "../../../utils/constants.util";
 import GenerateRandomToken from "../../../utils/generate-random-token.util";
 import { SubscriptionName } from "./auth-register.use-case";
-import { EmailValidator } from "../../../validators/email.validator";
 import { getJWEKeysFromEnv } from "src/utils/get-jwe-keys-from-env.util";
 import { CompactEncrypt } from "jose";
+import { z } from "zod";
 
 export interface AuthLoginGoogleUseCasePort {
 	execute(request: Request): Promise<AuthLoginGoogleUseCaseResponse>;
@@ -41,7 +39,7 @@ export default class AuthLoginGoogleUseCase implements AuthLoginGoogleUseCasePor
 			const payload = googleResponse.getPayload();
 			const { email, name } = payload;
 
-			if (!EmailValidator.validate(email)) throw new Error(ErrorsMessages.EMAIL_INVALID);
+			z.string().email().parse(email);
 
 			const { user, index } = await this.usersRepository.findByEmail(email);
 
