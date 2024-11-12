@@ -1,9 +1,10 @@
 import { Test } from "@nestjs/testing";
-import { User, UsersRepositoryPort } from "../../../repositories/users.repository";
-import { AuthSignupUseCasePort } from "../use-cases/auth-register.use-case";
+import { UsersRepositoryPort } from "../../../repositories/users.repository";
+import { AuthSignupUseCasePort } from "./auth-signup.use-case";
 import { mock } from "jest-mock-extended";
 import { AuthCheckUserAuthTokenUseCasePort } from "./auth-check-user-auth-token.use-case";
-import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
+import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.dto";
+import { User } from "@prisma/client";
 
 describe("Test AuthSignupUseCase", () => {
 	beforeAll(async () => {

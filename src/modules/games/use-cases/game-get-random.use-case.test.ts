@@ -1,8 +1,9 @@
 import { Test } from "@nestjs/testing";
 import { mock } from "jest-mock-extended";
-import { Game, GamesRepositoryPort } from "../../../repositories/games.repository";
+import { GamesRepositoryPort } from "../../../repositories/games.repository";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { GameGetRandomUseCasePort } from "../use-cases/game-get-random.use-case";
+import { Game } from "@prisma/client";
 
 describe("Test GameGetRandomUseCase", () => {
 	beforeAll(async () => {

@@ -1,13 +1,12 @@
 import { Test } from "@nestjs/testing";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
-import { AuthSignupUseCasePort } from "../use-cases/auth-register.use-case";
+import { AuthSignupUseCasePort } from "./auth-signup.use-case";
 import { AuthForgetPasswordUseCasePort } from "../use-cases/auth-forget-password.use-case";
 import { AuthResetPasswordDTO, AuthResetPasswordUseCasePort } from "../use-cases/auth-reset-password.use-case";
 import { mock } from "jest-mock-extended";
-import { randomUUID } from "node:crypto";
-import { EmailValidator } from "src/validators/email.validator";
-import { PasswordValidator } from "src/validators/password.validator";
-import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
+import { generateEmail } from "src/utils/generate-email.util";
+import { generatePassword } from "src/utils/generate-password.util";
+import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.dto";
 
 describe("Test AuthForgetPasswordUseCase", () => {
 	beforeAll(async () => {
@@ -26,7 +25,7 @@ describe("Test AuthForgetPasswordUseCase", () => {
 		jest.clearAllMocks();
 	});
 
-	const userEmail = EmailValidator.generate();
+	const userEmail = generateEmail();
 	let resetPasswordToken = null;
 
 	it("should register a user", async () => {
@@ -56,7 +55,7 @@ describe("Test AuthForgetPasswordUseCase", () => {
 	});
 
 	it("should get reset_password_token in url params and reset user password", async () => {
-		const newPassword = PasswordValidator.generate();
+		const newPassword = generatePassword();
 
 		const mockAuthResetPasswordUseCase = mock<AuthResetPasswordUseCasePort>();
 

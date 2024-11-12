@@ -1,7 +1,8 @@
 import { Test } from "@nestjs/testing";
-import { Game, GamesRepositoryPort } from "../../../repositories/games.repository";
+import { GamesRepositoryPort } from "../../../repositories/games.repository";
 import { mock } from "jest-mock-extended";
 import { GameGetByIdUseCasePort } from "./game-get-by-id.use-case";
+import { Game } from "@prisma/client";
 
 describe("Test GameGetByIdUseCase", () => {
 	beforeAll(async () => {

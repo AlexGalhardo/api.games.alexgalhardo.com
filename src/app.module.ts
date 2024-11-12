@@ -1,7 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
 import { AuthModule } from "./modules/auth/auth.module";
 import { ProfileModule } from "./modules/profile/profile.module";
-import { ContactModule } from "./modules/contact/contact.module";
 import { StripeModule } from "./modules/stripe/stripe.module";
 import { HealthCheckModule } from "./modules/healthcheck/health-check.module";
 import { ConfigModule } from "@nestjs/config";
@@ -15,7 +14,6 @@ import { APP_GUARD } from "@nestjs/core";
 		HealthCheckModule,
 		AuthModule,
 		ProfileModule,
-		ContactModule,
 		StripeModule,
 		GamesModule,
 		ConfigModule.forRoot({ isGlobal: true }),

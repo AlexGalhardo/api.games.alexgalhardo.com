@@ -1,9 +1,11 @@
 export enum ErrorsMessages {
 	EMAIL_FORGET_PASSWORD_NOT_SEND = "Email forget password not send",
 	USER_NOT_FOUND = "User not found",
-	INVALID_PHONE_NUMBER = "Invalid telegram number",
+	USER_ID_NOT_FOUND = "User ID not found",
+	INVALID_PHONE_NUMBER = "Invalid phone number",
 	MISSING_HEADER_AUTHORIZATION_BEARER_TOKEN = "Missing Header Authorization Bearer Token",
 	HEADER_AUTHORIZATION_BEARER_TOKEN_EXPIRED_OR_INVALID = "Header Authorization Bearer Token Invalid or Expired",
+	HEADER_AUTHORIZATION_BEARER_TOKEN_EXPIRED = "Header Authorization Bearer Token Expired",
 	USERNAME_INVALID = "Username invalid",
 	PASSWORD_IS_INVALID = "Password invalid",
 	PASSWORD_IS_REQUIRED = "Password required",

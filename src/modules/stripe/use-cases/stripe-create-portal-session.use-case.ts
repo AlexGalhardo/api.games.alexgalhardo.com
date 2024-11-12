@@ -26,7 +26,7 @@ export default class StripeCreatePortalSessionUseCase implements StripeCreatePor
 		user_id: string,
 		stripeCreatePortalSessionDTO: StripeCreatePortalSessionDTO,
 	): Promise<StripeCreatePortalSessionUseCaseResponse> {
-		const { user } = await this.usersRepository.findById(user_id);
+		const user = await this.usersRepository.findById(user_id);
 
 		if (user) {
 			const { session_id } = stripeCreatePortalSessionDTO;

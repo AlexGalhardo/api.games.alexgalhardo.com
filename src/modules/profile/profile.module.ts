@@ -12,7 +12,7 @@ import { ProfileController } from "./profile.controller";
 			provide: "UsersRepositoryPort",
 			inject: [Database],
 			useFactory: (database: Database) => {
-				return new UsersRepository(undefined, database);
+				return new UsersRepository(database);
 			},
 		},
 		{

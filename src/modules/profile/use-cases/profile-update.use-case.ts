@@ -1,58 +1,36 @@
-import { UsersRepositoryPort, UserUpdated } from "../../../repositories/users.repository";
+import { ProfileUpdateValidator } from "src/validators/profile-update.validator";
+import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { ErrorsMessages } from "../../../utils/errors-messages.util";
-import * as jwt from "jsonwebtoken";
-import { PhoneValidator } from "../../../validators/phone.validator";
-import { PasswordValidator } from "../../../validators/password.validator";
-import { UsernameValidator } from "../../../validators/username.validator";
-import { ProfileUpdateBodyDTO } from "src/modules/profile/dtos/profile-update.swagger";
+import { ProfileUpdateDTO } from "src/modules/profile/dtos/profile-update.dto";
+import { User } from "@prisma/client";
 
 interface ProfileUpdateUseCaseResponse {
 	success: boolean;
-	data?: UserUpdated;
+	data?: any;
+	error?: string;
 }
 
 export interface ProfileUpdateUseCasePort {
-	execute(user_id: string, profileUpdateDTO: ProfileUpdateBodyDTO): Promise<ProfileUpdateUseCaseResponse>;
+	execute(userId: string, profileUpdatePayload: ProfileUpdateDTO): Promise<ProfileUpdateUseCaseResponse>;
 }
 
 export default class ProfileUpdateUseCase implements ProfileUpdateUseCasePort {
 	constructor(private readonly usersRepository: UsersRepositoryPort) {}
 
-	async execute(user_id: string, profileUpdateDTO: ProfileUpdateBodyDTO): Promise<ProfileUpdateUseCaseResponse> {
-		const { user } = await this.usersRepository.findById(user_id);
+	async execute(userId: string, payload: ProfileUpdateDTO): Promise<ProfileUpdateUseCaseResponse> {
+		ProfileUpdateValidator.parse(payload);
 
-		if (user) {
-			if (profileUpdateDTO.name) {
-				if (!UsernameValidator.validate(profileUpdateDTO.name)) {
-					throw new Error(ErrorsMessages.USERNAME_INVALID);
-				}
-			}
+		const { new_password, confirm_new_password } = payload;
 
-			if (profileUpdateDTO.phone_number) {
-				if (!PhoneValidator.validate(profileUpdateDTO.phone_number)) {
-					throw new Error(ErrorsMessages.INVALID_PHONE_NUMBER);
-				}
+		const user = await this.usersRepository.findById(userId);
 
-				if (await this.usersRepository.phoneAlreadyRegistred(user.id, profileUpdateDTO.phone_number)) {
-					throw new Error(ErrorsMessages.PHONE_NUMBER_ALREADY_REGISTRED);
-				}
-			}
+		if (!user) return { success: false, error: ErrorsMessages.USER_NOT_FOUND };
 
-			if (profileUpdateDTO.newPassword && profileUpdateDTO.confirmNewPassword) {
-				if (!PasswordValidator.isEqual(profileUpdateDTO.newPassword, profileUpdateDTO.confirmNewPassword)) {
-					throw new Error(ErrorsMessages.PASSWORDS_NOT_EQUAL);
-				}
-
-				if (!PasswordValidator.validate(profileUpdateDTO.newPassword)) {
-					throw new Error(ErrorsMessages.NEW_PASSWORD_IS_INSECURE);
-				}
-			}
-
-			const userUpdated = await this.usersRepository.update(user_id, profileUpdateDTO);
-
+		if (user && new_password === confirm_new_password) {
+			const userUpdated = await this.usersRepository.update(userId, payload);
 			return { success: true, data: userUpdated };
 		}
 
-		throw new Error(ErrorsMessages.HEADER_AUTHORIZATION_BEARER_TOKEN_EXPIRED_OR_INVALID);
+		return { success: false, error: "new_password and confirm_new_password are not equal" };
 	}
 }

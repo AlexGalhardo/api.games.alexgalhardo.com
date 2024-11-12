@@ -1,11 +1,11 @@
 import { Test } from "@nestjs/testing";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
-import { AuthSignupUseCasePort } from "../use-cases/auth-register.use-case";
+import { AuthSignupUseCasePort } from "./auth-signup.use-case";
 import { mock } from "jest-mock-extended";
 import { randomUUID } from "node:crypto";
 import { AuthLoginDTO, AuthLoginUseCasePort } from "../use-cases/auth-login.use-case";
 import { AuthLogoutUseCasePort } from "../use-cases/auth-logout.use-case";
-import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
+import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.dto";
 
 describe("Test AuthLoginUseCase", () => {
 	beforeAll(async () => {

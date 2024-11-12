@@ -2,7 +2,7 @@ import { Controller, Res, HttpStatus, Get, Inject, Param } from "@nestjs/common"
 import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import TelegramLog from "src/config/telegram-logger.config";
-import { GamesResponse } from "src/modules/games/dtos/game-response.swagger";
+import { GamesResponse } from "src/modules/games/dtos/game-response.dto";
 import { GameGetRandomUseCasePort } from "./use-cases/game-get-random.use-case";
 import { GameGetByIdUseCasePort } from "./use-cases/game-get-by-id.use-case";
 import { GameGetByTitleUseCasePort } from "./use-cases/game-get-by-title.use-case";

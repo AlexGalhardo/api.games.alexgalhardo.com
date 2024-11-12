@@ -3,22 +3,20 @@ import { envsLocalValidator } from "src/validators/envs-local.validator";
 import { envsProductionValidator } from "src/validators/envs-production.validator";
 
 export default function verifyEnvs() {
-	console.log("\n\n...Veryfing Environment Variables...");
-
 	if (process.env.NODE_ENV === "local") {
 		const envLocalVariables = {
 			NODE_ENV: process.env.NODE_ENV,
 			PORT: Number(process.env?.PORT) ?? 3000,
 			API_KEY_ADMIN: process.env.API_KEY_ADMIN,
-			USE_JSON_DATABASE: process.env.USE_JSON_DATABASE,
 			LOG_PRISMA_QUERIES: process.env.LOG_PRISMA_QUERIES,
 			ENABLE_TELEGRAM_LOGS: process.env.ENABLE_TELEGRAM_LOGS,
 			ENABLE_ERRSOLE: process.env.ENABLE_ERRSOLE,
 			APP_FRONT_URL_DEV: process.env.APP_FRONT_URL_DEV,
 			APP_FRONT_URL_PROD: process.env.APP_FRONT_URL_PROD,
-			JWT_SECRET: process.env.JWT_SECRET,
 			TELEGRAM_BOT_HTTP_TOKEN: process.env.TELEGRAM_BOT_HTTP_TOKEN,
 			TELEGRAM_BOT_CHANNEL_ID: process.env.TELEGRAM_BOT_CHANNEL_ID,
+			JWE_PUBLIC_KEY: process.env.JWE_PUBLIC_KEY,
+			JWE_PRIVATE_KEY: process.env.JWE_PRIVATE_KEY,
 			SMTP_HOST: process.env.SMTP_HOST,
 			SMTP_PORT: process.env.SMTP_PORT,
 			SMTP_USER: process.env.SMTP_USER,
@@ -54,15 +52,15 @@ export default function verifyEnvs() {
 			NODE_ENV: process.env.NODE_ENV,
 			PORT: Number(process.env?.PORT) ?? 3000,
 			API_KEY_ADMIN: process.env.API_KEY_ADMIN,
-			USE_JSON_DATABASE: process.env.USE_JSON_DATABASE,
 			LOG_PRISMA_QUERIES: process.env.LOG_PRISMA_QUERIES,
 			ENABLE_TELEGRAM_LOGS: process.env.ENABLE_TELEGRAM_LOGS,
 			ENABLE_ERRSOLE: process.env.ENABLE_ERRSOLE,
 			APP_FRONT_URL_DEV: process.env.APP_FRONT_URL_DEV,
 			APP_FRONT_URL_PROD: process.env.APP_FRONT_URL_PROD,
-			JWT_SECRET: process.env.JWT_SECRET,
 			TELEGRAM_BOT_HTTP_TOKEN: process.env.TELEGRAM_BOT_HTTP_TOKEN,
 			TELEGRAM_BOT_CHANNEL_ID: process.env.TELEGRAM_BOT_CHANNEL_ID,
+			JWE_PUBLIC_KEY: process.env.JWE_PUBLIC_KEY,
+			JWE_PRIVATE_KEY: process.env.JWE_PRIVATE_KEY,
 			SMTP_HOST: process.env.SMTP_HOST,
 			SMTP_PORT: process.env.SMTP_PORT,
 			SMTP_USER: process.env.SMTP_USER,

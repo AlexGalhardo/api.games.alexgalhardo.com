@@ -91,7 +91,7 @@ export class StripeController implements StripeControllerPort {
 	}
 
 	// https://github.com/stripe/stripe-cli
-	// https://dashboard.stripe.com/webhooks
+	// https://dashboard.stripe_com/webhooks
 	@Post("/webhook")
 	@ApiResponse({ status: 200 })
 	async webhook(

@@ -1,10 +1,9 @@
-PUT http://localhost:3000/profile
+# PUT http://localhost:3000/profile
+PUT https://api.games.alexgalhardo.com/profile
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI3MjBiZjhlZi0zZWNmLTRhY2EtYWEyNi1lMDk2NzY2NDExYjIiLCJpYXQiOjE3MTIwNjA3NTl9.4i3r_3Prn-atg6kBGfRc3ntKFZNxvI6uUFTLjbxGr7w
+Authorization: Bearer eyJhbGciOiJSU0EtT0FFUC0yNTYiLCJlbmMiOiJBMjU2R0NNIn0.B0SxorTnEaBCT6MJwHdQ132bvxHsrmtbyIDYbGfj4zMgiK4kxShxt5JiEaTaZqLpvLRBIX6FWswmRjt7O5H8zyA9R6EqaT-a3iRaB_OLf8-lSdBhyWGkwvshOAHY5TpQ_lSSUycaQ0G_lZgGSfWKdKeGCYoFjyDm173Gv4laGS9srYy3k41DCQ0uJJOyJDf6E0POnG2kyv-XqQSINjQhw6p96zxt-x1ZlOqPbkGF7F20pozwe4n0_GNHLeRrP4iieRHNpnlJnKigAVRmBJtmR6OcyyCJRr-da1NA0zZsyhwRDr2CQ2yQ9RArCMiPtQPtrR62MHDZaoWyndVeymXQ3w.SMlXJHK3VDCFqQB0.tWdhD2HTLm9DrC0Xt4p07mqDAd8-dDw6CN3whGMSgZSxIyXNbB1ppR32dMkg5MTIyhiW4aXXDvrlI2WL0PvrLV352HpFvTKDjOq1__Z5TJM.spATIb9GYZ2l_jaUn6AsUw
 
 {
-	"name": "Updated Test User",
-	"phone_number": "5518999888888",
-	"olderPassword": "newPASSWORD!123",
-	"newPassword": "passwordUPDATED!123"
+    "name": "Vieira Alex",
+    "phone_number": "5518996971457"
 }

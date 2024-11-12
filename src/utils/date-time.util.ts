@@ -50,4 +50,9 @@ export default class DateTime {
 	static get hourInMilliseconds() {
 		return 3600000;
 	}
+
+	static get getThirtyMinutesFromNow() {
+		const now = new Date();
+		return now.setMinutes(now.getMinutes() + 30);
+	}
 }

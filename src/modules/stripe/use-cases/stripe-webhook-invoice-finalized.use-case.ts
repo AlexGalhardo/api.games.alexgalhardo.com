@@ -15,7 +15,7 @@ export default class StripeWebhookInvoiceFinalizedUseCase implements StripeWebho
 	) {}
 
 	async execute(event: any) {
-		const { user } = await this.usersRepository.findByEmail(event.data.object.customer_email);
+		const user = await this.usersRepository.findByEmail(event.data.object.customer_email);
 
 		if (user) {
 			const userUpdated = await this.usersRepository.updateStripeSubscriptionInfo(user, {
@@ -32,20 +32,20 @@ export default class StripeWebhookInvoiceFinalizedUseCase implements StripeWebho
 			this.stripeRepository.saveInvoiceWebhookEventLog(event);
 
 			TelegramLog.info(`\n
-            	<b>STRIPE CHARGE ID:</b> ${userUpdated.stripe.subscription.charge_id}
-            	<b>STRIPE CHARGE PAID:</b> ${userUpdated.stripe.subscription.active}
-            	<b>STRIPE RECEIPT URL:</b> ${userUpdated.stripe.subscription.receipt_url}
-            	<b>STRIPE INVOICE URL:</b> ${userUpdated.stripe.subscription.hosted_invoice_url}
+            	<b>STRIPE CHARGE ID:</b> ${userUpdated.stripe_subscription_charge_id}
+            	<b>STRIPE CHARGE PAID:</b> ${userUpdated.stripe_subscription_active}
+            	<b>STRIPE RECEIPT URL:</b> ${userUpdated.stripe_subscription_receipt_url}
+            	<b>STRIPE INVOICE URL:</b> ${userUpdated.stripe_subscription_hosted_invoice_url}
             	---------------------------------------------
-            	<b>SUBSCRIPTION NAME:</b> ${userUpdated.stripe.subscription.name}
-            	<b>SUBSCRIPTION AMOUNT:</b> ${userUpdated.stripe.subscription.name === "CASUAL" ? 199 : 499}
-            	<b>SUBSCRIPTION START AT:</b> ${userUpdated.stripe.subscription.starts_at}
-            	<b>SUBSCRIPTION ENDS AT:</b> ${userUpdated.stripe.subscription.ends_at}
+            	<b>SUBSCRIPTION NAME:</b> ${userUpdated.stripe_subscription_name}
+            	<b>SUBSCRIPTION AMOUNT:</b> ${userUpdated.stripe_subscription_name === "CASUAL" ? 199 : 499}
+            	<b>SUBSCRIPTION START AT:</b> ${userUpdated.stripe_subscription_starts_at}
+            	<b>SUBSCRIPTION ENDS AT:</b> ${userUpdated.stripe_subscription_ends_at}
             	---------------------------------------------
-            	<b>STRIPE CUSTOMER ID:</b> ${userUpdated.stripe.customer_id}
+            	<b>STRIPE CUSTOMER ID:</b> ${userUpdated.stripe_customer_id}
             	<b>CUSTOMER NAME:</b> ${userUpdated.name}
             	<b>CUSTOMER EMAIL:</b> ${userUpdated.email}
-            	<b>CUSTOMER SUBSCRIPTION ACTIVE: </b> ${userUpdated.stripe.subscription.active}
+            	<b>CUSTOMER SUBSCRIPTION ACTIVE: </b> ${userUpdated.stripe_subscription_active}
             	<b>CUSTOMER API TOKEN: </b> ${userUpdated.api_key}
             	`);
 		} else {

@@ -1,6 +1,7 @@
-import { Game, GamesRepositoryPort } from "../../../repositories/games.repository";
+import { GamesRepositoryPort } from "../../../repositories/games.repository";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { ErrorsMessages } from "../../../utils/errors-messages.util";
+import { Game } from "@prisma/client";
 
 export interface GameGetByTitleUseCasePort {
 	execute(gameId: string, userAPIKey: string): Promise<GameGetByTitleUseCaseResponse>;

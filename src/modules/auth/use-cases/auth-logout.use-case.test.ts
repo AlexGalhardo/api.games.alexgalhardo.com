@@ -1,13 +1,13 @@
 import { Test } from "@nestjs/testing";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
-import { AuthSignupUseCasePort } from "../use-cases/auth-register.use-case";
+import { AuthSignupUseCasePort } from "./auth-signup.use-case";
 import { mock } from "jest-mock-extended";
 import { AuthLoginDTO, AuthLoginUseCasePort } from "../use-cases/auth-login.use-case";
 import { AuthLogoutUseCasePort } from "../use-cases/auth-logout.use-case";
-import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
-import { EmailValidator } from "src/validators/email.validator";
-import { PasswordValidator } from "src/validators/password.validator";
-import { PhoneValidator } from "src/validators/phone.validator";
+import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.dto";
+import { generateEmail } from "src/utils/generate-email.util";
+import { generatePassword } from "src/utils/generate-password.util";
+import { generatePhoneNumber } from "src/utils/generate-phone-number.util";
 
 describe("Test AuthLogoutUseCase", () => {
 	beforeAll(async () => {
@@ -26,15 +26,15 @@ describe("Test AuthLogoutUseCase", () => {
 		jest.clearAllMocks();
 	});
 
-	const userEmail = EmailValidator.generate();
-	const userPassword = PasswordValidator.generate();
+	const userEmail = generateEmail();
+	const userPassword = generatePassword();
 	let loginToken = null;
 
 	it("should register a user", async () => {
 		const authRegisterDTO = mock<AuthSignupBodyDTO>({
 			name: "Testing Logout Test",
 			email: userEmail,
-			phone_number: PhoneValidator.generate(),
+			phone_number: generatePhoneNumber(),
 			password: userPassword,
 		});
 		const mockAuthRegisterUseCase = mock<AuthSignupUseCasePort>();
