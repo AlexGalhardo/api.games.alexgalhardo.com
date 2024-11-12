@@ -16,14 +16,14 @@ import StripeWebhookInvoiceFinalizedUseCase from "./use-cases/stripe-webhook-inv
 			provide: "StripeRepositoryPort",
 			inject: [Database],
 			useFactory: (database: Database) => {
-				return new StripeRepository(undefined, undefined, undefined, undefined, undefined, undefined, database);
+				return new StripeRepository(database);
 			},
 		},
 		{
 			provide: "UsersRepositoryPort",
 			inject: [Database],
 			useFactory: (database: Database) => {
-				return new UsersRepository(undefined, database);
+				return new UsersRepository(database);
 			},
 		},
 		{

@@ -1,7 +1,7 @@
 import { Controller, Res, HttpStatus, Get, Inject } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import { HealthCheckResponse } from "./dtos/health-check.swagger";
+import { HealthCheckResponse } from "./dtos/health-check.dto";
 import { GamesRepositoryPort } from "src/repositories/games.repository";
 
 @Controller()
@@ -19,7 +19,7 @@ export class HealthCheckController {
 		try {
 			const randomGame = await this.gamesRepository.getRandom();
 			if (randomGame) databaseStatus = "healthy";
-		} catch (error) {
+		} catch (error: any) {
 			return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
 				success: false,
 				message: "Unable to connect to the database",

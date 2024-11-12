@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+model User {
   id                                     String    @id @default(uuid())
   name                               	 String
   email                                  String    @unique
@@ -37,7 +37,7 @@ model Users {
   @@map("users")
 }
 
-model Games {
+model Game {
   id                  String  @id @default(uuid())
   title               String  @unique
   slug                String  @unique

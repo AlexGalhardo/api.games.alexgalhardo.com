@@ -1,7 +1,7 @@
+import { AuthResetPasswordValidator } from "src/validators/auth-reset-password.validator";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { Bcrypt } from "../../../utils/bcrypt.util";
 import { ErrorsMessages } from "../../../utils/errors-messages.util";
-import { PasswordValidator } from "../../../validators/password.validator";
 
 export interface AuthResetPasswordUseCasePort {
 	execute(
@@ -28,12 +28,11 @@ export default class AuthResetPasswordUseCase implements AuthResetPasswordUseCas
 	): Promise<AuthResetPasswordUseCaseResponse> {
 		const { newPassword, confirmNewPassword } = authResetPasswordDTO;
 
-		if (!PasswordValidator.isEqual(newPassword, confirmNewPassword))
-			throw new Error(ErrorsMessages.PASSWORDS_NOT_EQUAL);
+		AuthResetPasswordValidator.parse(authResetPasswordDTO);
 
-		const { user } = await this.usersRepository.findByResetPasswordToken(resetPasswordToken);
+		const user = await this.usersRepository.findByResetPasswordToken(resetPasswordToken);
 
-		if (user) {
+		if (user && newPassword === confirmNewPassword) {
 			const hashedPassword = await Bcrypt.hash(newPassword);
 
 			await this.usersRepository.resetPassword(user.id, hashedPassword);

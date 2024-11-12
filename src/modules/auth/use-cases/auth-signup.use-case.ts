@@ -2,10 +2,9 @@ import { randomUUID } from "crypto";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { Bcrypt } from "../../../utils/bcrypt.util";
 import GenerateRandomToken from "../../../utils/generate-random-token.util";
-import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
-import { getJWEKeysFromEnv } from "src/utils/get-jwe-keys-from-env.util";
-import { CompactEncrypt } from "jose";
+import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.dto";
 import { AuthSignupValidator } from "src/validators/auth-signup.validator";
+import createAuthToken from "src/utils/create-auth-token.util";
 
 interface AuthSignupUseCaseResponse {
 	success: boolean;
@@ -37,13 +36,7 @@ export default class AuthSignupUseCase implements AuthSignupUseCasePort {
 			try {
 				const user_id = randomUUID();
 
-				const { JWE_PUBLIC_KEY } = await getJWEKeysFromEnv();
-				const encoder = new TextEncoder();
-				const encodedPayload = encoder.encode(JSON.stringify({ user_id, user_email: email }));
-
-				const auth_token = await new CompactEncrypt(encodedPayload)
-					.setProtectedHeader({ alg: "RSA-OAEP-256", enc: "A256GCM" })
-					.encrypt(JWE_PUBLIC_KEY);
+				const auth_token = await createAuthToken({ id: user_id, email });
 
 				await this.usersRepository.create({
 					id: user_id,

@@ -2,8 +2,8 @@ import { Test } from "@nestjs/testing";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { mock } from "jest-mock-extended";
 import { AuthCheckResetPasswordTokenUseCasePort } from "../use-cases/auth-check-reset-password-token.use-case";
-import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
-import { AuthSignupUseCasePort } from "./auth-register.use-case";
+import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.dto";
+import { AuthSignupUseCasePort } from "./auth-signup.use-case";
 import { AuthForgetPasswordDTO, AuthForgetPasswordUseCasePort } from "./auth-forget-password.use-case";
 
 describe("Test AuthForgetPasswordUseCase", () => {

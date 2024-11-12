@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Game } from "src/repositories/games.repository";
+import { Game } from "@prisma/client";
 
 export class GamesResponse {
 	@ApiProperty()

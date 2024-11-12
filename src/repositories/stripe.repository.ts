@@ -1,10 +1,3 @@
-import * as fs from "fs";
-import * as StripeCharges from "./jsons/stripe/charges.json";
-import * as StripeCustomers from "./jsons/stripe/customers.json";
-import * as StripeInvoices from "./jsons/stripe/invoices.json";
-import * as StripeCheckouts from "./jsons/stripe/checkouts.json";
-import * as StripeBillingPortals from "./jsons/stripe/billing-portals.json";
-import * as StripePayments from "./jsons/stripe/payments.json";
 import { Database } from "../config/database.config";
 import { Injectable } from "@nestjs/common";
 
@@ -19,30 +12,9 @@ export interface StripeRepositoryPort {
 
 @Injectable()
 export default class StripeRepository implements StripeRepositoryPort {
-	constructor(
-		private readonly charges = StripeCharges,
-		private readonly customers = StripeCustomers,
-		private readonly invoices = StripeInvoices,
-		private readonly checkouts = StripeCheckouts,
-		private readonly billingPortals = StripeBillingPortals,
-		private readonly payments = StripePayments,
-		private readonly database: Database,
-	) {}
+	constructor(private readonly database: Database) {}
 
 	public async saveChargeWebhookEventLog(event: any) {
-		if (process.env.USE_JSON_DATABASE === "true") {
-			try {
-				this.charges.push(event);
-				fs.writeFileSync(
-					"./../repositories/jsons/stripe/charges.json",
-					JSON.stringify(this.charges, null, 4),
-					"utf-8",
-				);
-			} catch (error: any) {
-				throw new Error(error);
-			}
-		}
-
 		try {
 			await this.database.stripeWebhookChargesLogs.create({
 				data: {
@@ -50,24 +22,11 @@ export default class StripeRepository implements StripeRepositoryPort {
 				},
 			});
 		} catch (error: any) {
-			throw new Error(error);
+			throw new Error(error?.message);
 		}
 	}
 
 	public async saveCustomerWebhookEventLog(event: any) {
-		if (process.env.USE_JSON_DATABASE === "true") {
-			try {
-				this.customers.push(event);
-				fs.writeFileSync(
-					"./../repositories/jsons/stripe/customers.json",
-					JSON.stringify(this.customers, null, 4),
-					"utf-8",
-				);
-			} catch (error: any) {
-				throw new Error(error);
-			}
-		}
-
 		try {
 			await this.database.stripeWebhookCustomersLogs.create({
 				data: {
@@ -75,24 +34,11 @@ export default class StripeRepository implements StripeRepositoryPort {
 				},
 			});
 		} catch (error: any) {
-			throw new Error(error);
+			throw new Error(error?.message);
 		}
 	}
 
 	public async saveInvoiceWebhookEventLog(event: any) {
-		if (process.env.USE_JSON_DATABASE === "true") {
-			try {
-				this.invoices.push(event);
-				fs.writeFileSync(
-					"./../repositories/jsons/stripe/invoices.json",
-					JSON.stringify(this.invoices, null, 4),
-					"utf-8",
-				);
-			} catch (error: any) {
-				throw new Error(error);
-			}
-		}
-
 		try {
 			await this.database.stripeWebhookInvoicesLogs.create({
 				data: {
@@ -100,24 +46,11 @@ export default class StripeRepository implements StripeRepositoryPort {
 				},
 			});
 		} catch (error: any) {
-			throw new Error(error);
+			throw new Error(error?.message);
 		}
 	}
 
 	public async savePaymentWebhookEventLog(event: any) {
-		if (process.env.USE_JSON_DATABASE === "true") {
-			try {
-				this.payments.push(event);
-				fs.writeFileSync(
-					"./../repositories/jsons/stripe/payments.json",
-					JSON.stringify(this.payments, null, 4),
-					"utf-8",
-				);
-			} catch (error: any) {
-				throw new Error(error);
-			}
-		}
-
 		try {
 			await this.database.stripeWebhookPaymentsLogs.create({
 				data: {
@@ -125,24 +58,11 @@ export default class StripeRepository implements StripeRepositoryPort {
 				},
 			});
 		} catch (error: any) {
-			throw new Error(error);
+			throw new Error(error?.message);
 		}
 	}
 
 	public async saveCheckoutSessionWebhookEventLog(event: any) {
-		if (process.env.USE_JSON_DATABASE === "true") {
-			try {
-				this.checkouts.push(event);
-				fs.writeFileSync(
-					"./../repositories/jsons/stripe/checkouts.json",
-					JSON.stringify(this.checkouts, null, 4),
-					"utf-8",
-				);
-			} catch (error: any) {
-				throw new Error(error);
-			}
-		}
-
 		try {
 			await this.database.stripeWebhookCheckoutsLogs.create({
 				data: {
@@ -150,24 +70,11 @@ export default class StripeRepository implements StripeRepositoryPort {
 				},
 			});
 		} catch (error: any) {
-			throw new Error(error);
+			throw new Error(error?.message);
 		}
 	}
 
 	public async saveBillingPortalSessionWebhookEventLog(event: any) {
-		if (process.env.USE_JSON_DATABASE === "true") {
-			try {
-				this.billingPortals.push(event);
-				fs.writeFileSync(
-					"./../repositories/jsons/stripe/billingPortals.json",
-					JSON.stringify(this.billingPortals, null, 4),
-					"utf-8",
-				);
-			} catch (error: any) {
-				throw new Error(error);
-			}
-		}
-
 		try {
 			await this.database.stripeWebhookBillingPortalLogs.create({
 				data: {
@@ -175,7 +82,7 @@ export default class StripeRepository implements StripeRepositoryPort {
 				},
 			});
 		} catch (error: any) {
-			throw new Error(error);
+			throw new Error(error?.message);
 		}
 	}
 }

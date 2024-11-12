@@ -25,14 +25,15 @@ export class ValidateHeaderAuthorizationBearerToken implements NestMiddleware {
 			next();
 		}
 
-		console.log("bearer token jwe -> ", bearerToken);
-
 		const { JWE_PRIVATE_KEY } = await getJWEKeysFromEnv();
-		console.log("JWE_PRIVATE_KEY -> ", JWE_PRIVATE_KEY);
 		const { plaintext } = await compactDecrypt(bearerToken, JWE_PRIVATE_KEY);
 		const decodedJWE = JSON.parse(new TextDecoder().decode(plaintext));
 
-		console.log("decodedJWE -> ", decodedJWE);
+		if (decodedJWE.expires_at < new Date()) {
+			return response
+				.status(HttpStatus.BAD_REQUEST)
+				.json({ success: false, error: ErrorsMessages.HEADER_AUTHORIZATION_BEARER_TOKEN_EXPIRED });
+		}
 
 		response.locals.auth = { user_id: decodedJWE.user_id, user_email: decodedJWE.user_email };
 

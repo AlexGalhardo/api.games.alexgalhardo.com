@@ -12,7 +12,7 @@ import GamesRepository from "src/repositories/games.repository";
 			provide: "GamesRepositoryPort",
 			inject: [Database],
 			useFactory: (database: Database) => {
-				return new GamesRepository(undefined, database);
+				return new GamesRepository(database);
 			},
 		},
 	],

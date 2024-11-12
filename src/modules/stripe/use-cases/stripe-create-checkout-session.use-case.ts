@@ -26,10 +26,10 @@ export default class StripeCreateCheckoutSessionUseCase implements StripeCreateC
 		user_id: string,
 		stripeCreateCheckoutSessionDTO: StripeCreateCheckoutSessionDTO,
 	): Promise<StripeCreateCheckoutSessionUseCaseResponse> {
-		const { user } = await this.usersRepository.findById(user_id);
+		const user = await this.usersRepository.findById(user_id);
 
 		if (user) {
-			if (user.stripe.subscription.active) throw new Error(ErrorsMessages.USER_HAS_ACTIVE_PLAN);
+			if (user.stripe_subscription_active) throw new Error(ErrorsMessages.USER_HAS_ACTIVE_PLAN);
 
 			const { lookup_key } = stripeCreateCheckoutSessionDTO;
 

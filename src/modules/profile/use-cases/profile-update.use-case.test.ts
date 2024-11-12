@@ -1,9 +1,9 @@
 import { Test } from "@nestjs/testing";
 import { mock } from "jest-mock-extended";
-import { AuthSignupUseCasePort } from "../../auth/use-cases/auth-register.use-case";
+import { AuthSignupUseCasePort } from "../../auth/use-cases/auth-signup.use-case";
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
-import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
-import { ProfileUpdateBodyDTO } from "src/modules/profile/dtos/profile-update.swagger";
+import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.dto";
+import { ProfileUpdateDTO } from "src/modules/profile/dtos/profile-update.dto";
 import { ProfileUpdateUseCasePort } from "./profile-update.use-case";
 import { ProfileDeleteUseCasePort } from "./profile-delete.use-case";
 
@@ -38,7 +38,7 @@ describe("Test ProfileUpdateUseCase", () => {
 
 	it("should update profile", async () => {
 		const mockProfileUpdateUseCase = mock<ProfileUpdateUseCasePort>();
-		const mockProfileUpdateDTO = mock<ProfileUpdateBodyDTO>();
+		const mockProfileUpdateDTO = mock<ProfileUpdateDTO>();
 		mockProfileUpdateUseCase.execute.mockResolvedValueOnce({ success: true, data: mockProfileUpdateDTO });
 
 		const response = await mockProfileUpdateUseCase.execute("jwttoken", mockProfileUpdateDTO);

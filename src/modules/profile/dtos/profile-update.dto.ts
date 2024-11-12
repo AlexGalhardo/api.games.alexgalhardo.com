@@ -1,6 +1,6 @@
 import { IsString } from "class-validator";
 
-export class ProfileUpdateBodyDTO {
+export class ProfileUpdateDTO {
 	@IsString()
 	readonly name: string;
 
@@ -8,8 +8,8 @@ export class ProfileUpdateBodyDTO {
 	readonly phone_number: string;
 
 	@IsString()
-	readonly newPassword: string;
+	readonly new_password: string;
 
 	@IsString()
-	readonly confirmNewPassword: string;
+	readonly confirm_new_password: string;
 }

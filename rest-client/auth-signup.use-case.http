@@ -1,8 +1,9 @@
 POST http://localhost:3000/signup
+# POST https://api.games.alexgalhardo.com/signup
 content-type: application/json
 
 {
 	"name": "User Alex",
-	"email": "alex@gmail.com",
-	"password": "alexUSER!123"
+	"email": "testando@gmail.com",
+	"password": "qweQWE!123"
 }

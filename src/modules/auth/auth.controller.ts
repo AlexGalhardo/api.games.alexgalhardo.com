@@ -1,11 +1,11 @@
 import { Controller, Post, Res, Body, Inject, HttpStatus, Req, Get, Param } from "@nestjs/common";
 import { Request, Response } from "express";
 import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { AuthLoginBodyDTO } from "src/modules/auth/dtos/auth-login.swagger";
-import { AuthResponse } from "src/modules/auth/dtos/auth-response.swagger";
-import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.swagger";
+import { AuthLoginBodyDTO } from "src/modules/auth/dtos/auth-login.dto";
+import { AuthResponse } from "src/modules/auth/dtos/auth-response.dto";
+import { AuthSignupBodyDTO } from "src/modules/auth/dtos/auth-register.dto";
 import TelegramLog from "src/config/telegram-logger.config";
-import { AuthForgetPasswordBodyDTO } from "src/modules/auth/dtos/auth-forget-password.swagger";
+import { AuthForgetPasswordBodyDTO } from "src/modules/auth/dtos/auth-forget-password.dto";
 import { AuthLoginDTO, AuthLoginUseCasePort } from "./use-cases/auth-login.use-case";
 import {
 	AuthCheckResetPasswordTokenUseCasePort,
@@ -16,7 +16,7 @@ import { AuthForgetPasswordDTO, AuthForgetPasswordUseCasePort } from "./use-case
 import { AuthLoginGitHubUseCasePort } from "./use-cases/auth-login-github.use-case";
 import { AuthLoginGoogleUseCasePort } from "./use-cases/auth-login-google.use-case";
 import { AuthLogoutUseCasePort } from "./use-cases/auth-logout.use-case";
-import { AuthSignupUseCasePort } from "./use-cases/auth-register.use-case";
+import { AuthSignupUseCasePort } from "./use-cases/auth-signup.use-case";
 import { AuthResetPasswordDTO, AuthResetPasswordUseCasePort } from "./use-cases/auth-reset-password.use-case";
 
 interface AuthControllerPort {
@@ -57,9 +57,9 @@ export class AuthController implements AuthControllerPort {
 	@ApiResponse({ status: 200, type: AuthResponse })
 	async login(@Body() authLoginPayload: AuthLoginDTO, @Res() response: Response): Promise<Response<AuthResponse>> {
 		try {
-			const { success, auth_token, message } = await this.authLoginUseCase.execute(authLoginPayload);
+			const { success, auth_token, error } = await this.authLoginUseCase.execute(authLoginPayload);
 			if (success === true) return response.status(HttpStatus.OK).json({ success: true, auth_token });
-			return response.status(HttpStatus.BAD_REQUEST).json({ success: false, message });
+			return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error });
 		} catch (error: any) {
 			TelegramLog.error(`ERROR Auth Login: ${error.message}`);
 			return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });
@@ -89,7 +89,6 @@ export class AuthController implements AuthControllerPort {
 			if (success) return response.status(HttpStatus.OK).json({ success: true });
 			return response.status(HttpStatus.BAD_REQUEST).json({ success: false });
 		} catch (error: any) {
-			// TelegramLog.error(`ERROR Auth Logout: ${error.message}`);
 			return response.status(HttpStatus.BAD_REQUEST).json({ success: false, error: error.message });
 		}
 	}

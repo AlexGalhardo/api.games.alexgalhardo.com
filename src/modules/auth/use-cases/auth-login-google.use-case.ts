@@ -1,16 +1,15 @@
 import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { Bcrypt } from "../../../utils/bcrypt.util";
-import { ErrorsMessages } from "../../../utils/errors-messages.util";
-import * as jwt from "jsonwebtoken";
 import { Request } from "express";
 import { OAuth2Client } from "google-auth-library";
 import { randomUUID } from "node:crypto";
 import { FRONT_END_URL } from "../../../utils/constants.util";
 import GenerateRandomToken from "../../../utils/generate-random-token.util";
-import { SubscriptionName } from "./auth-register.use-case";
-import { EmailValidator } from "../../../validators/email.validator";
+import { SubscriptionName } from "./auth-signup.use-case";
 import { getJWEKeysFromEnv } from "src/utils/get-jwe-keys-from-env.util";
 import { CompactEncrypt } from "jose";
+import { z } from "zod";
+import createAuthToken from "src/utils/create-auth-token.util";
 
 export interface AuthLoginGoogleUseCasePort {
 	execute(request: Request): Promise<AuthLoginGoogleUseCaseResponse>;
@@ -41,22 +40,14 @@ export default class AuthLoginGoogleUseCase implements AuthLoginGoogleUseCasePor
 			const payload = googleResponse.getPayload();
 			const { email, name } = payload;
 
-			if (!EmailValidator.validate(email)) throw new Error(ErrorsMessages.EMAIL_INVALID);
+			z.string().email().parse(email);
 
-			const { user, index } = await this.usersRepository.findByEmail(email);
+			const user = await this.usersRepository.findByEmail(email);
 
 			if (user) {
-				const { JWE_PUBLIC_KEY } = await getJWEKeysFromEnv();
-				const encoder = new TextEncoder();
-				const encodedPayload = encoder.encode(JSON.stringify({ user_id: user?.id, user_email: user?.email }));
+				const auth_token = await createAuthToken(user);
 
-				const auth_token = await new CompactEncrypt(encodedPayload)
-					.setProtectedHeader({ alg: "RSA-OAEP-256", enc: "A256GCM" })
-					.encrypt(JWE_PUBLIC_KEY);
-
-				user.auth_token = auth_token;
-
-				await this.usersRepository.save(user, index);
+				await this.usersRepository.updateAuthToken(user.id, auth_token);
 
 				return {
 					success: true,
@@ -66,13 +57,7 @@ export default class AuthLoginGoogleUseCase implements AuthLoginGoogleUseCasePor
 			} else {
 				const userId = randomUUID();
 
-				const { JWE_PUBLIC_KEY } = await getJWEKeysFromEnv();
-				const encoder = new TextEncoder();
-				const encodedPayload = encoder.encode(JSON.stringify({ user_id: user?.id, user_email: user?.email }));
-
-				const auth_token = await new CompactEncrypt(encodedPayload)
-					.setProtectedHeader({ alg: "RSA-OAEP-256", enc: "A256GCM" })
-					.encrypt(JWE_PUBLIC_KEY);
+				const auth_token = await createAuthToken({ id: userId, email });
 
 				await this.usersRepository.create({
 					id: userId,

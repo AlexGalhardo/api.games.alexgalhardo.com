@@ -1,5 +1,6 @@
-import { User, UsersRepositoryPort } from "../../../repositories/users.repository";
+import { UsersRepositoryPort } from "../../../repositories/users.repository";
 import { ErrorsMessages } from "../../../utils/errors-messages.util";
+import { User } from "@prisma/client";
 
 export interface AuthCheckUserAuthTokenUseCasePort {
 	execute(token: string): Promise<AuthCheckUserAuthTokenUseCaseResponse>;
@@ -15,7 +16,7 @@ export default class AuthCheckUserAuthTokenUseCase implements AuthCheckUserAuthT
 
 	async execute(userId: string): Promise<AuthCheckUserAuthTokenUseCaseResponse> {
 		if (userId && (await this.usersRepository.findById(userId))) {
-			const { user } = await this.usersRepository.findById(userId);
+			const user = await this.usersRepository.findById(userId);
 			return { success: true, data: user };
 		}
 
